@@ -114,9 +114,11 @@ function showAuth(){document.body.classList.add('auth-mode');document.getElement
 function hideAuth(){document.body.classList.remove('auth-mode');document.getElementById('auth').style.display='none'}
 function showSignup(){document.getElementById('loginBox').style.display='none';document.getElementById('signupBox').style.display='block'}
 function showLogin(){document.getElementById('signupBox').style.display='none';document.getElementById('loginBox').style.display='block'}
-async function signupUser(){let n=document.getElementById('signupName').value.trim(),e=document.getElementById('signupEmail').value.trim(),p=document.getElementById('signupPassword').value;if(!n||!e||p.length<6){document.getElementById('signupMsg').style.color='#dc2626';document.getElementById('signupMsg').textContent='Enter name, email and 6+ character password.';return}let r=await db.auth.signUp({email:e,password:p,options:{data:{full_name:n}}});if(r.error){document.getElementById('signupMsg').style.color='#dc2626';document.getElementById('signupMsg').textContent=r.error.message;return}document.getElementById('signupMsg').style.color='#16a34a';document.getElementById('signupMsg').textContent=r.data.session?'Account created.':'Account created. Check your email, then login.';showLogin()}
-async function loginUser(){let e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPassword').value;if(!e||!p){document.getElementById('loginMsg').style.color='#dc2626';document.getElementById('loginMsg').textContent='Enter email and password.';return}let r=await db.auth.signInWithPassword({email:e,password:p});if(r.error){document.getElementById('loginMsg').style.color='#dc2626';document.getElementById('loginMsg').textContent=r.error.message;return}user=r.data.user;hideAuth();stack=['home'];go('home',false);loadAccount()}
-async function logoutUser(){await db.auth.signOut();user=null;stack=['home'];current='home';showAuth();showLogin()}
+async function signupUser(){
+const client=getDb();if(!client){document.getElementById('signupMsg').style.color='#dc2626';document.getElementById('signupMsg').textContent='Internet connection is required for account signup.';return}let n=document.getElementById('signupName').value.trim(),e=document.getElementById('signupEmail').value.trim(),p=document.getElementById('signupPassword').value;if(!n||!e||p.length<6){document.getElementById('signupMsg').style.color='#dc2626';document.getElementById('signupMsg').textContent='Enter name, email and 6+ character password.';return}let r=await client.auth.signUp({email:e,password:p,options:{data:{full_name:n}}});if(r.error){document.getElementById('signupMsg').style.color='#dc2626';document.getElementById('signupMsg').textContent=r.error.message;return}document.getElementById('signupMsg').style.color='#16a34a';document.getElementById('signupMsg').textContent=r.data.session?'Account created.':'Account created. Check your email, then login.';showLogin()}
+async function loginUser(){
+const client=getDb();if(!client){document.getElementById('loginMsg').style.color='#dc2626';document.getElementById('loginMsg').textContent='Internet connection is required for login.';return}let e=document.getElementById('loginEmail').value.trim(),p=document.getElementById('loginPassword').value;if(!e||!p){document.getElementById('loginMsg').style.color='#dc2626';document.getElementById('loginMsg').textContent='Enter email and password.';return}let r=await client.auth.signInWithPassword({email:e,password:p});if(r.error){document.getElementById('loginMsg').style.color='#dc2626';document.getElementById('loginMsg').textContent=r.error.message;return}user=r.data.user;hideAuth();stack=['home'];go('home',false);loadAccount()}
+async function logoutUser(){const client=getDb();if(client) await client.auth.signOut();user=null;stack=['home'];current='home';showAuth();showLogin()}
 function go(id,push=true){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id)?.classList.add('active');current=id;if(push&&stack[stack.length-1]!==id)stack.push(id);scrollTo(0,0);if(id==='home')renderHome();if(id==='shorts')renderShorts();if(id==='library')loadAccount()}
 window.appBack=()=>{if(stack.length>1){stack.pop();go(stack[stack.length-1],false);return'handled'}if(current!=='home'){go('home',false);stack=['home'];return'handled'}return'exit'};
 function card(v){
@@ -149,7 +151,7 @@ ${v.videoUrl?`<video controls playsinline style="width:100%;height:100%;object-f
 <button onclick="toggleSaveById('${v.id}')">▣</button>
 </div></div>`).join(''):'<div class="empty">No Shorts yet. Tap Create Short to upload one.</div>';
 }
-async function loadAccount(){if(!user)return;let name=user.user_metadata?.full_name||user.email?.split('@')[0]||'Vidoza User';try{let r=await db.from('vidoza_profiles').select('*').eq('id',user.id).maybeSingle();if(r.data)name=r.data.full_name||r.data.channel_name||name}catch(e){}let h=`<div class="row"><div class="avatar">${esc(name)[0].toUpperCase()}</div><div><b>${esc(name)}</b><div class="sub">${esc(user.email||'')}</div></div></div>`;document.getElementById('account').innerHTML=h;document.getElementById('channelAccount').innerHTML=h}
+async function loadAccount(){if(!user)return;let name=user.user_metadata?.full_name||user.email?.split('@')[0]||'Vidoza User';try{const client=getDb();if(!client)return;let r=await client.from('vidoza_profiles').select('*').eq('id',user.id).maybeSingle();if(r.data)name=r.data.full_name||r.data.channel_name||name}catch(e){}let h=`<div class="row"><div class="avatar">${esc(name)[0].toUpperCase()}</div><div><b>${esc(name)}</b><div class="sub">${esc(user.email||'')}</div></div></div>`;document.getElementById('account').innerHTML=h;document.getElementById('channelAccount').innerHTML=h}
 async function openVideo(id){
 selected=videos.find(v=>v.id===id);if(!selected)return;
 history=[id,...history.filter(x=>x!==id)];save();
@@ -170,46 +172,47 @@ go('player');
 await syncVideoState(selected);
 }
 async function syncVideoState(v){
-if(!user)return;
+if(!user)return;const client=getDb();if(!client)return;
 try{
 const [l,s]=await Promise.all([
-db.from('vidoza_likes').select('id').eq('video_id',v.id).eq('user_id',user.id).maybeSingle(),
-db.from('vidoza_saved_videos').select('id').eq('video_id',v.id).eq('user_id',user.id).maybeSingle()
+client.from('vidoza_likes').select('id').eq('video_id',v.id).eq('user_id',user.id).maybeSingle(),
+client.from('vidoza_saved_videos').select('id').eq('video_id',v.id).eq('user_id',user.id).maybeSingle()
 ]);
 v.liked=!!l.data;v.saved=!!s.data;
 }catch(e){}
 }
 async function toggleLike(){
-if(!selected)return;
-if(!user){toast('Please login first');return}
+if(!selected)return;const client=getDb();
+if(!user||!client){toast('Please login first or check internet');return}
 const was=selected.liked;selected.liked=!was;
 try{
 if(selected.id.startsWith('v')||selected.id.startsWith('u')){
-if(was) await db.from('vidoza_likes').delete().eq('video_id',selected.id).eq('user_id',user.id);
-else await db.from('vidoza_likes').insert({video_id:selected.id,user_id:user.id});
+if(was) await client.from('vidoza_likes').delete().eq('video_id',selected.id).eq('user_id',user.id);
+else await client.from('vidoza_likes').insert({video_id:selected.id,user_id:user.id});
 }
 }catch(e){}
 document.getElementById('likeText').textContent=selected.liked?'Liked':'Like';save();
 }
 async function toggleSave(){
-if(!selected)return;
-if(!user){toast('Please login first');return}
+if(!selected)return;const client=getDb();
+if(!user||!client){toast('Please login first or check internet');return}
 const was=selected.saved;selected.saved=!was;
 try{
-if(was) await db.from('vidoza_saved_videos').delete().eq('video_id',selected.id).eq('user_id',user.id);
-else await db.from('vidoza_saved_videos').insert({video_id:selected.id,user_id:user.id});
+if(was) await client.from('vidoza_saved_videos').delete().eq('video_id',selected.id).eq('user_id',user.id);
+else await client.from('vidoza_saved_videos').insert({video_id:selected.id,user_id:user.id});
 }catch(e){}
 document.getElementById('saveText').textContent=selected.saved?'Saved':'Save';save();
 }
 async function toggleSubscribe(){
-if(!selected||!user){toast('Please login first');return}
+const client=getDb();
+if(!selected||!user||!client){toast('Please login first');return}
 if(selected.channel===user.user_metadata?.full_name||selected.channel==='My Vidoza Channel'){toast('You cannot subscribe to your own channel');return}
 const was=!!selected.subscribed;selected.subscribed=!was;
 try{
-const channel=await db.from('vidoza_profiles').select('id').eq('channel_name',selected.channel).maybeSingle();
+const channel=await client.from('vidoza_profiles').select('id').eq('channel_name',selected.channel).maybeSingle();
 if(channel.data){
-if(was) await db.from('vidoza_subscriptions').delete().eq('subscriber_id',user.id).eq('channel_id',channel.data.id);
-else await db.from('vidoza_subscriptions').insert({subscriber_id:user.id,channel_id:channel.data.id});
+if(was) await client.from('vidoza_subscriptions').delete().eq('subscriber_id',user.id).eq('channel_id',channel.data.id);
+else await client.from('vidoza_subscriptions').insert({subscriber_id:user.id,channel_id:channel.data.id});
 }
 }catch(e){}
 const b=document.getElementById('subBtn');if(b){b.textContent=selected.subscribed?'Subscribed':'Subscribe';b.className='btn '+(selected.subscribed?'soft':'primary')}
@@ -222,7 +225,7 @@ let x=document.getElementById('ci');if(!x||!x.value.trim())return;
 const text=x.value.trim();
 selected.comments=selected.comments||[];selected.comments.unshift(text);save();
 if(user&&!selected.id.startsWith('v')){
-try{await db.from('vidoza_comments').insert({user_id:user.id,video_id:selected.id,comment:text})}catch(e){}
+try{const client=getDb();if(client) await client.from('vidoza_comments').insert({user_id:user.id,video_id:selected.id,comment:text})}catch(e){}
 }
 document.getElementById('comments').innerHTML=selected.comments.map(c=>`<div class="comment">${esc(c)}</div>`).join('');
 x.value='';
@@ -239,9 +242,10 @@ function toast(t){alert(t)}
 function renderSearch(){let q=document.getElementById('searchInput').value.toLowerCase();document.getElementById('searchResults').innerHTML=videos.filter(v=>(v.title+' '+v.channel).toLowerCase().includes(q)).map(card).join('')||'<div class="empty">No results</div>'}
 function readFile(f,cb){if(!f)return cb('');let r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(f)}
 async function storageUpload(bucket,file,path){
-const {error}=await db.storage.from(bucket).upload(path,file,{upsert:false,contentType:file.type});
+const client=getDb();if(!client)throw new Error('Supabase connection is unavailable');
+const {error}=await client.storage.from(bucket).upload(path,file,{upsert:false,contentType:file.type});
 if(error)throw error;
-const {data}=db.storage.from(bucket).getPublicUrl(path);
+const {data}=client.storage.from(bucket).getPublicUrl(path);
 return data.publicUrl;
 }
 async function uploadVideo(){
@@ -259,7 +263,7 @@ if(tf){status.textContent='Uploading thumbnail...';thumbnail=await storageUpload
 status.textContent='Publishing...';
 const visibility=document.getElementById('visibility').value.toLowerCase();
 const payload={user_id:user.id,title:t,description:document.getElementById('uploadDescription').value,video_url:videoUrl,thumbnail_url:thumbnail||null,visibility};
-const r=await db.from('vidoza_videos').insert(payload).select().single();
+const r=await getDb().from('vidoza_videos').insert(payload).select().single();
 if(r.error)throw r.error;
 videos.unshift({id:r.data.id,title:t,channel:user.user_metadata?.full_name||'My Vidoza Channel',views:'0 views',age:'Just now',description:payload.description,uploaded:true,thumbnail,videoUrl,isShort:false,category:'All'});
 save();renderHome();status.style.color='#16a34a';status.textContent='Upload complete.';toast('Video published');setTimeout(()=>go('home'),500);
@@ -271,13 +275,14 @@ async function uploadShort(){
 const vf=document.getElementById('shortVideoFile').files[0],tf=document.getElementById('shortThumbFile').files[0],t=document.getElementById('shortTitle').value.trim(),status=document.getElementById('shortUploadStatus');
 if(!vf||!t){toast('Select Short video and title');return}
 if(!user){toast('Please login first');return}
+if(!getDb()){toast('Internet connection is required for upload');return}
 try{
 status.style.color='#111';status.textContent='Uploading Short...';
 const stamp=Date.now(),safe=vf.name.replace(/[^a-zA-Z0-9._-]/g,'_');
 const videoUrl=await storageUpload('vidoza-videos',vf,`${user.id}/short-${stamp}-${safe}`);
 let thumbnail='';if(tf)thumbnail=await storageUpload('vidoza-thumbnails',tf,`${user.id}/short-${stamp}-${tf.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`);
 const payload={user_id:user.id,title:t,description:document.getElementById('shortDescription').value,video_url:videoUrl,thumbnail_url:thumbnail||null,visibility:'public'};
-const r=await db.from('vidoza_videos').insert({...payload,is_short:true}).select().single();
+const r=await getDb().from('vidoza_videos').insert({...payload,is_short:true}).select().single();
 if(r.error)throw r.error;
 videos.unshift({id:r.data.id,title:t,channel:user.user_metadata?.full_name||'My Vidoza Channel',views:'0 views',age:'Just now',description:payload.description,uploaded:true,thumbnail,videoUrl,isShort:true,category:'All'});
 save();renderHome();status.style.color='#16a34a';status.textContent='Short published.';setTimeout(()=>go('shorts'),500);
@@ -289,9 +294,9 @@ function sendSupport(){let m=document.getElementById('supportMessage').value.tri
 function renderTickets(){let t=JSON.parse(localStorage.getItem('vidozaTickets')||'[]');document.getElementById('tickets').innerHTML=t.map(x=>`<div class="comment"><b>${esc(x.date)}</b><br>${esc(x.message)}</div>`).join('')}
 function emailSupport(){location.href='mailto:?subject=Vidoza Support&body='+encodeURIComponent(document.getElementById('supportMessage').value)}
 async function loadCloudVideos(){
-if(!user)return;
+if(!user)return;const client=getDb();if(!client)return;
 try{
-const r=await db.from('vidoza_videos').select('*').eq('status','published').order('created_at',{ascending:false}).limit(100);
+const r=await client.from('vidoza_videos').select('*').eq('status','published').order('created_at',{ascending:false}).limit(100);
 if(r.data){
 const cloud=r.data.map(v=>({id:v.id,title:v.title,channel:'Vidoza Creator',views:(v.views||0)+' views',age:'Recently',description:v.description||'',thumbnail:v.thumbnail_url||'',videoUrl:v.video_url,isShort:!!v.is_short,uploaded:true,category:'All',liked:false,saved:false,subscribed:false}));
 const local=videos.filter(v=>!v.uploaded);
@@ -299,7 +304,16 @@ videos=[...cloud,...local];save();renderHome();
 }
 }catch(e){}
 }
-async function init(){renderHome();renderTickets();showAuth();let r=await db.auth.getSession();if(r.data.session){user=r.data.session.user;hideAuth();stack=['home'];go('home',false);loadAccount();loadCloudVideos()}db.auth.onAuthStateChange((e,s)=>{setTimeout(()=>{if(s){user=s.user;hideAuth();stack=['home'];go('home',false);loadAccount();loadCloudVideos()}else{user=null;showAuth()}},0)})}
+async function init(){
+  renderHome();renderTickets();showAuth();
+  const client=getDb();
+  if(!client) return;
+  try{
+    const r=await client.auth.getSession();
+    if(r.data&&r.data.session){user=r.data.session.user;hideAuth();stack=['home'];go('home',false);loadAccount();loadCloudVideos()}
+    client.auth.onAuthStateChange((e,s)=>{setTimeout(()=>{if(s){user=s.user;hideAuth();stack=['home'];go('home',false);loadAccount();loadCloudVideos()}else{user=null;showAuth();showLogin()}},0)})
+  }catch(e){showAuth()}
+}
 init();
 </script>
 </body>

@@ -336,7 +336,441 @@ button,input,textarea,select{font:inherit}
 </head>
 
 <body>
+<!-- VIDOZA LOGIN / SIGNUP -->
+<div id="vidozaAuthScreen" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:#f7f7f8;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  font-family:Arial,sans-serif;
+">
 
+  <div style="
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 40px rgba(0,0,0,.15);
+    box-sizing:border-box;
+  ">
+
+    <div style="text-align:center;margin-bottom:25px;">
+      <div style="
+        width:70px;
+        height:70px;
+        margin:auto;
+        border-radius:18px;
+        background:#E11D48;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#fff;
+        font-size:38px;
+        font-weight:800;
+      ">V</div>
+
+      <h1 style="margin:15px 0 5px;font-size:28px;">Vidoza</h1>
+
+      <div style="color:#777;font-size:14px;">
+        India's video platform
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="vidozaLoginBox">
+
+      <h2 style="margin-bottom:20px;">Welcome back</h2>
+
+      <input
+        id="vidozaLoginEmail"
+        type="email"
+        placeholder="Email address"
+        style="
+          width:100%;
+          padding:14px;
+          margin-bottom:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+          box-sizing:border-box;
+          font-size:15px;
+        "
+      >
+
+      <input
+        id="vidozaLoginPassword"
+        type="password"
+        placeholder="Password"
+        style="
+          width:100%;
+          padding:14px;
+          margin-bottom:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+          box-sizing:border-box;
+          font-size:15px;
+        "
+      >
+
+      <button
+        onclick="vidozaLogin()"
+        style="
+          width:100%;
+          padding:14px;
+          border:0;
+          border-radius:10px;
+          background:#E11D48;
+          color:white;
+          font-size:16px;
+          font-weight:bold;
+          cursor:pointer;
+        "
+      >
+        Login
+      </button>
+
+      <div
+        id="vidozaLoginMessage"
+        style="margin-top:12px;text-align:center;font-size:14px;"
+      ></div>
+
+      <p style="text-align:center;margin-top:20px;color:#666;">
+        Don't have an account?
+        <button
+          onclick="vidozaShowSignup()"
+          style="
+            border:0;
+            background:none;
+            color:#E11D48;
+            font-weight:bold;
+            cursor:pointer;
+          "
+        >
+          Create Account
+        </button>
+      </p>
+
+    </div>
+
+
+    <!-- SIGNUP -->
+    <div id="vidozaSignupBox" style="display:none;">
+
+      <h2 style="margin-bottom:20px;">Create your account</h2>
+
+      <input
+        id="vidozaSignupName"
+        type="text"
+        placeholder="Full name"
+        style="
+          width:100%;
+          padding:14px;
+          margin-bottom:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+          box-sizing:border-box;
+          font-size:15px;
+        "
+      >
+
+      <input
+        id="vidozaSignupEmail"
+        type="email"
+        placeholder="Email address"
+        style="
+          width:100%;
+          padding:14px;
+          margin-bottom:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+          box-sizing:border-box;
+          font-size:15px;
+        "
+      >
+
+      <input
+        id="vidozaSignupPassword"
+        type="password"
+        placeholder="Create password"
+        style="
+          width:100%;
+          padding:14px;
+          margin-bottom:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+          box-sizing:border-box;
+          font-size:15px;
+        "
+      >
+
+      <button
+        onclick="vidozaSignup()"
+        style="
+          width:100%;
+          padding:14px;
+          border:0;
+          border-radius:10px;
+          background:#E11D48;
+          color:white;
+          font-size:16px;
+          font-weight:bold;
+          cursor:pointer;
+        "
+      >
+        Create Account
+      </button>
+
+      <div
+        id="vidozaSignupMessage"
+        style="margin-top:12px;text-align:center;font-size:14px;"
+      ></div>
+
+      <p style="text-align:center;margin-top:20px;color:#666;">
+        Already have an account?
+        <button
+          onclick="vidozaShowLogin()"
+          style="
+            border:0;
+            background:none;
+            color:#E11D48;
+            font-weight:bold;
+            cursor:pointer;
+          "
+        >
+          Login
+        </button>
+      </p>
+
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+
+function vidozaShowSignup(){
+
+  document.getElementById("vidozaLoginBox").style.display="none";
+
+  document.getElementById("vidozaSignupBox").style.display="block";
+
+}
+
+
+function vidozaShowLogin(){
+
+  document.getElementById("vidozaSignupBox").style.display="none";
+
+  document.getElementById("vidozaLoginBox").style.display="block";
+
+}
+
+
+async function vidozaLogin(){
+
+  const email =
+    document.getElementById("vidozaLoginEmail").value.trim();
+
+  const password =
+    document.getElementById("vidozaLoginPassword").value;
+
+  const msg =
+    document.getElementById("vidozaLoginMessage");
+
+
+  if(!email || !password){
+
+    msg.style.color="#dc2626";
+
+    msg.innerText="Please enter email and password.";
+
+    return;
+  }
+
+
+  try{
+
+    const {data,error} =
+      await vidozaDB.auth.signInWithPassword({
+        email:email,
+        password:password
+      });
+
+
+    if(error){
+
+      msg.style.color="#dc2626";
+
+      msg.innerText=error.message;
+
+      return;
+    }
+
+
+    msg.style.color="#16a34a";
+
+    msg.innerText="Login successful!";
+
+
+    document.getElementById("vidozaAuthScreen").style.display="none";
+
+
+  }catch(e){
+
+    msg.style.color="#dc2626";
+
+    msg.innerText="Unable to login. Please try again.";
+
+  }
+
+}
+
+
+async function vidozaSignup(){
+
+  const name =
+    document.getElementById("vidozaSignupName").value.trim();
+
+  const email =
+    document.getElementById("vidozaSignupEmail").value.trim();
+
+  const password =
+    document.getElementById("vidozaSignupPassword").value;
+
+  const msg =
+    document.getElementById("vidozaSignupMessage");
+
+
+  if(!name || !email || !password){
+
+    msg.style.color="#dc2626";
+
+    msg.innerText="Please fill all fields.";
+
+    return;
+  }
+
+
+  if(password.length < 6){
+
+    msg.style.color="#dc2626";
+
+    msg.innerText="Password must be at least 6 characters.";
+
+    return;
+  }
+
+
+  try{
+
+    const {data,error} =
+      await vidozaDB.auth.signUp({
+
+        email:email,
+
+        password:password,
+
+        options:{
+          data:{
+            full_name:name
+          }
+        }
+
+      });
+
+
+    if(error){
+
+      msg.style.color="#dc2626";
+
+      msg.innerText=error.message;
+
+      return;
+    }
+
+
+    msg.style.color="#16a34a";
+
+    msg.innerText =
+      "Account created successfully. Please login.";
+
+
+    setTimeout(function(){
+
+      vidozaShowLogin();
+
+    },1500);
+
+
+  }catch(e){
+
+    msg.style.color="#dc2626";
+
+    msg.innerText="Unable to create account.";
+
+  }
+
+}
+
+
+async function vidozaCheckLogin(){
+
+  if(typeof vidozaDB === "undefined")
+
+    setTimeout(vidozaCheckLogin,300);
+
+    return;
+  }
+
+
+  const {data} =
+    await vidozaDB.auth.getSession();
+
+
+  const authScreen =
+    document.getElementById("vidozaAuthScreen");
+
+
+  if(data && data.session){
+
+    authScreen.style.display="none";
+
+  }else{
+
+    authScreen.style.display="flex";
+
+  }
+
+
+  vidozaDB.auth.onAuthStateChange(function(event,session){
+
+    if(session){
+
+      authScreen.style.display="none";
+
+    }else{
+
+      authScreen.style.display="flex";
+
+    }
+
+  });
+
+}
+
+
+window.addEventListener("load",function(){
+
+  setTimeout(vidozaCheckLogin,500);
+
+});
+
+</script>
 <div class="top">
   <div class="logo">
     <span class="logoMark">V▶</span>

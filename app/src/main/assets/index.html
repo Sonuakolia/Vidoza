@@ -332,6 +332,7 @@ button,input,textarea,select{font:inherit}
   color:var(--muted);
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -1658,6 +1659,16 @@ renderHome();
 renderTickets();
 
 </script>
+<script>
+const VIDOZA_SUPABASE_URL = "https://mhjtlxxgeepmbxeoravu.supabase.co";
+const VIDOZA_SUPABASE_KEY = "sb_publishable_gHUxa_Mrg3UKzhjq9Rr30g_45Mqfex6";
 
+const vidozaDB = window.supabase.createClient(
+  VIDOZA_SUPABASE_URL,
+  VIDOZA_SUPABASE_KEY
+);
+
+console.log("Vidoza Supabase connected");
+</script>
 </body>
 </html>

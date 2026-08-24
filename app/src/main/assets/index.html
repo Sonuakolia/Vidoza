@@ -66,7 +66,7 @@ button,input,textarea,select{font:inherit}
 }
 
 .page{
-  display:none;
+  display:flex;
   padding-bottom:75px;
 }
 
@@ -720,49 +720,40 @@ async function vidozaSignup(){
 
 async function vidozaCheckLogin(){
 
-  if(typeof vidozaDB === "undefined")
+  const authScreen = document.getElementById("vidozaAuthScreen");
 
-    setTimeout(vidozaCheckLogin,300);
-
+  if(typeof vidozaDB === "undefined"){
+    authScreen.style.display = "flex";
     return;
   }
 
+  try {
 
-  const {data} =
-    await vidozaDB.auth.getSession();
+    const { data } = await vidozaDB.auth.getSession();
 
+    if(data && data.session){
+      authScreen.style.display = "none";
+    }else{
+      authScreen.style.display = "flex";
+    }
 
-  const authScreen =
-    document.getElementById("vidozaAuthScreen");
+    vidozaDB.auth.onAuthStateChange(function(event, session){
 
+      if(session){
+        authScreen.style.display = "none";
+      }else{
+        authScreen.style.display = "flex";
+      }
 
-  if(data && data.session){
+    });
 
-    authScreen.style.display="none";
+  } catch(error) {
 
-  }else{
-
-    authScreen.style.display="flex";
+    authScreen.style.display = "flex";
 
   }
 
-
-  vidozaDB.auth.onAuthStateChange(function(event,session){
-
-    if(session){
-
-      authScreen.style.display="none";
-
-    }else{
-
-      authScreen.style.display="flex";
-
-    }
-
-  });
-
 }
-
 
 window.addEventListener("load",function(){
 

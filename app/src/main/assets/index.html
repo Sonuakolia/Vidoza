@@ -73,9 +73,9 @@ body.auth-mode>.app{display:none!important}
 </div>
 
 <script>
-const URL="https://mhjtlxxgeepmbxeoravu.supabase.co";
-const KEY="sb_publishable_gHUxa_Mrg3UKzhjq9Rr30g_45Mqfex6";
-const db=window.supabase.createClient(URL,KEY);
+const SUPABASE_URL="https://mhjtlxxgeepmbxeoravu.supabase.co";
+const SUPABASE_KEY="sb_publishable_gHUxa_Mrg3UKzhjq9Rr30g_45Mqfex6";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const seeds=[{id:'v1',title:'Welcome to Vidoza',channel:'Vidoza Official',views:'12K views',age:'Today',description:'Welcome to your own video platform.',liked:false,saved:false,subscribed:false},{id:'v2',title:'Creator Spotlight India',channel:'Vidoza Creators',views:'8.4K views',age:'1 day ago',description:'Discover creators and stories.',liked:false,saved:false,subscribed:false}];
 let videos=JSON.parse(localStorage.getItem('vidozaVideos')||'null')||seeds;
 let history=JSON.parse(localStorage.getItem('vidozaHistory')||'[]');
@@ -102,7 +102,7 @@ function share(t){try{if(navigator.share)navigator.share({title:t,text:'Watch on
 function toast(t){alert(t)}
 function renderSearch(){let q=document.getElementById('searchInput').value.toLowerCase();document.getElementById('searchResults').innerHTML=videos.filter(v=>(v.title+' '+v.channel).toLowerCase().includes(q)).map(card).join('')||'<div class="empty">No results</div>'}
 function readFile(f,cb){if(!f)return cb('');let r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(f)}
-function uploadVideo(){let vf=document.getElementById('videoFile').files[0],tf=document.getElementById('thumbFile').files[0],t=document.getElementById('uploadTitle').value.trim();if(!vf||!t){toast('Select video and title');return}readFile(tf,im=>{videos.unshift({id:'u'+Date.now(),title:t,channel:'My Vidoza Channel',views:'0 views',age:'Just now',description:document.getElementById('uploadDescription').value,uploaded:true,thumbnail:im,videoUrl:URL.createObjectURL(vf)});save();renderHome();toast('Video uploaded');go('home')})}
+function uploadVideo(){let vf=document.getElementById('videoFile').files[0],tf=document.getElementById('thumbFile').files[0],t=document.getElementById('uploadTitle').value.trim();if(!vf||!t){toast('Select video and title');return}readFile(tf,im=>{videos.unshift({id:'u'+Date.now(),title:t,channel:'My Vidoza Channel',views:'0 views',age:'Just now',description:document.getElementById('uploadDescription').value,uploaded:true,thumbnail:im,videoUrl:window.URL.createObjectURL(vf)});save();renderHome();toast('Video uploaded');go('home')})}
 function showList(type){let list=type==='history'?history.map(id=>videos.find(v=>v.id===id)).filter(Boolean):videos.filter(v=>type==='saved'?v.saved:v.liked);document.getElementById('libraryList').innerHTML=list.map(card).join('')||'<div class="empty">Nothing here yet.</div>'}
 function policy(t,x){document.getElementById('policyContent').innerHTML=`<div class="h1">${esc(t)}</div><p style="line-height:1.7">${esc(x)}</p>`;go('policy')}
 function sendSupport(){let m=document.getElementById('supportMessage').value.trim();if(!m)return toast('Type your problem');let t=JSON.parse(localStorage.getItem('vidozaTickets')||'[]');t.unshift({date:new Date().toLocaleString(),message:m});localStorage.setItem('vidozaTickets',JSON.stringify(t));renderTickets();toast('Support ticket saved')}

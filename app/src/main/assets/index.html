@@ -1,0 +1,1663 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Vidoza</title>
+
+<style>
+:root{
+  --red:#e11d48;
+  --bg:#ffffff;
+  --text:#111111;
+  --muted:#6b7280;
+  --line:#e5e7eb;
+  --soft:#f3f4f6;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,textarea,select{font:inherit}
+
+.top{
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 14px;
+  border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  background:white;
+  z-index:10;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.logoMark{
+  width:34px;
+  height:34px;
+  border-radius:9px;
+  background:var(--red);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.spacer{flex:1}
+
+.iconBtn{
+  border:0;
+  background:transparent;
+  font-size:21px;
+}
+
+.page{
+  display:none;
+  padding-bottom:75px;
+}
+
+.page.active{display:block}
+
+.chips{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:12px;
+}
+
+.chip{
+  border:0;
+  background:#eee;
+  padding:8px 12px;
+  border-radius:10px;
+  white-space:nowrap;
+}
+
+.chip.active{
+  background:#111;
+  color:white;
+}
+
+.card{
+  margin-bottom:18px;
+}
+
+.thumb{
+  width:100%;
+  aspect-ratio:16/9;
+  background:linear-gradient(135deg,#161616,#444);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:52px;
+  position:relative;
+  overflow:hidden;
+}
+
+.thumb img,.thumb video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.duration{
+  position:absolute;
+  right:8px;
+  bottom:8px;
+  background:#000c;
+  padding:3px 6px;
+  border-radius:4px;
+  color:white;
+  font-size:12px;
+}
+
+.meta{
+  display:flex;
+  gap:10px;
+  padding:10px 12px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#ddd;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+}
+
+.title{
+  font-weight:700;
+  line-height:1.3;
+}
+
+.sub{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:66px;
+  border-top:1px solid var(--line);
+  background:white;
+  display:flex;
+  z-index:20;
+}
+
+.nav button{
+  flex:1;
+  border:0;
+  background:white;
+  font-size:11px;
+}
+
+.nav b{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
+
+.nav .create b{
+  font-size:31px;
+}
+
+.section{
+  padding:16px;
+}
+
+.h1{
+  font-size:24px;
+  font-weight:800;
+  margin-bottom:16px;
+}
+
+.field{
+  width:100%;
+  border:1px solid var(--line);
+  padding:12px;
+  border-radius:10px;
+  margin:7px 0 12px;
+}
+
+.btn{
+  border:0;
+  border-radius:20px;
+  padding:10px 16px;
+  font-weight:700;
+}
+
+.primary{
+  background:var(--red);
+  color:white;
+}
+
+.soft{
+  background:#eee;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.divider{
+  height:1px;
+  background:var(--line);
+  margin:14px 0;
+}
+
+.menu button{
+  width:100%;
+  text-align:left;
+  border:0;
+  border-bottom:1px solid var(--line);
+  background:white;
+  padding:16px 8px;
+  font-size:16px;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:10px 12px;
+}
+
+.action{
+  min-width:75px;
+  border:0;
+  background:#eee;
+  border-radius:18px;
+  padding:9px 12px;
+}
+
+.player video{
+  width:100%;
+  aspect-ratio:16/9;
+  background:black;
+}
+
+.panel{
+  padding:12px;
+}
+
+.comment{
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.short{
+  height:calc(100vh - 124px);
+  background:#111;
+  color:white;
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+
+.short .big{
+  font-size:72px;
+}
+
+.shortCaption{
+  position:absolute;
+  bottom:18px;
+  left:14px;
+  right:70px;
+}
+
+.shortRail{
+  position:absolute;
+  right:12px;
+  bottom:18px;
+  display:grid;
+  gap:16px;
+}
+
+.shortRail button{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:0;
+  background:#ffffff22;
+  color:white;
+}
+
+.searchBox{
+  display:flex;
+  gap:8px;
+  padding:12px;
+}
+
+.searchBox input{
+  flex:1;
+  border:1px solid var(--line);
+  padding:11px 15px;
+  border-radius:20px;
+}
+
+.notice{
+  background:#fff3cd;
+  color:#664d03;
+  padding:10px;
+  border-radius:8px;
+  font-size:12px;
+  margin-bottom:12px;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">
+  <div class="logo">
+    <span class="logoMark">V▶</span>
+    Vidoza
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="iconBtn" onclick="go('search')">⌕</button>
+  <button class="iconBtn" onclick="go('settings')">⚙</button>
+</div>
+
+
+<div id="home" class="page active">
+
+  <div class="chips">
+    <button class="chip active">All</button>
+    <button class="chip">Music</button>
+    <button class="chip">News</button>
+    <button class="chip">Gaming</button>
+    <button class="chip">Learning</button>
+    <button class="chip">Live</button>
+  </div>
+
+  <div id="feed"></div>
+</div>
+
+
+<div id="shorts" class="page">
+
+  <div class="short">
+
+    <div class="big">▶</div>
+
+    <div class="shortCaption">
+      <b>@VidozaCreator</b><br>
+      Welcome to Vidoza Shorts #vidoza
+    </div>
+
+    <div class="shortRail">
+      <button onclick="toast('Liked')">♥</button>
+      <button onclick="toast('Comments')">💬</button>
+      <button onclick="share('Vidoza Short')">↗</button>
+      <button onclick="toast('Saved')">▣</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<div id="search" class="page">
+
+  <div class="searchBox">
+
+    <input
+      id="searchInput"
+      placeholder="Search Vidoza"
+      oninput="renderSearch()">
+
+    <button
+      class="btn primary"
+      onclick="renderSearch()">
+      Search
+    </button>
+
+  </div>
+
+  <div id="searchResults"></div>
+
+</div>
+
+
+<div id="upload" class="page section">
+
+  <div class="h1">Upload video</div>
+
+  <label>Video file</label>
+  <input
+    id="videoFile"
+    class="field"
+    type="file"
+    accept="video/*">
+
+  <label>Thumbnail image</label>
+  <input
+    id="thumbFile"
+    class="field"
+    type="file"
+    accept="image/*">
+
+  <label>Title</label>
+  <input
+    id="uploadTitle"
+    class="field"
+    placeholder="Enter video title">
+
+  <label>Description</label>
+  <textarea
+    id="uploadDescription"
+    class="field"
+    rows="4"
+    placeholder="Tell viewers about your video"></textarea>
+
+  <label>Visibility</label>
+
+  <select
+    id="visibility"
+    class="field">
+
+    <option>Public</option>
+    <option>Unlisted</option>
+    <option>Private</option>
+
+  </select>
+
+  <button
+    class="btn primary"
+    onclick="uploadVideo()">
+    Upload & Publish
+  </button>
+
+  <p class="sub">
+    Testing build: upload data is stored on this device.
+  </p>
+
+</div>
+
+
+<div id="library" class="page section">
+
+  <div class="h1">You</div>
+
+  <div class="row">
+
+    <div class="avatar">V</div>
+
+    <div>
+      <b>My Vidoza Channel</b>
+      <div class="sub">@myvidoza</div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="menu">
+
+    <button onclick="showList('history')">
+      ◷ History
+    </button>
+
+    <button onclick="showList('saved')">
+      ▣ Saved videos
+    </button>
+
+    <button onclick="showList('liked')">
+      ♥ Liked videos
+    </button>
+
+    <button onclick="go('channel')">
+      ▤ Your channel
+    </button>
+
+    <button onclick="go('settings')">
+      ⚙ Settings
+    </button>
+
+  </div>
+
+  <div id="libraryList"></div>
+
+</div>
+
+
+<div id="channel" class="page">
+
+  <div class="section">
+
+    <div class="h1">My Vidoza Channel</div>
+
+    <div class="row">
+
+      <div class="avatar">V</div>
+
+      <div>
+        <b>@myvidoza</b>
+        <div class="sub">
+          Creator Channel
+        </div>
+      </div>
+
+    </div>
+
+    <div class="divider"></div>
+
+    <b>Your videos</b>
+
+  </div>
+
+  <div id="channelVideos"></div>
+
+</div>
+
+
+<div id="player" class="page"></div>
+
+
+<div id="settings" class="page section">
+
+  <div class="h1">Settings</div>
+
+  <div class="menu">
+
+    <button onclick="policy(
+      'Privacy Policy',
+      'Vidoza protects account and usage information and uses it to operate, secure and improve the platform. Users can request account and data deletion.'
+    )">
+      🔒 Privacy Policy
+    </button>
+
+    <button onclick="policy(
+      'Terms of Service',
+      'Use Vidoza lawfully. Do not upload illegal, deceptive, abusive or rights-infringing content.'
+    )">
+      📄 Terms of Service
+    </button>
+
+    <button onclick="policy(
+      'Community Guidelines',
+      'No harassment, scams, spam, hate, dangerous content, sexual exploitation, or unlawful content.'
+    )">
+      🛡 Community Guidelines
+    </button>
+
+    <button onclick="policy(
+      'Copyright Policy',
+      'Upload only content you own or have permission to use. Copyright complaints can lead to content removal.'
+    )">
+      © Copyright Policy
+    </button>
+
+    <button onclick="policy(
+      'Safety Center',
+      'Use reporting and blocking tools for unsafe behaviour. Do not share passwords or sensitive personal information.'
+    )">
+      ✓ Safety Center
+    </button>
+
+    <button onclick="go('support')">
+      🎧 Help & Support
+    </button>
+
+    <button onclick="policy(
+      'About Vidoza',
+      'Vidoza is an independent video platform for videos, Shorts, creators, subscribers and communities.'
+    )">
+      ⓘ About Vidoza
+    </button>
+
+  </div>
+
+</div>
+
+
+<div id="support" class="page section">
+
+  <div class="h1">
+    Help & Support
+  </div>
+
+  <div class="notice">
+    Testing build: support tickets are saved locally.
+    Email button can open the phone email app.
+  </div>
+
+  <label>Name</label>
+
+  <input
+    id="supportName"
+    class="field"
+    placeholder="Your name">
+
+  <label>Email / Mobile</label>
+
+  <input
+    id="supportContact"
+    class="field"
+    placeholder="Contact details">
+
+  <label>Your Problem</label>
+
+  <textarea
+    id="supportMessage"
+    class="field"
+    rows="6"
+    placeholder="Type your problem"></textarea>
+
+  <button
+    class="btn primary"
+    onclick="sendSupport()">
+    Submit Support Ticket
+  </button>
+
+  <button
+    class="btn soft"
+    onclick="emailSupport()">
+    Send by Email
+  </button>
+
+  <div id="tickets"></div>
+
+</div>
+
+
+<div id="policy" class="page section">
+
+  <div id="policyContent"></div>
+
+</div>
+
+
+<div class="nav">
+
+  <button onclick="go('home')">
+    <b>⌂</b>
+    Home
+  </button>
+
+  <button onclick="go('shorts')">
+    <b>♬</b>
+    Shorts
+  </button>
+
+  <button
+    class="create"
+    onclick="go('upload')">
+    <b>⊕</b>
+    Create
+  </button>
+
+  <button onclick="toast('Subscriptions')">
+    <b>▣</b>
+    Subscriptions
+  </button>
+
+  <button onclick="go('library')">
+    <b>◉</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+const seedVideos = [
+
+{
+id:'v1',
+title:'Welcome to Vidoza',
+channel:'Vidoza Official',
+views:'12K views',
+age:'Today',
+description:'Welcome to your own video platform.',
+liked:false,
+saved:false,
+subscribed:false
+},
+
+{
+id:'v2',
+title:'Creator Spotlight India',
+channel:'Vidoza Creators',
+views:'8.4K views',
+age:'1 day ago',
+description:'Discover creators and stories.',
+liked:false,
+saved:false,
+subscribed:false
+},
+
+{
+id:'v3',
+title:'Learn Watch Share',
+channel:'Vidoza Learning',
+views:'5.1K views',
+age:'2 days ago',
+description:'Learning and entertainment on Vidoza.',
+liked:false,
+saved:false,
+subscribed:false
+}
+
+];
+
+let videos =
+JSON.parse(
+localStorage.getItem('vidozaVideos') || 'null'
+)
+|| seedVideos;
+
+let history =
+JSON.parse(
+localStorage.getItem('vidozaHistory') || '[]'
+);
+
+let pageStack=['home'];
+
+let currentPage='home';
+
+let selectedVideo=null;
+
+
+function saveData(){
+
+localStorage.setItem(
+'vidozaVideos',
+JSON.stringify(videos)
+);
+
+localStorage.setItem(
+'vidozaHistory',
+JSON.stringify(history)
+);
+
+}
+
+
+function escapeText(text){
+
+return (text || '').replace(
+/[&<>"']/g,
+function(m){
+
+return {
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+}[m];
+
+});
+
+}
+
+
+function createThumbnail(video){
+
+if(video.thumbnail){
+
+return `
+<img src="${video.thumbnail}">
+`;
+
+}
+
+return `
+<div>
+${video.uploaded ? '🎬' : '▶'}
+</div>
+`;
+
+}
+
+
+function createCard(video){
+
+return `
+
+<div
+class="card"
+onclick="openVideo('${video.id}')">
+
+<div class="thumb">
+
+${createThumbnail(video)}
+
+<span class="duration">
+${video.uploaded ? 'NEW' : '4:20'}
+</span>
+
+</div>
+
+<div class="meta">
+
+<div class="avatar">
+${escapeText(video.channel || 'V')[0]}
+</div>
+
+<div>
+
+<div class="title">
+${escapeText(video.title)}
+</div>
+
+<div class="sub">
+
+${escapeText(video.channel)}
+
+ ·
+
+${escapeText(video.views || '0 views')}
+
+ ·
+
+${escapeText(video.age || 'Just now')}
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function renderHome(){
+
+document.getElementById('feed')
+.innerHTML =
+videos.map(createCard).join('');
+
+document.getElementById('channelVideos')
+.innerHTML =
+videos
+.filter(v => v.uploaded)
+.map(createCard)
+.join('')
+||
+'<div class="empty">Your uploaded videos will appear here.</div>';
+
+}
+
+
+function go(pageId,push=true){
+
+document
+.querySelectorAll('.page')
+.forEach(page =>
+page.classList.remove('active')
+);
+
+document
+.getElementById(pageId)
+.classList.add('active');
+
+currentPage=pageId;
+
+if(
+push &&
+pageStack[pageStack.length-1] !== pageId
+){
+
+pageStack.push(pageId);
+
+}
+
+window.scrollTo(0,0);
+
+if(pageId === 'home'){
+
+renderHome();
+
+}
+
+}
+
+
+window.appBack=function(){
+
+if(pageStack.length > 1){
+
+pageStack.pop();
+
+go(
+pageStack[pageStack.length-1],
+false
+);
+
+return 'handled';
+
+}
+
+if(currentPage !== 'home'){
+
+go('home',false);
+
+pageStack=['home'];
+
+return 'handled';
+
+}
+
+return 'exit';
+
+};
+
+
+function openVideo(id){
+
+selectedVideo =
+videos.find(v => v.id === id);
+
+if(!selectedVideo) return;
+
+history =
+history.filter(x => x !== id);
+
+history.unshift(id);
+
+saveData();
+
+
+let media='';
+
+if(selectedVideo.videoUrl){
+
+media = `
+<div class="player">
+<video
+controls
+autoplay
+src="${selectedVideo.videoUrl}">
+</video>
+</div>
+`;
+
+}else{
+
+media = `
+<div class="thumb">
+▶
+</div>
+`;
+
+}
+
+
+document.getElementById('player')
+.innerHTML = `
+
+${media}
+
+<div class="panel">
+
+<div
+class="title"
+style="font-size:19px">
+
+${escapeText(selectedVideo.title)}
+
+</div>
+
+<div class="sub">
+
+${escapeText(selectedVideo.views || '0 views')}
+
+ ·
+
+${escapeText(selectedVideo.age || 'Just now')}
+
+</div>
+
+</div>
+
+
+<div class="actions">
+
+<button
+class="action"
+onclick="toggleLike()">
+
+♥<br>
+
+${selectedVideo.liked ? 'Liked' : 'Like'}
+
+</button>
+
+
+<button
+class="action"
+onclick="focusComment()">
+
+💬<br>
+
+Comment
+
+</button>
+
+
+<button
+class="action"
+onclick="share('${escapeText(selectedVideo.title)}')">
+
+↗<br>
+
+Share
+
+</button>
+
+
+<button
+class="action"
+onclick="toggleSave()">
+
+▣<br>
+
+${selectedVideo.saved ? 'Saved' : 'Save'}
+
+</button>
+
+</div>
+
+
+<div class="panel">
+
+
+<div class="row">
+
+<div class="avatar">
+
+${escapeText(selectedVideo.channel)[0]}
+
+</div>
+
+
+<div style="flex:1">
+
+<b>
+
+${escapeText(selectedVideo.channel)}
+
+</b>
+
+<div class="sub">
+Creator
+</div>
+
+</div>
+
+
+<button
+class="btn
+${selectedVideo.subscribed ? 'soft' : 'primary'}"
+onclick="toggleSubscribe()">
+
+${selectedVideo.subscribed
+? 'Subscribed'
+: 'Subscribe'}
+
+</button>
+
+</div>
+
+
+<div class="divider"></div>
+
+
+<b>Description</b>
+
+
+<p>
+
+${escapeText(
+selectedVideo.description
+||
+'No description'
+)}
+
+</p>
+
+
+<div class="divider"></div>
+
+
+<b>Comments</b>
+
+
+<div
+class="row"
+style="margin-top:8px">
+
+
+<input
+id="commentInput"
+class="field"
+style="margin:0"
+placeholder="Add a comment">
+
+
+<button
+class="btn primary"
+onclick="addComment()">
+
+Post
+
+</button>
+
+
+</div>
+
+
+<div id="comments">
+
+${(selectedVideo.comments || [])
+.map(comment =>
+`
+<div class="comment">
+${escapeText(comment)}
+</div>
+`
+)
+.join('')}
+
+</div>
+
+
+</div>
+
+`;
+
+go('player');
+
+}
+
+
+function updateSelected(){
+
+let index =
+videos.findIndex(
+v => v.id === selectedVideo.id
+);
+
+videos[index] = selectedVideo;
+
+saveData();
+
+openVideo(selectedVideo.id);
+
+}
+
+
+function toggleLike(){
+
+selectedVideo.liked =
+!selectedVideo.liked;
+
+updateSelected();
+
+}
+
+
+function toggleSave(){
+
+selectedVideo.saved =
+!selectedVideo.saved;
+
+updateSelected();
+
+}
+
+
+function toggleSubscribe(){
+
+selectedVideo.subscribed =
+!selectedVideo.subscribed;
+
+updateSelected();
+
+}
+
+
+function focusComment(){
+
+document
+.getElementById('commentInput')
+.focus();
+
+}
+
+
+function addComment(){
+
+let input =
+document.getElementById('commentInput');
+
+let text =
+input.value.trim();
+
+if(!text) return;
+
+selectedVideo.comments =
+selectedVideo.comments || [];
+
+selectedVideo.comments.unshift(text);
+
+updateSelected();
+
+}
+
+
+function share(title){
+
+try{
+
+if(window.Native && Native.share){
+
+Native.share(
+title,
+'Watch on Vidoza: ' + title
+);
+
+}
+
+}
+
+catch(e){
+
+alert('Share unavailable');
+
+}
+
+}
+
+
+function toast(message){
+
+try{
+
+Native.toast(message);
+
+}
+
+catch(e){
+
+alert(message);
+
+}
+
+}
+
+
+function renderSearch(){
+
+let query =
+document
+.getElementById('searchInput')
+.value
+.toLowerCase();
+
+
+let results =
+videos.filter(video =>
+
+(
+video.title +
+' ' +
+video.channel
+)
+.toLowerCase()
+.includes(query)
+
+);
+
+
+document
+.getElementById('searchResults')
+.innerHTML =
+
+results.map(createCard).join('')
+
+||
+
+'<div class="empty">No results</div>';
+
+}
+
+
+function readFile(file,callback){
+
+if(!file){
+
+callback('');
+
+return;
+
+}
+
+let reader =
+new FileReader();
+
+reader.onload =
+() => callback(reader.result);
+
+reader.readAsDataURL(file);
+
+}
+
+
+function uploadVideo(){
+
+let videoFile =
+document
+.getElementById('videoFile')
+.files[0];
+
+let thumbnailFile =
+document
+.getElementById('thumbFile')
+.files[0];
+
+let title =
+document
+.getElementById('uploadTitle')
+.value
+.trim();
+
+
+if(!videoFile || !title){
+
+toast(
+'Select video and enter title'
+);
+
+return;
+
+}
+
+
+readFile(
+thumbnailFile,
+function(thumbnail){
+
+let videoUrl =
+URL.createObjectURL(videoFile);
+
+let newVideo = {
+
+id:'u' + Date.now(),
+
+title:title,
+
+channel:
+'My Vidoza Channel',
+
+views:
+'0 views',
+
+age:
+'Just now',
+
+description:
+document
+.getElementById('uploadDescription')
+.value,
+
+uploaded:true,
+
+thumbnail:
+thumbnail || '',
+
+videoUrl:videoUrl,
+
+liked:false,
+
+saved:false,
+
+subscribed:false
+
+};
+
+
+videos.unshift(newVideo);
+
+saveData();
+
+renderHome();
+
+toast('Video uploaded');
+
+go('home');
+
+});
+
+}
+
+
+function showList(type){
+
+let list=[];
+
+
+if(type === 'history'){
+
+list =
+history
+.map(id =>
+videos.find(v => v.id === id)
+)
+.filter(Boolean);
+
+}
+
+
+if(type === 'saved'){
+
+list =
+videos.filter(v => v.saved);
+
+}
+
+
+if(type === 'liked'){
+
+list =
+videos.filter(v => v.liked);
+
+}
+
+
+document
+.getElementById('libraryList')
+.innerHTML =
+
+'<div class="divider"></div>'
+
++
+
+'<b>'
+
++
+type[0].toUpperCase()
++
+type.slice(1)
+
++
+'</b>'
+
++
+
+(
+list.map(createCard).join('')
+
+||
+
+'<div class="empty">Nothing here yet.</div>'
+);
+
+}
+
+
+function policy(title,text){
+
+document
+.getElementById('policyContent')
+.innerHTML = `
+
+<div class="h1">
+${escapeText(title)}
+</div>
+
+<p style="line-height:1.7">
+${escapeText(text)}
+</p>
+
+`;
+
+go('policy');
+
+}
+
+
+function sendSupport(){
+
+let message =
+document
+.getElementById('supportMessage')
+.value
+.trim();
+
+
+if(!message){
+
+toast(
+'Type your problem'
+);
+
+return;
+
+}
+
+
+let tickets =
+JSON.parse(
+localStorage
+.getItem('vidozaTickets')
+||
+'[]'
+);
+
+
+tickets.unshift({
+
+date:
+new Date().toLocaleString(),
+
+name:
+document
+.getElementById('supportName')
+.value,
+
+contact:
+document
+.getElementById('supportContact')
+.value,
+
+message:
+message
+
+});
+
+
+localStorage.setItem(
+'vidozaTickets',
+JSON.stringify(tickets)
+);
+
+
+renderTickets();
+
+toast(
+'Support ticket saved'
+);
+
+}
+
+
+function renderTickets(){
+
+let tickets =
+JSON.parse(
+localStorage
+.getItem('vidozaTickets')
+||
+'[]'
+);
+
+
+document
+.getElementById('tickets')
+.innerHTML =
+
+tickets.length
+
+?
+
+'<div class="divider"></div><b>Submitted tickets</b>'
+
++
+
+tickets.map(ticket => `
+
+<div class="comment">
+
+<b>
+${escapeText(ticket.date)}
+</b>
+
+<br>
+
+${escapeText(ticket.message)}
+
+</div>
+
+`).join('')
+
+:
+
+'';
+
+}
+
+
+function emailSupport(){
+
+let message =
+document
+.getElementById('supportMessage')
+.value;
+
+
+try{
+
+Native.emailSupport(
+'Vidoza Support',
+message
+);
+
+}
+
+catch(e){
+
+toast(
+'Email app not available'
+);
+
+}
+
+}
+
+
+renderHome();
+
+renderTickets();
+
+</script>
+
+</body>
+</html>

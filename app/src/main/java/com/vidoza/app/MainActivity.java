@@ -82,17 +82,32 @@ public class MainActivity extends Activity {
         });
 
         // Chrome / file chooser
-        webView.setWebChromeClient(new WebChromeClient() {
+       webView.setWebViewClient(new WebViewClient() {
 
-            @Override
-            public boolean onShowFileChooser(
-                    WebView webView,
-                    ValueCallback<Uri[]> filePathCallbackNew,
-                    FileChooserParams fileChooserParams) {
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+    }
 
-                if (filePathCallback != null) {
-                    filePathCallback.onReceiveValue(null);
-                }
+    @Override
+    public void onReceivedError(
+            WebView view,
+            WebResourceRequest request,
+            WebResourceError error) {
+
+        if (request.isForMainFrame()) {
+            view.loadData(
+                "<html><body style='font-family:Arial;padding:30px'>" +
+                "<h2>Vidoza Loading Error</h2>" +
+                "<p>" + error.getDescription() + "</p>" +
+                "<p>Error code: " + error.getErrorCode() + "</p>" +
+                "</body></html>",
+                "text/html",
+                "UTF-8"
+            );
+        }
+    }
+});
 
                 filePathCallback = filePathCallbackNew;
 

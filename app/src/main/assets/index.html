@@ -708,6 +708,47 @@ video::-webkit-media-controls-panel{display:none!important}
 }
 </style>
 
+
+<style id="vidoza-home-final-v32">
+.homeTabs{
+  position:sticky;top:70px;z-index:900;
+  display:grid;grid-template-columns:1fr 1fr;
+  background:#fff;border-bottom:1px solid #eee;
+  padding:6px 12px 0;
+}
+.homeTab{
+  border:0;background:#fff;padding:12px 6px;
+  font-size:16px;font-weight:700;color:#777;
+  border-bottom:3px solid transparent;
+}
+.homeTab.active{color:#111;border-bottom-color:#e11d48}
+.homeContinue{padding:0 12px}
+.homeSectionTitle{font-size:19px;font-weight:800;margin:12px 0 10px}
+.continueRow{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px}
+.continueCard{min-width:165px;width:165px;border:0;background:#fff;text-align:left;padding:0}
+.continueThumb{width:165px;aspect-ratio:16/9;background:#222;color:#fff;border-radius:12px;overflow:hidden;display:grid;place-items:center;font-size:30px}
+.continueThumb img{width:100%;height:100%;object-fit:cover}
+.continueTitle{font-size:13px;font-weight:700;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.homeCard{width:100%;background:#fff;margin:0 0 20px;overflow:hidden}
+.homeThumb{position:relative;width:100%;aspect-ratio:16/9;background:#171717;overflow:hidden}
+.homeThumb img,.homeThumb .homePreview{display:block;width:100%;height:100%;object-fit:cover;background:#111}
+.homeNoThumb{width:100%;height:100%;display:grid;place-items:center;color:#fff;font-size:46px}
+.homeDuration{position:absolute;right:8px;bottom:8px;background:#000c;color:#fff;border-radius:5px;padding:3px 6px;font-size:12px}
+.homeMeta{display:grid;grid-template-columns:42px 1fr 38px;gap:10px;align-items:start;padding:11px 12px 7px}
+.homeAvatar{width:42px;height:42px;border-radius:50%;background:#e5e7eb;display:grid;place-items:center;font-weight:800}
+.homeInfo{min-width:0}
+.homeTitle{font-size:17px;font-weight:800;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.homeSub{font-size:13px;color:#6b7280;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.homeMore{border:0;background:transparent;font-size:26px;line-height:1;padding:4px}
+.homeQuickActions{display:flex;gap:8px;padding:0 12px 12px;overflow-x:auto}
+.homeQuickActions button{border:0;background:#f1f1f3;border-radius:18px;padding:8px 13px;white-space:nowrap;font-size:13px;font-weight:700}
+#feed{padding-bottom:10px}
+@media(max-width:600px){
+  .homeTabs{top:70px}
+  .homeTitle{font-size:16px}
+}
+</style>
+
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -738,15 +779,18 @@ video::-webkit-media-controls-panel{display:none!important}
 <div class="app" id="app">
  <div class="top"><div class="logo"><span class="mark">V▶</span>Vidoza</div><div class="spacer"></div><button class="icon" id="searchBtn">⌕</button><button class="icon" id="settingsBtn">⚙</button></div>
 
- <div id="home" class="page active">
-      <div id="chips" class="chips"></div>
-      <div class="section" style="padding-top:4px">
-        <div id="featureStatus" class="notice" style="display:none"></div>
-      </div>
-      <div id="feed"></div>
-    </div>
+ 
+<div id="home" class="page active">
+  <div class="homeTabs">
+    <button id="homeForYouTab" class="homeTab active" type="button">For You</button>
+    <button id="homeFollowingTab" class="homeTab" type="button">Following</button>
+  </div>
+  <div id="chips" class="chips"></div>
+  <div id="homeContinue" class="homeContinue"></div>
+  <div id="feed"></div>
+</div>
 
- <div id="shorts" class="page"><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
+<div id="shorts" class="page"><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
 
  
 <div id="social" class="page section">
@@ -1054,6 +1098,7 @@ const SUPABASE_URL='https://mhjtlxxgeepmbxeoravu.supabase.co';
 const SUPABASE_KEY='sb_publishable_gHUxa_Mrg3UKzhjq9Rr30g_45Mqfex6';
 
 let db=null,user=null,current='home',stack=['home'],selected=null,category='All';
+let homeMode='For You';
 let videos=JSON.parse(localStorage.getItem('vidozaVideosSafe')||'null')||[
  {id:'demo1',title:'Welcome to Vidoza',channel:'Vidoza Official',views:'12K views',age:'Today',category:'Learning',description:'Welcome to Vidoza.',liked:false,saved:false,subscribed:false},
  {id:'demo2',title:'Vidoza Music India',channel:'Vidoza Music',views:'5.1K views',age:'Today',category:'Music',description:'Music on Vidoza.',liked:false,saved:false,subscribed:false},
@@ -1185,24 +1230,106 @@ function card(v){
  const media=v.thumbnail
    ? '<img src="'+esc(v.thumbnail)+'" alt="">'
    : (v.url ? '<video class="homePreview" muted playsinline preload="metadata" src="'+esc(v.url)+'"></video>'
-             : '<div class="noThumb">▶</div>');
- return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+media+'<span class="duration">'+(v.isShort?'SHORT':'4:20')+'</span></div><div class="infoRow"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div class="videoInfo"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.channel)+' · '+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div></div></div>'
+             : '<div class="homeNoThumb">▶</div>');
+ const subbed=!!v.subscribed;
+ return '<article class="homeCard" data-video="'+esc(v.id)+'">'+
+   '<div class="homeThumb">'+media+
+     '<span class="homeDuration">'+(v.durationLabel||'')+'</span>'+
+   '</div>'+
+   '<div class="homeMeta">'+
+     '<div class="homeAvatar">'+esc((v.channel||'V')[0])+'</div>'+
+     '<div class="homeInfo">'+
+       '<div class="homeTitle">'+esc(v.title||'Untitled video')+'</div>'+
+       '<div class="homeSub">'+esc(v.channel||'Vidoza Creator')+' · '+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div>'+
+     '</div>'+
+     '<button class="homeMore" data-home-more="'+esc(v.id)+'" type="button">⋮</button>'+
+   '</div>'+
+   '<div class="homeQuickActions">'+
+     '<button data-home-subscribe="'+esc(v.id)+'">'+(subbed?'Subscribed':'Subscribe')+'</button>'+
+     '<button data-home-save="'+esc(v.id)+'">'+(v.saved?'Saved':'Save')+'</button>'+
+     '<button data-home-share="'+esc(v.id)+'">Share</button>'+
+   '</div>'+
+ '</article>';
 }
-function bindCards(root){root.querySelectorAll('[data-video]').forEach(function(x){x.onclick=function(){openVideo(x.dataset.video)}})}
+function bindCards(root){
+ if(!root)return;
+ root.querySelectorAll('[data-video]').forEach(function(x){
+   x.onclick=function(e){
+     if(e.target.closest('button'))return;
+     openVideo(x.dataset.video);
+   };
+ });
+ root.querySelectorAll('[data-home-subscribe]').forEach(function(b){
+   b.onclick=function(e){
+     e.stopPropagation();
+     const v=videos.find(function(x){return String(x.id)===String(b.dataset.homeSubscribe)});
+     if(!v)return;
+     v.subscribed=!v.subscribed;save();renderHome();
+   };
+ });
+ root.querySelectorAll('[data-home-save]').forEach(function(b){
+   b.onclick=function(e){
+     e.stopPropagation();
+     const v=videos.find(function(x){return String(x.id)===String(b.dataset.homeSave)});
+     if(!v)return;
+     v.saved=!v.saved;save();renderHome();
+   };
+ });
+ root.querySelectorAll('[data-home-share]').forEach(function(b){
+   b.onclick=function(e){
+     e.stopPropagation();
+     const v=videos.find(function(x){return String(x.id)===String(b.dataset.homeShare)});
+     if(v)shareText((v.title||'Vidoza video')+' — '+(v.channel||'Vidoza'));
+   };
+ });
+ root.querySelectorAll('[data-home-more]').forEach(function(b){
+   b.onclick=function(e){
+     e.stopPropagation();
+     const v=videos.find(function(x){return String(x.id)===String(b.dataset.homeMore)});
+     if(!v)return;
+     const action=prompt('Video options:\\n1 Save\\n2 Share\\n3 Report','1');
+     if(action==='1'){v.saved=true;save();renderHome()}
+     if(action==='2')shareText((v.title||'Vidoza video')+' — '+(v.channel||'Vidoza'));
+     if(action==='3')reportVideo(v);
+   };
+ });
+}
+function renderContinueWatching(){
+ const box=$('homeContinue');if(!box)return;
+ const recent=videos.filter(function(v){return v.lastPosition>0 && !v.isShort}).slice(0,4);
+ if(!recent.length){box.innerHTML='';return}
+ box.innerHTML='<div class="homeSectionTitle">Continue watching</div><div class="continueRow">'+recent.map(function(v){
+   return '<button class="continueCard" data-video="'+esc(v.id)+'"><div class="continueThumb">'+
+     (v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+
+     '</div><div class="continueTitle">'+esc(v.title)+'</div></button>';
+ }).join('')+'</div>';
+ bindCards(box);
+}
 function renderHome(){
  renderChips();
- let list=category==='All'?videos:videos.filter(function(v){return v.category===category});
- const full=list.filter(function(v){return !v.isShort});
- let homeHtml=full.map(card).join('')||'<div class="empty">No videos in '+esc(category)+' yet.</div>';
- if(category==='All'&&shorts.length){
-   homeHtml+='<div class="section"><div class="h2">Shorts</div><div style="display:flex;gap:10px;overflow:auto;padding-bottom:8px">'+shorts.slice(0,6).map(function(s){
-     return '<div data-home-short="'+esc(s.id)+'" style="min-width:150px;width:150px;cursor:pointer"><div style="background:#111;border-radius:12px;overflow:hidden;aspect-ratio:9/14">'+(s.thumbnail?'<img src="'+esc(s.thumbnail)+'" style="width:100%;height:100%;object-fit:cover">':'<div style="height:100%;display:grid;place-items:center;color:#fff;font-size:36px">▶</div>')+'</div><div class="title" style="font-size:14px;margin-top:6px">'+esc(s.title)+'</div><div class="sub">'+esc(s.channel)+'</div></div>'
-   }).join('')+'</div></div>';
- }
- $('feed').innerHTML=homeHtml;
+ let list=videos.filter(function(v){return !v.isShort});
+ if(homeMode==='Following')list=list.filter(function(v){return v.subscribed});
+ if(category!=='All')list=list.filter(function(v){return v.category===category});
+
+ // Uploaded videos first, then other videos. Keeps user's own uploads visible.
+ list=list.slice().sort(function(a,b){
+   const au=a.uploaded?1:0,bu=b.uploaded?1:0;
+   if(au!==bu)return bu-au;
+   return (b.createdAt||0)-(a.createdAt||0);
+ });
+
+ $('feed').innerHTML=list.length
+   ? list.map(card).join('')
+   : '<div class="empty">'+(homeMode==='Following'?'Subscribe to creators to see their videos here.':'No videos available yet.')+'</div>';
+
  bindCards($('feed'));
- $('feed').querySelectorAll('[data-home-short]').forEach(function(x){x.onclick=function(){showPage('shorts')}});
- renderChannel()
+ renderContinueWatching();
+
+ document.querySelectorAll('.homePreview').forEach(function(v){
+   v.addEventListener('loadedmetadata',function(){
+     try{v.currentTime=Math.min(1,(v.duration||1)/4)}catch(e){}
+   });
+ });
 }
 function renderShorts(){
  const seen={};
@@ -1449,6 +1576,16 @@ $('subAction').onclick=toggleSubscribe;
 $('commentAction').onclick=function(){document.getElementById('commentInput').focus()};
 $('postComment').onclick=postComment;
 renderComments();
+
+ setTimeout(function(){
+   const pv=document.querySelector('#player video');
+   if(pv){
+     pv.addEventListener('timeupdate',function(){
+       const vv=videos.find(function(x){return String(x.id)===String(selected&&selected.id)});
+       if(vv && pv.currentTime>2){vv.lastPosition=Math.floor(pv.currentTime);save()}
+     });
+   }
+ },80);
 }
 function renderComments(){
  const list=selected.comments||[];
@@ -1914,6 +2051,20 @@ function wire(){
 
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
  $('navHome').onclick=function(){showPage('home')};
+
+if($('homeForYouTab'))$('homeForYouTab').onclick=function(){
+  homeMode='For You';
+  this.classList.add('active');
+  if($('homeFollowingTab'))$('homeFollowingTab').classList.remove('active');
+  renderHome();
+};
+if($('homeFollowingTab'))$('homeFollowingTab').onclick=function(){
+  homeMode='Following';
+  this.classList.add('active');
+  if($('homeForYouTab'))$('homeForYouTab').classList.remove('active');
+  renderHome();
+};
+
 $('navShorts').onclick=function(){showPage('shorts')};
 $('navCreate').onclick=function(){$('createMenu').style.display='flex'};
 $('closeCreateMenu').onclick=function(){$('createMenu').style.display='none'};

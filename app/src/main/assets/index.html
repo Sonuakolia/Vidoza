@@ -62,6 +62,12 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
   .meta{padding:10px 14px}
   .nav{height:78px;padding-bottom:10px;bottom:32px}
 }
+@media(max-width:600px){
+      .nav button{font-size:11px}
+      .nav b{font-size:21px}
+      .profileTabs .btn{padding:10px 4px;font-size:13px}
+      #createMenu>div{max-width:440px}
+    }
 </style>
 </head>
 <body>
@@ -103,9 +109,34 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
 
  <div id="shorts" class="page"><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
 
+ 
+<div id="social" class="page section">
+  <div class="row" style="justify-content:space-between">
+    <div class="h1" style="margin:0">Social</div>
+    <button class="btn soft" id="socialRefresh">↻ Refresh</button>
+  </div>
+  <div class="notice">Stories, photo posts and text updates from creators you follow.</div>
+  <div id="storiesBar" style="display:flex;gap:12px;overflow:auto;padding:8px 0 14px"></div>
+  <div id="socialFeed"></div>
+</div>
+
  <div id="search" class="page section"><div class="row"><input id="searchInput" class="field" style="margin:0" placeholder="Search Vidoza"><button class="btn primary" id="searchGo">Search</button></div><div id="searchResults"></div></div>
 
  <div id="upload" class="page section"><div class="h1">Upload video</div><div class="notice">Select a video and publish it. Upload status will be shown below.</div><input id="videoFile" class="field" type="file" accept="video/*"><input id="thumbFile" class="field" type="file" accept="image/*"><input id="uploadTitle" class="field" placeholder="Video title"><textarea id="uploadDesc" class="field" rows="4" placeholder="Description"></textarea><select id="visibility" class="field"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select><button class="btn primary" id="uploadBtn">Upload & Publish</button><div id="uploadStatus" class="authMsg"></div></div>
+
+ 
+<div id="photoUpload" class="page section">
+  <div class="h1">Create Photo Post</div>
+  <input id="photoFile" class="field" type="file" accept="image/*">
+  <textarea id="photoCaption" class="field" rows="4" placeholder="Write something..."></textarea>
+  <select id="photoVisibility" class="field">
+    <option value="public">Public</option>
+    <option value="followers">Followers</option>
+    <option value="private">Private</option>
+  </select>
+  <button class="btn primary" id="photoPostBtn">Publish Photo Post</button>
+  <div id="photoPostStatus" class="authMsg"></div>
+</div>
 
  <div id="shortUpload" class="page section"><div class="h1">Create Short</div><input id="shortFile" class="field" type="file" accept="video/*"><input id="shortThumb" class="field" type="file" accept="image/*"><input id="shortTitle" class="field" placeholder="Short title"><textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea><button class="btn primary" id="shortUploadBtn">Upload Short</button><div id="shortStatus" class="authMsg"></div></div>
 
@@ -115,9 +146,47 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
   <div id="subscriptionList"></div>
 </div>
 
- <div id="you" class="page section"><div class="h1">You</div><div id="account"></div><div class="divider"></div><div class="menu"><button id="historyBtn">◷ History</button><button id="savedBtn">▣ Saved videos</button><button id="likedBtn">♥ Liked videos</button><button id="channelBtn">▤ Your channel</button><button id="youShortBtn">＋ Create Short</button><button id="youSettingsBtn">⚙ Settings</button><button id="logoutBtn" style="color:#e11d48;font-weight:700">🚪 Logout</button></div><div id="youList"></div></div>
+ <div id="you" class="page section">
+<div class="h1">You</div>
+<div id="account"></div>
+<div class="profileTabs" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0">
+  <button class="btn soft profileTab active" data-profile-tab="videos">Videos</button>
+  <button class="btn soft profileTab" data-profile-tab="reels">Reels</button>
+  <button class="btn soft profileTab" data-profile-tab="posts">Posts</button>
+</div>
+<div class="row" style="gap:8px;margin:14px 0">
+<button class="btn primary" id="viewChannelBtn">View channel</button>
+<button class="btn soft" id="shareProfileBtn">↗ Share</button>
+</div>
+<div class="divider"></div>
+<div class="menu">
+<button id="subscriptionsBtn">▣ Subscriptions</button><button id="historyBtn">◷ History</button>
+<button id="savedBtn">▣ Saved videos</button>
+<button id="likedBtn">♥ Liked videos</button>
+<button id="channelBtn">▤ Your channel</button>
+<button id="youShortBtn">＋ Create Short</button>
+<button id="youSettingsBtn">⚙ Settings</button>
+<button id="logoutBtn" style="color:#e11d48;font-weight:700">🚪 Logout</button>
+</div>
+<div id="youList"></div>
+</div>
 
- <div id="channel" class="page section"><div class="h1">Your channel</div><div id="channelAccount"></div><div class="divider"></div><div id="channelVideos"></div></div>
+ <div id="channel" class="page section">
+<div class="h1">Your channel</div>
+<div id="channelAccount"></div>
+<div class="row" style="gap:8px;margin:12px 0">
+<button class="btn primary" id="editChannelBtn">Edit channel</button>
+<button class="btn soft" id="shareChannelBtn">↗ Share</button>
+</div>
+<div id="channelEditBox" style="display:none">
+<input id="channelNameInput" class="field" placeholder="Channel name">
+<textarea id="channelBioInput" class="field" rows="3" placeholder="Channel description"></textarea>
+<button class="btn primary" id="saveChannelBtn">Save channel</button>
+</div>
+<div class="divider"></div>
+<div class="h2">Your videos</div>
+<div id="channelVideos"></div>
+</div>
 
  <div id="player" class="page"></div>
 
@@ -136,7 +205,7 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
 
  <div id="policy" class="page section"><div id="policyContent"></div></div>
 
- <div class="nav"><button id="navHome"><b>⌂</b>Home</button><button id="navShorts"><b>♬</b>Shorts</button><button class="plus" id="navCreate"><b>＋</b>Create</button><button id="navSubs"><b>▣</b>Subscriptions</button><button id="navYou"><b>◉</b>You</button></div>
+ <div class="nav"><button id="navHome"><b>⌂</b>Home</button><button id="navShorts"><b>♬</b>Shorts</button><button class="plus" id="navCreate"><b>＋</b>Create</button><button id="navSocial"><b>♡</b>Social</button><button id="navYou"><b>◉</b>Profile</button></div>
 </div>
 
 <script>
@@ -155,9 +224,82 @@ let videos=JSON.parse(localStorage.getItem('vidozaVideosSafe')||'null')||[
  {id:'demo5',title:'Vidoza Live',channel:'Vidoza Live',views:'Live now',age:'Now',category:'Live',description:'Live video demo.',liked:false,saved:false,subscribed:false}
 ];
 let shorts=JSON.parse(localStorage.getItem('vidozaShortsSafe')||'[]');
+let posts=JSON.parse(localStorage.getItem('vidozaPostsSafe')||'[]');
+
 function $(id){return document.getElementById(id)}
 function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-function save(){localStorage.setItem('vidozaVideosSafe',JSON.stringify(videos));localStorage.setItem('vidozaShortsSafe',JSON.stringify(shorts))}
+const MEDIA_DB='vidozaMediaDB', MEDIA_STORE='files';
+function mediaOpen(){
+ return new Promise(function(resolve,reject){
+  if(!window.indexedDB){reject(new Error('IndexedDB unavailable'));return}
+  const r=indexedDB.open(MEDIA_DB,1);
+  r.onupgradeneeded=function(){if(!r.result.objectStoreNames.contains(MEDIA_STORE))r.result.createObjectStore(MEDIA_STORE)};
+  r.onsuccess=function(){resolve(r.result)};
+  r.onerror=function(){reject(r.error)};
+ });
+}
+async function mediaPut(key,blob){
+ const dbi=await mediaOpen();
+ return new Promise(function(resolve,reject){
+  const tx=dbi.transaction(MEDIA_STORE,'readwrite');tx.objectStore(MEDIA_STORE).put(blob,key);
+  tx.oncomplete=function(){dbi.close();resolve()};
+  tx.onerror=function(){dbi.close();reject(tx.error)};
+ });
+}
+async function mediaGet(key){
+ try{
+  const dbi=await mediaOpen();
+  return await new Promise(function(resolve,reject){
+   const tx=dbi.transaction(MEDIA_STORE,'readonly'),r=tx.objectStore(MEDIA_STORE).get(key);
+   r.onsuccess=function(){dbi.close();resolve(r.result||null)};r.onerror=function(){dbi.close();reject(r.error)};
+  });
+ }catch(e){return null}
+}
+async function mediaDelete(key){
+ try{
+  const dbi=await mediaOpen();
+  return await new Promise(function(resolve){
+   const tx=dbi.transaction(MEDIA_STORE,'readwrite');tx.objectStore(MEDIA_STORE).delete(key);
+   tx.oncomplete=function(){dbi.close();resolve()};tx.onerror=function(){dbi.close();resolve()};
+  });
+ }catch(e){}
+}
+async function hydrateMedia(){
+ const all=videos.concat(shorts);
+ for(const v of all){
+  if(v._objectUrl){try{URL.revokeObjectURL(v._objectUrl)}catch(e){};v._objectUrl='';}
+  if(v.mediaKey){
+   const b=await mediaGet(v.mediaKey);
+   if(b){v.url=URL.createObjectURL(b);v._objectUrl=v.url}
+  }
+  if(v.thumbKey){
+   const b=await mediaGet(v.thumbKey);
+   if(b){v.thumbnail=URL.createObjectURL(b);v._thumbObjectUrl=v.thumbnail}
+  }
+ }
+}
+
+async function hydratePosts(){
+ for(const p of posts){
+  if(p._objectUrl){try{URL.revokeObjectURL(p._objectUrl)}catch(e){}}
+  if(p.mediaKey){
+   const b=await mediaGet(p.mediaKey);
+   if(b){p.url=URL.createObjectURL(b);p._objectUrl=p.url}
+  }
+ }
+}
+function save(){
+ const clean=function(a){return a.map(function(v){
+  const x=Object.assign({},v);
+  if(x.mediaKey)x.url='';
+  if(x.thumbKey)x.thumbnail='';
+  delete x._objectUrl;delete x._thumbObjectUrl;
+  return x;
+ })};
+ localStorage.setItem('vidozaVideosSafe',JSON.stringify(clean(videos)));
+ localStorage.setItem('vidozaShortsSafe',JSON.stringify(clean(shorts)));
+ localStorage.setItem('vidozaPostsSafe',JSON.stringify(clean(posts)));
+}
 function toast(t){alert(t)}
 function featureMessage(t){
  const el=$('featureStatus'); if(!el)return;
@@ -169,7 +311,7 @@ function showPage(id,push){
  if($(id))$(id).classList.add('active');
  if(push!==false&&stack[stack.length-1]!==id)stack.push(id);
  current=id;window.scrollTo(0,0);
- if(id==='home')renderHome();if(id==='shorts')renderShorts();if(id==='you')renderAccount();if(id==='channel')renderChannel();
+ if(id==='home')renderHome();if(id==='shorts')renderShorts();if(id==='social')renderSocial();if(id==='you'){renderAccount();renderProfileTab('videos')};if(id==='channel')renderChannel();if(id==='subscriptions')renderSubscriptions();
 }
 window.appBack=function(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1],false);return'handled'}if(current!=='home'){stack=['home'];showPage('home',false);return'handled'}return'exit'};
 
@@ -185,8 +327,17 @@ function bindCards(root){root.querySelectorAll('[data-video]').forEach(function(
 function renderHome(){
  renderChips();
  let list=category==='All'?videos:videos.filter(function(v){return v.category===category});
- $('feed').innerHTML=list.filter(function(v){return !v.isShort}).map(card).join('')||'<div class="empty">No videos in '+esc(category)+' yet.</div>';
- bindCards($('feed'));renderChannel()
+ const full=list.filter(function(v){return !v.isShort});
+ let homeHtml=full.map(card).join('')||'<div class="empty">No videos in '+esc(category)+' yet.</div>';
+ if(category==='All'&&shorts.length){
+   homeHtml+='<div class="section"><div class="h2">Shorts</div><div style="display:flex;gap:10px;overflow:auto;padding-bottom:8px">'+shorts.slice(0,6).map(function(s){
+     return '<div data-home-short="'+esc(s.id)+'" style="min-width:150px;width:150px;cursor:pointer"><div style="background:#111;border-radius:12px;overflow:hidden;aspect-ratio:9/14">'+(s.thumbnail?'<img src="'+esc(s.thumbnail)+'" style="width:100%;height:100%;object-fit:cover">':'<div style="height:100%;display:grid;place-items:center;color:#fff;font-size:36px">▶</div>')+'</div><div class="title" style="font-size:14px;margin-top:6px">'+esc(s.title)+'</div><div class="sub">'+esc(s.channel)+'</div></div>'
+   }).join('')+'</div></div>';
+ }
+ $('feed').innerHTML=homeHtml;
+ bindCards($('feed'));
+ $('feed').querySelectorAll('[data-home-short]').forEach(function(x){x.onclick=function(){showPage('shorts')}});
+ renderChannel()
 }
 function renderShorts(){
  const seen={};
@@ -213,6 +364,7 @@ function renderShorts(){
        '<button data-short-share="'+esc(v.id)+'">↗ Share</button>'+
        '<button class="'+(v.saved?'active':'')+'" data-short-save="'+esc(v.id)+'">▣ '+(v.saved?'Saved':'Save')+'</button>'+
        '<button data-short-download="'+esc(v.id)+'">⬇ Download</button>'+
+       '<button data-short-report="'+esc(v.id)+'">⚑ Report</button>'+
      '</div>'+
      '<div class="shortCommentBox"><input data-comment-input="'+esc(v.id)+'" placeholder="Write a comment"><button data-comment-post="'+esc(v.id)+'">Post</button></div>'+
      '<div class="shortComments">'+(comments.length?comments.map(function(c){return '<div>'+esc(c)+'</div>'}).join(''):'<div style="opacity:.7">No comments yet</div>')+'</div>'+
@@ -230,6 +382,9 @@ function renderShorts(){
  });
  document.querySelectorAll('[data-short-download]').forEach(function(b){
    b.onclick=function(){downloadShort(b.dataset.shortDownload)}
+ });
+ document.querySelectorAll('[data-short-report]').forEach(function(b){
+   b.onclick=function(){reportVideo(findShort(b.dataset.shortReport))}
  });
  document.querySelectorAll('[data-short-comment]').forEach(function(b){
    b.onclick=function(){
@@ -281,24 +436,128 @@ function renderSubscriptions(){
  const find=$('findChannels');
  if(find)find.onclick=function(){showPage('home')};
 }
+function profileName(){
+ return user?(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]:'Vidoza User';
+}
+function profileBio(){
+ return user?(user.user_metadata&&user.user_metadata.bio)||'':'';
+}
+
+function renderSocial(){
+ const storyNames=['Your story','Music India','Vidoza News','Gaming','Learning'];
+ $('storiesBar').innerHTML=storyNames.map(function(n,i){
+   return '<div style="min-width:72px;text-align:center"><div class="avatar" style="width:62px;height:62px;margin:auto;border:3px solid #e11d48">'+esc(n[0])+'</div><div class="sub" style="margin-top:5px">'+esc(n)+'</div></div>';
+ }).join('');
+
+ const list=posts.slice().sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)});
+ $('socialFeed').innerHTML=list.map(function(p){
+   return '<div class="card socialPost" data-post="'+esc(p.id)+'">'+
+     '<div class="meta"><div class="avatar">'+esc((p.author||'V')[0])+'</div><div style="flex:1"><b>'+esc(p.author||'Vidoza User')+'</b><div class="sub">Just now</div></div></div>'+
+     (p.url?'<img src="'+esc(p.url)+'" style="display:block;width:100%;max-height:520px;object-fit:cover">':'')+
+     '<div style="padding:12px 14px"><div>'+esc(p.caption||'')+'</div>'+
+     '<div class="actions" style="margin-top:8px">'+
+       '<button class="action" data-post-like="'+esc(p.id)+'">♥ <span>'+(p.liked?'Liked':'Like')+'</span></button>'+
+       '<button class="action" data-post-comment="'+esc(p.id)+'">💬 Comment</button>'+
+       '<button class="action" data-post-share="'+esc(p.id)+'">↗ Share</button>'+
+       '<button class="action" data-post-save="'+esc(p.id)+'">▣ <span>'+(p.saved?'Saved':'Save')+'</span></button>'+
+       '<button class="action" data-post-report="'+esc(p.id)+'">⚑ Report</button>'+
+     '</div>'+
+     '<div class="shortCommentBox"><input data-post-input="'+esc(p.id)+'" placeholder="Write a comment"><button data-post-submit="'+esc(p.id)+'">Post</button></div>'+
+     '<div class="shortComments">'+((p.comments||[]).map(function(c){return '<div>'+esc(c)+'</div>'}).join('')||'<div style="opacity:.6">No comments yet</div>')+'</div>'+
+     '</div></div>';
+ }).join('') || '<div class="empty">No social posts yet. Tap + → Photo.</div>';
+
+ $('socialFeed').querySelectorAll('[data-post-like]').forEach(function(b){b.onclick=function(){postLike(b.dataset.postLike)}});
+ $('socialFeed').querySelectorAll('[data-post-save]').forEach(function(b){b.onclick=function(){postSave(b.dataset.postSave)}});
+ $('socialFeed').querySelectorAll('[data-post-share]').forEach(function(b){b.onclick=function(){let p=findPost(b.dataset.postShare);if(p)shareText((p.author||'Vidoza')+' on Vidoza: '+(p.caption||''))}});
+ $('socialFeed').querySelectorAll('[data-post-report]').forEach(function(b){b.onclick=function(){if(confirm('Report this post?')){toast('Report submitted')}}});
+ $('socialFeed').querySelectorAll('[data-post-submit]').forEach(function(b){b.onclick=function(){postComment(b.dataset.postSubmit)}});
+ $('socialFeed').querySelectorAll('[data-post-comment]').forEach(function(b){b.onclick=function(){let i=document.querySelector('[data-post-input="'+CSS.escape(b.dataset.postComment)+'"]');if(i)i.focus()}});
+}
+function findPost(id){return posts.find(function(p){return String(p.id)===String(id)})}
+function postLike(id){if(!user){toast('Please login first');return}let p=findPost(id);if(!p)return;p.liked=!p.liked;save();renderSocial()}
+function postSave(id){if(!user){toast('Please login first');return}let p=findPost(id);if(!p)return;p.saved=!p.saved;save();renderSocial()}
+function postComment(id){
+ if(!user){toast('Please login first');return}
+ const input=document.querySelector('[data-post-input="'+CSS.escape(String(id))+'"]');
+ if(!input||!input.value.trim())return;
+ const p=findPost(id);if(!p)return;
+ p.comments=p.comments||[];p.comments.unshift(input.value.trim());input.value='';save();renderSocial();
+}
+async function createPhotoPost(){
+ if(!user){toast('Please login first');return}
+ const f=$('photoFile').files[0],caption=$('photoCaption').value.trim();
+ if(!f){toast('Select a photo');return}
+ $('photoPostStatus').textContent='Saving photo… please wait';
+ try{
+   const id='post-'+Date.now(),key='post-'+id;
+   await mediaPut(key,f);
+   posts.unshift({id:id,author:profileName(),caption:caption,mediaKey:key,url:'',liked:false,saved:false,comments:[],createdAt:Date.now()});
+   save();await hydratePosts();
+   $('photoPostStatus').style.color='#16a34a';$('photoPostStatus').textContent='Photo posted successfully.';
+   setTimeout(function(){showPage('social')},500);
+ }catch(e){
+   $('photoPostStatus').style.color='#dc2626';$('photoPostStatus').textContent='Photo save failed: '+(e.message||'Storage error');
+ }
+}
+
+
+function renderProfileTab(tab){
+ document.querySelectorAll('.profileTab').forEach(function(b){
+   b.classList.toggle('active',b.dataset.profileTab===tab);
+ });
+ if(tab==='videos'){
+   $('youList').innerHTML=videos.filter(function(v){return v.uploaded&&!v.isShort}).map(card).join('')||'<div class="empty">No long videos uploaded yet.</div>';
+ }else if(tab==='reels'){
+   $('youList').innerHTML=shorts.map(function(s){
+     return '<div class="card" style="display:flex;gap:10px;padding:10px" data-short-profile="'+esc(s.id)+'">'+
+       (s.thumbnail?'<img src="'+esc(s.thumbnail)+'" style="width:120px;height:150px;object-fit:cover;border-radius:10px">':'<div style="width:120px;height:150px;background:#111;border-radius:10px;display:grid;place-items:center;color:#fff">▶</div>')+
+       '<div><b>'+esc(s.title)+'</b><div class="sub">'+esc(s.channel)+'</div></div></div>';
+   }).join('')||'<div class="empty">No Shorts uploaded yet.</div>';
+   $('youList').querySelectorAll('[data-short-profile]').forEach(function(x){x.onclick=function(){showPage('shorts')}});
+ }else{
+   $('youList').innerHTML=posts.filter(function(p){return p.author===profileName()}).map(function(p){
+     return '<div class="card"><div class="meta"><div class="avatar">'+esc((p.author||'V')[0])+'</div><div><b>'+esc(p.caption||'Photo post')+'</b><div class="sub">Photo Post</div></div></div></div>';
+   }).join('')||'<div class="empty">No photo posts yet.</div>';
+ }
+ if(tab==='videos')bindCards($('youList'));
+}
+
 function renderAccount(){
- let name=user?(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]:'Vidoza User';
- $('account').innerHTML='<div class="row"><div class="avatar">'+esc(name[0].toUpperCase())+'</div><div><b>'+esc(name)+'</b><div class="sub">'+esc(user?user.email:'')+'</div></div></div>';
- $('channelAccount').innerHTML=$('account').innerHTML;
+ let name=profileName();
+ $('account').innerHTML='<div class="row"><div class="avatar" style="width:72px;height:72px;font-size:28px">'+esc(name[0].toUpperCase())+'</div><div style="flex:1"><div class="title" style="font-size:25px">'+esc(name)+'</div><div class="sub">'+esc(user?user.email:'')+'</div><div class="sub">'+esc(profileBio())+'</div></div></div>';
 }
 function renderChannel(){
- if($('channelVideos'))$('channelVideos').innerHTML=videos.filter(function(v){return v.uploaded&&!v.isShort}).map(card).join('')||'<div class="empty">Your uploaded videos will appear here.</div>';
- if($('channelVideos'))bindCards($('channelVideos'))
+ let name=profileName();
+ if($('channelAccount'))$('channelAccount').innerHTML='<div class="row"><div class="avatar" style="width:82px;height:82px;font-size:30px">'+esc(name[0].toUpperCase())+'</div><div style="flex:1"><div class="title" style="font-size:26px">'+esc(name)+'</div><div class="sub">@'+esc(name.replace(/\\s+/g,''))+'</div><p class="sub">'+esc(profileBio())+'</p></div></div>';
+ if($('channelVideos')){
+  $('channelVideos').innerHTML=videos.filter(function(v){return v.uploaded&&!v.isShort}).map(channelCard).join('')||'<div class="empty">Your uploaded videos will appear here.</div>';
+  bindCards($('channelVideos'));
+  $('channelVideos').querySelectorAll('[data-delete-video]').forEach(function(b){b.onclick=function(e){e.stopPropagation();deleteVideo(b.dataset.deleteVideo)}});
+ }
+}
+function channelCard(v){
+ return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">4:20</span></div><div class="meta"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div style="flex:1"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div><button class="btn soft" data-delete-video="'+esc(v.id)+'">Delete</button></div></div>'
+}
+async function deleteVideo(id){
+ const v=videos.find(function(x){return String(x.id)===String(id)});
+ if(!v)return;
+ if(!confirm('Delete this video?'))return;
+ if(v.mediaKey)await mediaDelete(v.mediaKey);
+ if(v.thumbKey)await mediaDelete(v.thumbKey);
+ videos=videos.filter(function(x){return String(x.id)!==String(id)});
+ save();renderChannel();renderHome();toast('Video deleted');
 }
 function openVideo(id){
  selected=videos.find(function(v){return String(v.id)===String(id)});
  if(!selected)return;
  let media=selected.url?'<video controls playsinline autoplay style="width:100%;aspect-ratio:16/9;background:#000" src="'+esc(selected.url)+'"></video>':'<div class="thumb">▶</div>';
- $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="downloadAction">⬇<br>Download</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b><div class="sub"><span id="subCount">'+(selected.subscribers||0)+'</span> subscribers</div></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p><div class="divider"></div><b>Comments</b><div class="row" style="margin-top:10px"><input id="commentInput" class="field" style="margin:0" placeholder="Add a comment"><button class="btn primary" id="postComment">Post</button></div><div id="commentList"></div></div>';
+ $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="downloadAction">⬇<br>Download</button><button class="action" id="reportAction">⚑<br>Report</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b><div class="sub"><span id="subCount">'+(selected.subscribers||0)+'</span> subscribers</div></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p><div class="divider"></div><b>Comments</b><div class="row" style="margin-top:10px"><input id="commentInput" class="field" style="margin:0" placeholder="Add a comment"><button class="btn primary" id="postComment">Post</button></div><div id="commentList"></div></div>';
  showPage('player');
  $('likeAction').onclick=toggleLike;
 $('saveAction').onclick=toggleSave;
 $('shareAction').onclick=function(){shareText(selected.title)};
+$('reportAction').onclick=function(){reportVideo(selected)};
 $('subAction').onclick=toggleSubscribe;
 $('commentAction').onclick=function(){document.getElementById('commentInput').focus()};
 $('postComment').onclick=postComment;
@@ -326,6 +585,15 @@ function downloadVideo(v){
    a.remove();
    toast('Download started');
  }catch(e){toast('Download is not available on this device')}
+}
+function reportVideo(v){
+ if(!user){toast('Please login first');return}
+ const reason=prompt('Report reason: spam, harmful, copyright, or other');
+ if(!reason)return;
+ let reports=JSON.parse(localStorage.getItem('vidozaReports')||'[]');
+ reports.unshift({videoId:v.id,title:v.title,reason:reason,at:new Date().toISOString()});
+ localStorage.setItem('vidozaReports',JSON.stringify(reports));
+ toast('Report submitted');
 }
 function toggleLike(){
  if(!user){toast('Please login first');return}
@@ -380,34 +648,35 @@ async function signup(){
 async function logout(){try{if(db)await db.auth.signOut()}catch(e){}user=null;showAuth();$('app').style.display='none';stack=['home'];current='home'}
 
 function fileToData(file,cb){if(!file){cb('');return}let r=new FileReader();r.onload=function(){cb(r.result)};r.readAsDataURL(file)}
-function uploadVideo(){
+async function uploadVideo(){
  if(!user){toast('Please login first');return}
  let f=$('videoFile').files[0],t=$('uploadTitle').value.trim();
  if(!f||!t){toast('Select video and title');return}
- $('uploadStatus').style.color='#111';$('uploadStatus').textContent='Preparing video…';
- fileToData(f,function(url){
-  $('uploadStatus').textContent='Processing video… please wait';
-  let tf=$('thumbFile').files[0];
-  fileToData(tf,function(th){
-   videos.unshift({id:'local-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,url:url,thumbnail:th,isShort:false,liked:false,saved:false,subscribed:false});
-   save();renderHome();$('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video added successfully.';featureMessage('Video uploaded successfully');setTimeout(function(){showPage('home')},700)
-  })
- })
+ $('uploadStatus').style.color='#111';$('uploadStatus').textContent='Saving video… please wait';
+ try{
+  const id='local-'+Date.now(),mediaKey='video-'+id,tf=$('thumbFile').files[0],thumbKey=tf?'thumb-'+id:'';
+  await mediaPut(mediaKey,f);if(tf)await mediaPut(thumbKey,tf);
+  videos.unshift({id:id,title:t,channel:profileName(),views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,mediaKey:mediaKey,thumbKey:thumbKey,url:'',thumbnail:'',isShort:false,liked:false,saved:false,subscribed:false,comments:[]});
+  save();await hydrateMedia();renderHome();
+  $('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video uploaded successfully.';
+  featureMessage('Video uploaded successfully');setTimeout(function(){showPage('home')},500);
+ }catch(e){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Video save failed: '+(e.message||'Storage error')}
 }
-function uploadShort(){
+async function uploadShort(){
  if(!user){toast('Please login first');return}
  let f=$('shortFile').files[0],t=$('shortTitle').value.trim();
  if(!f||!t){toast('Select Short video and title');return}
- $('shortStatus').textContent='Processing Short… please wait';
- fileToData(f,function(url){
-  let tf=$('shortThumb').files[0];
-  fileToData(tf,function(th){
-   const duplicate=shorts.some(function(x){return x.url===url || (x.title===t && x.channel===((user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]))});
-   if(duplicate){$('shortStatus').style.color='#b45309';$('shortStatus').textContent='This Short is already added.';return;}
-   shorts.unshift({id:'short-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],url:url,thumbnail:th,description:$('shortDesc').value,liked:false,saved:false,comments:[]});
-   save();renderShorts();$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short added successfully.';featureMessage('Short uploaded successfully');setTimeout(function(){showPage('shorts')},700)
-  })
- })
+ $('shortStatus').textContent='Saving Short… please wait';
+ try{
+  const id='short-'+Date.now(),mediaKey='short-'+id,tf=$('shortThumb').files[0],thumbKey=tf?'thumb-'+id:'';
+  await mediaPut(mediaKey,f);if(tf)await mediaPut(thumbKey,tf);
+  const duplicate=shorts.some(function(x){return x.title===t&&x.channel===profileName()});
+  if(duplicate){await mediaDelete(mediaKey);if(thumbKey)await mediaDelete(thumbKey);$('shortStatus').style.color='#b45309';$('shortStatus').textContent='This Short is already added.';return}
+  shorts.unshift({id:id,title:t,channel:profileName(),url:'',thumbnail:'',mediaKey:mediaKey,thumbKey:thumbKey,description:$('shortDesc').value,liked:false,saved:false,comments:[]});
+  save();await hydrateMedia();renderShorts();
+  $('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';
+  featureMessage('Short uploaded successfully');setTimeout(function(){showPage('shorts')},500);
+ }catch(e){$('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Short save failed: '+(e.message||'Storage error')}
 }
 function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(title)+'</div><p style="line-height:1.7">'+esc(text)+'</p>';showPage('policy')}
 
@@ -420,27 +689,50 @@ $('closeCreateMenu').onclick=function(){$('createMenu').style.display='none'};
 $('createMenu').onclick=function(e){if(e.target===$('createMenu'))$('createMenu').style.display='none'};
 $('createVideoOption').onclick=function(){$('createMenu').style.display='none';showPage('upload')};
 $('createShortOption').onclick=function(){$('createMenu').style.display='none';showPage('shortUpload')};
+$('createPhotoOption').onclick=function(){$('createMenu').style.display='none';showPage('photoUpload')};
 $('createLiveOption').onclick=function(){$('createMenu').style.display='none';showPage('live')};
 $('startLiveBtn').onclick=function(){if(!user){toast('Please login first');return}$('liveStatus').textContent='Live setup ready.';$('liveStatus').style.color='#16a34a'};
-$('navSubs').onclick=function(){showPage('subscriptions');renderSubscriptions()};
+$('navSocial').onclick=function(){showPage('social');renderSocial()};
 $('navYou').onclick=function(){showPage('you')};
  $('createShortBtn').onclick=function(){showPage('shortUpload')};$('searchGo').onclick=doSearch;
- $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;
+ $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;$('photoPostBtn').onclick=createPhotoPost;
+ document.querySelectorAll('.profileTab').forEach(function(b){b.onclick=function(){renderProfileTab(b.dataset.profileTab)}});
+ $('socialRefresh').onclick=function(){renderSocial()};
  $('logoutBtn').onclick=logout;$('settingsLogout').onclick=logout;
- $('channelBtn').onclick=function(){showPage('channel')};$('youShortBtn').onclick=function(){showPage('shortUpload')};$('youSettingsBtn').onclick=function(){showPage('settings')};
+ $('channelBtn').onclick=function(){showPage('channel')};
+ $('viewChannelBtn').onclick=function(){showPage('channel')};
+ $('shareProfileBtn').onclick=function(){shareText(profileName())};
+ $('shareChannelBtn').onclick=function(){shareText(profileName()+' on Vidoza')};
+ $('editChannelBtn').onclick=function(){if($('channelEditBox')){$('channelEditBox').style.display=$('channelEditBox').style.display==='none'?'block':'none';$('channelNameInput').value=profileName();$('channelBioInput').value=profileBio()}};
+ $('saveChannelBtn').onclick=saveChannel;$('youShortBtn').onclick=function(){showPage('shortUpload')};$('youSettingsBtn').onclick=function(){showPage('settings')};
  $('historyBtn').onclick=function(){toast('History is available for videos opened on this device.')};$('savedBtn').onclick=function(){showSaved()};$('likedBtn').onclick=function(){showLiked()};
  $('privacyBtn').onclick=function(){policy('Privacy Policy','Vidoza uses account information to provide login and platform features.')};
  $('termsBtn').onclick=function(){policy('Terms of Service','Use Vidoza lawfully and upload only content you own or have permission to use.')};
  $('guidelinesBtn').onclick=function(){policy('Community Guidelines','Do not upload unlawful, abusive, deceptive, dangerous or rights-infringing content.')};
  $('supportBtn').onclick=function(){showPage('support')};$('supportSubmit').onclick=function(){$('supportStatus').textContent='Support ticket saved on this device.'};
 }
+async function saveChannel(){
+ const n=$('channelNameInput').value.trim(),b=$('channelBioInput').value.trim();
+ if(!n){toast('Enter channel name');return}
+ if(user&&db){
+  try{
+   const r=await db.auth.updateUser({data:{full_name:n,bio:b}});
+   if(r.error)throw r.error;user=r.data.user;
+  }catch(e){toast('Channel saved on this device');}
+ }else if(user){
+  user.user_metadata=user.user_metadata||{};user.user_metadata.full_name=n;user.user_metadata.bio=b;
+ }
+ renderAccount();renderChannel();$('channelEditBox').style.display='none';toast('Channel updated');
+}
 function doSearch(){let q=$('searchInput').value.toLowerCase();let a=videos.filter(function(v){return (v.title+' '+v.channel).toLowerCase().indexOf(q)>=0});$('searchResults').innerHTML=a.map(card).join('')||'<div class="empty">No results</div>';bindCards($('searchResults'))}
 function showSaved(){let a=videos.filter(function(v){return v.saved});$('youList').innerHTML=a.map(card).join('')||'<div class="empty">No saved videos yet.</div>';bindCards($('youList'))}
 function showLiked(){let a=videos.filter(function(v){return v.liked});$('youList').innerHTML=a.map(card).join('')||'<div class="empty">No liked videos yet.</div>';bindCards($('youList'))}
 
 async function boot(){
- setupAuth();wire();renderHome();renderShorts();
+ setupAuth();wire();
  $('bootText').textContent='Starting Vidoza…';
+ try{await hydrateMedia()}catch(e){}
+ renderHome();renderShorts();
  try{
   if(window.supabase&&window.supabase.createClient){
    db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
@@ -460,10 +752,10 @@ window.addEventListener('load',boot);
 <div id="createMenu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:5000;align-items:flex-end;justify-content:center;padding-bottom:115px">
 <div style="width:calc(100% - 28px);max-width:460px;background:#fff;border-radius:20px;padding:14px 14px 16px;box-shadow:0 10px 35px rgba(0,0,0,.22)">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><b style="font-size:20px">Create</b><button id="closeCreateMenu" class="icon">✕</button></div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
 <button id="createVideoOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">🎬</div><b>Video</b></button>
 <button id="createShortOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">⚡</div><b>Short</b></button>
-<button id="createLiveOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">🔴</div><b>Live</b></button>
+<button id="createPhotoOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 5px"><div style="font-size:30px">📷</div><b>Photo</b></button><button id="createLiveOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">🔴</div><b>Live</b></button>
 </div></div></div>
 </body>
 </html>

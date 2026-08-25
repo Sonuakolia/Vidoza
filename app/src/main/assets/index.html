@@ -426,6 +426,62 @@ video::-webkit-media-controls{display:none!important}
 video::-webkit-media-controls-enclosure{display:none!important}
 video::-webkit-media-controls-panel{display:none!important}
 </style>
+
+<style id="vidoza-short-v28">
+.shortCreatePage{padding:0!important;background:#000!important}
+.shortStage{display:none!important;min-height:calc(100vh - 82px)}
+.shortStage.active{display:block!important}
+
+.vidozaCreateShell,.vidozaEditorShell{position:relative;height:calc(100vh - 82px);background:#000;color:#fff}
+.createHeader,.editorHeader{position:absolute;left:14px;right:14px;top:12px;z-index:30;display:flex;align-items:center;justify-content:space-between}
+.createBrand{font-size:20px;font-weight:800}
+.vIconBtn{width:48px;height:48px;border:0;border-radius:50%;background:#ffffff18;color:#fff;font-size:23px}
+.vIconBtn.dark{background:#0008}
+.soundPill{border:0;border-radius:24px;background:#0008;color:#fff;padding:12px 22px;font-size:17px;font-weight:800}
+
+.cameraCanvas,.editorCanvas{position:absolute;inset:0;background:#111;overflow:hidden}
+.cameraPlaceholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:linear-gradient(145deg,#272727,#070707)}
+.bigCamera{font-size:64px;margin-bottom:12px}.cameraText{font-size:24px;font-weight:800}.cameraSub{font-size:14px;color:#bbb;margin-top:6px}
+#shortCameraVideo,#shortEditorVideo{width:100%;height:100%;object-fit:cover;background:#000}
+.soundPill{position:relative}
+#shortAddSoundTop{position:absolute;top:90px;left:50%;transform:translateX(-50%);z-index:25}
+
+.captureTools,.editorTools{position:absolute;right:12px;top:29%;z-index:25;display:flex;flex-direction:column;gap:10px}
+.captureTool,.editorTool{width:68px;border:0;border-radius:18px;background:#0008;color:#fff;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.captureTool b,.editorTool b{font-size:22px}.captureTool span,.editorTool span{font-size:11px}
+
+.captureBottom{position:absolute;left:0;right:0;bottom:18px;z-index:25;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;padding:0 20px}
+.galleryButton{display:flex;flex-direction:column;align-items:center;gap:4px}.galleryTile{width:56px;height:56px;border-radius:12px;background:#ffffff20;display:grid;place-items:center;font-size:28px}
+.recordButton{justify-self:center;width:92px;height:92px;border-radius:50%;border:7px solid #fff;background:#e11d48}
+.createModes{justify-self:end;display:flex;gap:5px;align-items:center}.createModes button{border:0;background:transparent;color:#aaa;padding:9px 10px}.createModes .active{background:#ffffff20;color:#fff;border-radius:18px}
+
+.editorPlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border:0;border-radius:50%;background:#ffffffcc;font-size:34px;z-index:12}
+.overlayText,.overlayEmoji{position:absolute;left:50%;transform:translateX(-50%);z-index:15;color:#fff;text-shadow:0 2px 6px #000;font-weight:900}.overlayText{top:30%;font-size:34px}.overlayEmoji{top:44%;font-size:58px}
+.swipeHint{position:absolute;left:0;right:0;bottom:110px;text-align:center;z-index:15;font-size:22px}.swipeHint span{font-size:15px}
+
+.editorFooter{position:absolute;left:18px;right:18px;bottom:18px;z-index:28;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.editBtn,.nextBtn{height:58px;border:0;border-radius:29px;font-size:19px;font-weight:800}.editBtn{background:#333;color:#fff}.nextBtn{background:#fff;color:#111}
+
+.trimPanel{position:fixed;left:0;right:0;bottom:-100%;z-index:130000;background:#000;color:#fff;border-radius:24px 24px 0 0;padding:18px;transition:.25s;max-height:88vh;overflow:auto}.trimPanel.open{bottom:0}
+.trimTop{display:flex;align-items:center;justify-content:space-between;font-size:20px}.doneBtn{border:0;background:#fff;color:#111;border-radius:18px;padding:8px 16px;font-weight:800}
+.trimVideoWrap{height:360px;margin:14px 0;background:#111;border-radius:14px;overflow:hidden}.trimVideoWrap video{width:100%;height:100%;object-fit:contain}
+.trimDurationBadge{text-align:center;margin:8px 0}.trimDurationBadge span{background:#fff;color:#111;border-radius:8px;padding:8px 12px;font-weight:800}
+.timelineBar{height:88px;background:linear-gradient(90deg,#222,#444);border:3px solid #fff;border-radius:10px;margin:12px 0;position:relative}.timelineFill{position:absolute;inset:0 18% 0 0;background:#ffffff08}
+.trimPanel input[type=range]{width:100%}
+.timelineTools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.timelineTools button{border:0;background:#1f1f1f;color:#fff;border-radius:14px;padding:14px 5px;font-size:19px}.timelineTools span{font-size:12px}
+
+.detailsStage{background:#fff!important;color:#111!important;padding:0 0 135px!important}
+.detailsTop{height:76px;display:flex;align-items:center;gap:18px;padding:0 22px}.detailsTop h2{margin:0;font-size:28px}.plainBack{border:0;background:transparent;font-size:32px}
+.detailsCoverRow{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:start;padding:18px 22px;border-bottom:1px solid #eee}.coverPreviewBox{height:220px;border-radius:18px;background:#222 center/cover no-repeat;position:relative}.coverPreviewBox button{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);border:0;border-radius:18px;background:#000b;color:#fff;padding:8px 12px;white-space:nowrap}.detailsCoverRow textarea{border:0;outline:none;resize:none;font-size:20px;min-height:180px;padding:10px 0}
+.quickChips{display:flex;gap:8px;overflow-x:auto;padding:14px 22px}.quickChips button{border:0;background:#f2f2f4;border-radius:14px;padding:10px 14px;white-space:nowrap;font-size:15px}
+.detailRows{padding:0 0 10px}.detailRow{width:100%;border:0;background:#fff;display:grid;grid-template-columns:48px 1fr 24px;align-items:center;text-align:left;padding:16px 24px;font-size:20px}.detailRow span{font-size:25px}.detailRow em{font-style:normal;font-size:28px;color:#777}.detailRow div{display:flex;flex-direction:column;gap:2px}.detailRow small{font-size:13px;color:#777}
+.hiddenShortFields{display:none}
+.publishBar{position:fixed;left:0;right:0;bottom:82px;background:#fff;padding:12px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;z-index:9998}.draftBtn,.shareBtn{height:58px;border:0;border-radius:20px;font-size:18px;font-weight:800}.draftBtn{background:#f0f0f2}.shareBtn{background:#e11d48;color:#fff}
+
+video::-webkit-media-controls{display:none!important}
+video::-webkit-media-controls-enclosure{display:none!important}
+video::-webkit-media-controls-panel{display:none!important}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -521,134 +577,177 @@ video::-webkit-media-controls-panel{display:none!important}
 </div>
 
  
+
 <div id="shortUpload" class="page shortCreatePage">
+
+  <!-- STEP 1: PICK / CREATE -->
   <div id="shortStageSelect" class="shortStage active">
-    <div class="shortCameraShell">
-      <div class="shortTopBar">
-        <button type="button" id="shortBackBtn" class="circleBtn">←</button>
-        <button type="button" id="shortSoundTop" class="pillBtn">♪ Add sound</button>
-        <button type="button" id="shortMagicTop" class="circleBtn">✦</button>
+    <div class="vidozaCreateShell">
+      <div class="createHeader">
+        <button id="shortBackBtn" class="vIconBtn" type="button">✕</button>
+        <div class="createBrand">Create Short</div>
+        <button id="shortSettingsBtn" class="vIconBtn" type="button">⚙</button>
       </div>
 
-      <div id="shortCameraPreview" class="shortCameraPreview">
-        <div class="shortCameraPlaceholder">
-          <div class="cameraIcon">◉</div>
-          <div>Select a video to create a Short</div>
+      <div class="cameraCanvas">
+        <div class="cameraPlaceholder">
+          <div class="bigCamera">◉</div>
+          <div class="cameraText">Create a Vidoza Short</div>
+          <div class="cameraSub">Record or choose a video from your phone</div>
         </div>
-        <video id="shortEditVideo" playsinline muted></video>
-      </div>
+        <video id="shortCameraVideo" playsinline muted></video>
 
-      <div class="shortRightTools">
-        <button type="button" class="shortSideTool" data-tool="flip"><span>↻</span><small>Flip</small></button>
-        <button type="button" class="shortSideTool" data-tool="timer"><span>⏱</span><small>Timer</small></button>
-        <button type="button" class="shortSideTool" data-tool="effects"><span>✦</span><small>Effects</small></button>
-        <button type="button" class="shortSideTool" data-tool="speed"><span>1×</span><small>Speed</small></button>
-        <button type="button" class="shortSideTool" data-tool="filter"><span>◌</span><small>Filter</small></button>
-      </div>
+        <button id="shortAddSoundTop" class="soundPill" type="button">♪ Add sound</button>
 
-      <div class="shortBottomCreate">
-        <label for="shortFile" class="galleryPick">
-          <div class="galleryThumb">＋</div>
-          <span>Add</span>
-        </label>
-        <input id="shortFile" type="file" accept="video/*" style="display:none">
-        <button type="button" id="shortRecordBtn" class="recordBtn"></button>
-        <div class="shortModeTabs"><button class="active">Short</button></div>
+        <div class="captureTools">
+          <button class="captureTool" data-capture-tool="flip"><b>↻</b><span>Flip</span></button>
+          <button class="captureTool" data-capture-tool="timer"><b>⏱</b><span>Timer</span></button>
+          <button class="captureTool" data-capture-tool="length"><b>90s</b><span>Length</span></button>
+          <button class="captureTool" data-capture-tool="effects"><b>✦</b><span>Effects</span></button>
+          <button class="captureTool" data-capture-tool="speed"><b>1×</b><span>Speed</span></button>
+        </div>
+
+        <div class="captureBottom">
+          <label for="shortFile" class="galleryButton">
+            <div class="galleryTile">＋</div>
+            <span>Gallery</span>
+          </label>
+          <input id="shortFile" type="file" accept="video/*" style="display:none">
+
+          <button id="shortRecordBtn" class="recordButton" type="button"></button>
+
+          <div class="createModes">
+            <button type="button">Video</button>
+            <button type="button" class="active">Short</button>
+            <button type="button">Live</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- STEP 2: FULL SCREEN EDITOR -->
   <div id="shortStageEdit" class="shortStage">
-    <div class="shortEditorShell">
-      <div class="editorTop">
-        <button type="button" id="editorBackBtn" class="circleBtn">←</button>
-        <button type="button" id="editorAddSound" class="pillBtn">♪ Add sound</button>
+    <div class="vidozaEditorShell">
+      <div class="editorHeader">
+        <button id="editorBackBtn" class="vIconBtn dark" type="button">←</button>
+        <button id="editorAddSound" class="soundPill dark" type="button">♪ Add sound</button>
+        <button id="editorMagicBtn" class="vIconBtn dark" type="button">✦</button>
       </div>
 
-      <div class="editorVideoWrap">
+      <div class="editorCanvas">
         <video id="shortEditorVideo" playsinline></video>
-        <div class="editorTapPlay" id="editorTapPlay">▶</div>
-        <div class="editorOverlayText" id="editorOverlayText"></div>
-        <div class="editorOverlayEmoji" id="editorOverlayEmoji"></div>
+        <button id="editorTapPlay" class="editorPlay" type="button">▶</button>
+        <div id="editorOverlayText" class="overlayText"></div>
+        <div id="editorOverlayEmoji" class="overlayEmoji"></div>
+
+        <div class="editorTools">
+          <button class="editorTool" data-editor-tool="text"><b>Aa</b><span>Text</span></button>
+          <button class="editorTool" data-editor-tool="effects"><b>✦</b><span>Effects</span></button>
+          <button class="editorTool" data-editor-tool="filter"><b>◌</b><span>Filters</span></button>
+          <button class="editorTool" data-editor-tool="emoji"><b>☺</b><span>Stickers</span></button>
+          <button class="editorTool" data-editor-tool="captions"><b>▤</b><span>Captions</span></button>
+          <button class="editorTool" data-editor-tool="more"><b>⌄</b><span>More</span></button>
+        </div>
+
+        <div class="swipeHint">⌃<br><span>Swipe up to edit</span></div>
       </div>
 
-      <div class="editorRightTools">
-        <button type="button" class="editorTool" data-editor-tool="text"><span>Aa</span><small>Text</small></button>
-        <button type="button" class="editorTool" data-editor-tool="effects"><span>✦</span><small>Effects</small></button>
-        <button type="button" class="editorTool" data-editor-tool="filter"><span>◌</span><small>Filters</small></button>
-        <button type="button" class="editorTool" data-editor-tool="emoji"><span>☺</span><small>Stickers</small></button>
-        <button type="button" class="editorTool" data-editor-tool="captions"><span>▤</span><small>Captions</small></button>
-      </div>
-
-      <div class="editorBottom">
-        <button type="button" id="openTrimBtn" class="editorBottomBtn">☰ Edit</button>
-        <button type="button" id="shortNextBtn" class="editorNextBtn">Next</button>
+      <div class="editorFooter">
+        <button id="openTrimBtn" class="editBtn" type="button">☰ Edit</button>
+        <button id="shortNextBtn" class="nextBtn" type="button">Next</button>
       </div>
     </div>
 
+    <!-- TIMELINE / TRIM -->
     <div id="trimPanel" class="trimPanel">
-      <div class="trimHeader"><b>Trim Short</b><button id="closeTrimBtn" type="button">Done</button></div>
-      <div class="trimPreview"><video id="trimVideo" playsinline muted></video></div>
-      <label>Start: <span id="trimStartText">0:00</span></label>
+      <div class="trimTop">
+        <button id="closeTrimBtn" class="vIconBtn" type="button">←</button>
+        <b>Edit clip</b>
+        <button id="trimDoneBtn" class="doneBtn" type="button">Done</button>
+      </div>
+
+      <div class="trimVideoWrap">
+        <video id="trimVideo" playsinline muted></video>
+      </div>
+
+      <div class="trimDurationBadge"><span id="trimDurationText">0:00</span></div>
+      <div class="timelineBar">
+        <div class="timelineFill"></div>
+      </div>
+
+      <label>Start <span id="trimStartText">0:00</span></label>
       <input id="trimStart" type="range" min="0" max="90" step="0.1" value="0">
-      <label>End: <span id="trimEndText">0:00</span></label>
+      <label>End <span id="trimEndText">0:00</span></label>
       <input id="trimEnd" type="range" min="0" max="90" step="0.1" value="90">
-      <div id="trimDurationText" class="trimInfo">Selected: 0:00 / 1:30</div>
+
+      <div class="timelineTools">
+        <button data-editor-tool="text">A<br><span>Text</span></button>
+        <button data-editor-tool="music">♪<br><span>Music</span></button>
+        <button data-editor-tool="emoji">☺<br><span>Stickers</span></button>
+        <button data-editor-tool="voice">🎙<br><span>Voiceover</span></button>
+      </div>
     </div>
   </div>
 
-  <div id="shortStageDetails" class="shortStage shortDetailsPage">
-    <div class="detailsHeader">
-      <button type="button" id="detailsBackBtn" class="plainBack">←</button>
-      <div class="detailsTitle">Add details</div>
+  <!-- STEP 3: ADD DETAILS -->
+  <div id="shortStageDetails" class="shortStage detailsStage">
+    <div class="detailsTop">
+      <button id="detailsBackBtn" class="plainBack" type="button">←</button>
+      <h2>New Short</h2>
     </div>
 
-    <div class="detailsHero">
-      <div id="detailsCover" class="detailsCover"></div>
-      <textarea id="shortCaption" placeholder="Caption your Short"></textarea>
+    <div class="detailsCoverRow">
+      <div id="detailsCover" class="coverPreviewBox">
+        <button id="editCoverBtn" type="button">✎ Edit cover</button>
+      </div>
+      <textarea id="shortCaption" maxlength="2200" placeholder="Write a caption and add hashtags..."></textarea>
     </div>
 
-    <div class="creatorMini">
-      <div id="detailsAvatar" class="avatar">V</div>
-      <div><b id="detailsCreator">Vidoza Creator</b><div class="sub" id="detailsHandle">@vidoza</div></div>
+    <div class="quickChips">
+      <button type="button" data-chip="hashtags"># Hashtags</button>
+      <button type="button" data-chip="link">▣ Link video</button>
+      <button type="button" data-chip="poll">☷ Poll</button>
+      <button type="button" data-chip="prompt">◯ Prompt</button>
     </div>
 
-    <div class="detailsList">
-      <button type="button" class="detailsRow" id="visibilityRow"><span>◎</span><div><small>Visibility</small><b id="visibilityValue">Public</b></div><em>›</em></button>
-      <button type="button" class="detailsRow" id="audienceRow"><span>◉</span><div><small>Audience</small><b id="audienceValue">Not made for kids</b></div><em>›</em></button>
-      <button type="button" class="detailsRow" id="descriptionRow"><span>≡</span><div><b>Add description</b></div><em>›</em></button>
-      <button type="button" class="detailsRow" id="locationRow"><span>⌖</span><div><b>Location</b><small id="locationValue"></small></div><em>›</em></button>
-      <button type="button" class="detailsRow" id="playlistRow"><span>☷</span><div><b>Add to playlists</b></div><em>＋</em></button>
-      <button type="button" class="detailsRow" id="promotionRow"><span>₹</span><div><b>Paid promotion and brands</b></div><em>›</em></button>
-      <button type="button" class="detailsRow" id="advancedRow"><span>⚙</span><div><b>Advanced settings</b></div><em>›</em></button>
+    <div class="detailRows">
+      <button class="detailRow" id="tagPeopleRow" type="button"><span>👤</span><b>Tag people</b><em>›</em></button>
+      <button class="detailRow" id="locationRow" type="button"><span>⌖</span><b>Add location</b><em>›</em></button>
+      <button class="detailRow" id="playlistRow" type="button"><span>☷</span><b>Add to playlist</b><em>＋</em></button>
+      <button class="detailRow" id="promotionRow" type="button"><span>₹</span><b>Paid promotion & brands</b><em>›</em></button>
+      <button class="detailRow" id="visibilityRow" type="button"><span>◎</span><div><small>Visibility</small><b id="visibilityValue">Public</b></div><em>›</em></button>
+      <button class="detailRow" id="audienceRow" type="button"><span>◉</span><div><small>Audience</small><b id="audienceValue">Not made for kids</b></div><em>›</em></button>
+      <button class="detailRow" id="descriptionRow" type="button"><span>≡</span><b>Add description</b><em>›</em></button>
+      <button class="detailRow" id="advancedRow" type="button"><span>⚙</span><b>Advanced settings</b><em>›</em></button>
     </div>
 
-    <div class="detailsHiddenInputs">
-      <input id="shortTitle" placeholder="Short title">
+    <div class="hiddenShortFields">
+      <input id="shortTitle">
       <textarea id="shortDesc"></textarea>
       <select id="shortVisibility"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select>
+      <select id="audience"><option value="general">Not made for kids</option><option value="kids">Made for kids</option></select>
       <input id="shortLocation">
       <input id="shortTags">
-      <input id="shortThumb" type="file" accept="image/*">
-      <input id="shortPeopleTags">
-      <input id="shortTopics">
-      <input id="shortReminder" type="datetime-local">
-      <input id="scheduleAt" type="datetime-local">
-      <input id="brands">
       <input id="playlist">
-      <select id="audience"><option value="general">Not made for kids</option><option value="kids">Made for kids</option></select>
+      <input id="brands">
+      <input id="shortPeopleTags">
+      <input id="paidPromotion" type="checkbox">
+      <input id="notifySubscribers" type="checkbox" checked>
+      <select id="community"><option value="allow">Allow comments</option><option value="review">Review comments</option><option value="off">Turn off comments</option></select>
+      <input id="shortThumb" type="file" accept="image/*">
       <input id="hideCounts" type="checkbox">
       <input id="disableComments" type="checkbox">
       <input id="highestQuality" type="checkbox" checked>
       <input id="scheduleEnabled" type="checkbox">
-      <input id="paidPromotion" type="checkbox">
-      <input id="notifySubscribers" type="checkbox" checked>
-      <select id="community"><option value="allow">Allow comments</option><option value="review">Review comments</option><option value="off">Turn off comments</option></select>
+      <input id="scheduleAt" type="datetime-local">
+      <input id="shortReminder" type="datetime-local">
+      <input id="shortTopics">
     </div>
 
-    <div class="detailsActions">
-      <button type="button" id="shortDraftBtn" class="draftAction">Save draft</button>
-      <button type="button" id="shortUploadBtn" class="uploadAction">Upload Short</button>
+    <div class="publishBar">
+      <button id="shortDraftBtn" class="draftBtn" type="button">Save draft</button>
+      <button id="shortUploadBtn" class="shareBtn" type="button">Share</button>
     </div>
     <div id="shortStatus" class="authMsg"></div>
   </div>
@@ -1372,101 +1471,135 @@ async function uploadVideo(){
 }
 
 
-let shortEditFile=null, shortEditUrl='', shortEditDuration=0, shortTrimStart=0, shortTrimEnd=0;
-let shortFilter='none', shortOverlayText='', shortOverlayEmoji='', selectedCoverData='';
+
+
+let shortEditFile=null,shortEditUrl='',shortEditDuration=0,shortTrimStart=0,shortTrimEnd=0;
+let shortFilter='none',shortOverlayText='',shortOverlayEmoji='',selectedCoverData='';
 
 function showShortStage(id){
- ['shortStageSelect','shortStageEdit','shortStageDetails'].forEach(function(x){$(x).classList.remove('active')});
- $(id).classList.add('active');
+ ['shortStageSelect','shortStageEdit','shortStageDetails'].forEach(function(x){if($(x))$(x).classList.remove('active')});
+ if($(id))$(id).classList.add('active');
 }
-function fmtTime(sec){sec=Math.max(0,Number(sec)||0);return Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0')}
+function fmtTime(sec){
+ sec=Math.max(0,Number(sec)||0);
+ return Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0');
+}
 function openShortFromFile(file){
  shortEditFile=file;
  if(shortEditUrl)try{URL.revokeObjectURL(shortEditUrl)}catch(e){}
  shortEditUrl=URL.createObjectURL(file);
- $('shortEditVideo').src=shortEditUrl;
- $('shortEditorVideo').src=shortEditUrl;
- $('trimVideo').src=shortEditUrl;
+
+ ['shortCameraVideo','shortEditorVideo','trimVideo'].forEach(function(id){if($(id))$(id).src=shortEditUrl});
+
  $('shortEditorVideo').onloadedmetadata=function(){
    shortEditDuration=this.duration||0;
-   shortTrimStart=0;shortTrimEnd=Math.min(90,shortEditDuration);
+   shortTrimStart=0;
+   shortTrimEnd=Math.min(90,shortEditDuration);
    $('trimStart').max=Math.min(90,shortEditDuration);
    $('trimEnd').max=Math.min(90,shortEditDuration);
-   $('trimStart').value=0;$('trimEnd').value=shortTrimEnd;
+   $('trimStart').value=0;
+   $('trimEnd').value=shortTrimEnd;
    updateShortTrim();
    showShortStage('shortStageEdit');
  };
 }
 function updateShortTrim(){
+ if(!$('trimStart')||!$('trimEnd'))return;
  let s=Number($('trimStart').value),e=Number($('trimEnd').value);
- if(e<=s)e=Math.min(Number($('trimEnd').max)||90,s+0.1);
+ if(e<=s)e=Math.min(Number($('trimEnd').max)||90,s+.1);
  shortTrimStart=s;shortTrimEnd=e;
- $('trimStartText').textContent=fmtTime(s);$('trimEndText').textContent=fmtTime(e);
- $('trimDurationText').textContent='Selected: '+fmtTime(e-s)+' / 1:30';
+ $('trimStartText').textContent=fmtTime(s);
+ $('trimEndText').textContent=fmtTime(e);
+ $('trimDurationText').textContent=fmtTime(e-s);
  try{$('trimVideo').currentTime=s;$('shortEditorVideo').currentTime=s}catch(e){}
 }
 function editorToolAction(tool){
  if(tool==='text'){
    const t=prompt('Add text'); if(t!==null){shortOverlayText=t;$('editorOverlayText').textContent=t}
  }else if(tool==='emoji'){
-   const e=prompt('Add emoji / sticker','😊'); if(e!==null){shortOverlayEmoji=e;$('editorOverlayEmoji').textContent=e}
+   const e=prompt('Add sticker / emoji','😊'); if(e!==null){shortOverlayEmoji=e;$('editorOverlayEmoji').textContent=e}
  }else if(tool==='filter'){
-   shortFilter=shortFilter==='none'?'contrast(1.12) saturate(1.18)':shortFilter==='contrast(1.12) saturate(1.18)'?'grayscale(.2) contrast(1.1)':'none';
+   const choices=['none','contrast(1.12) saturate(1.18)','grayscale(.25) contrast(1.08)','sepia(.25) saturate(1.2)'];
+   const idx=(choices.indexOf(shortFilter)+1)%choices.length;shortFilter=choices[idx];
    $('shortEditorVideo').style.filter=shortFilter;
- }else if(tool==='effects'){
-   toast('Effects selected');
- }else if(tool==='captions'){
-   toast('Captions selected');
+ }else{
+   toast((tool||'Tool')+' selected');
  }
 }
 function captureDetailsCover(){
- const v=$('shortEditorVideo'); if(!v.videoWidth)return;
- const c=document.createElement('canvas');c.width=360;c.height=640;
- const ctx=c.getContext('2d');ctx.fillStyle='#000';ctx.fillRect(0,0,c.width,c.height);
+ const v=$('shortEditorVideo');
+ if(!v||!v.videoWidth)return;
+ const c=document.createElement('canvas');
+ c.width=360;c.height=640;
+ const ctx=c.getContext('2d');ctx.fillStyle='#111';ctx.fillRect(0,0,c.width,c.height);
  const ratio=Math.min(c.width/v.videoWidth,c.height/v.videoHeight);
  const w=v.videoWidth*ratio,h=v.videoHeight*ratio;
  ctx.drawImage(v,(c.width-w)/2,(c.height-h)/2,w,h);
- selectedCoverData=c.toDataURL('image/jpeg',.85);
+ selectedCoverData=c.toDataURL('image/jpeg',.86);
  $('detailsCover').style.backgroundImage='url("'+selectedCoverData+'")';
 }
 function goShortDetails(){
- if(shortTrimEnd-shortTrimStart>90.001){toast('Short maximum is 1:30');return}
+ if(!shortEditFile){toast('Choose a video first');return}
+ if(shortTrimEnd-shortTrimStart>90.001){toast('Short maximum length is 1:30');return}
  captureDetailsCover();
- $('detailsCreator').textContent=profileName();
- $('detailsHandle').textContent='@'+profileName().replace(/\s+/g,'');
- $('detailsAvatar').textContent=profileName().charAt(0).toUpperCase();
- $('shortTitle').value=$('shortTitle').value||'Vidoza Short';
  showShortStage('shortStageDetails');
 }
 function resetShortFlow(){
  stopAllMedia();
  shortEditFile=null;shortEditDuration=0;shortTrimStart=0;shortTrimEnd=0;shortOverlayText='';shortOverlayEmoji='';shortFilter='none';selectedCoverData='';
- $('shortFile').value='';$('shortCaption').value='';$('shortDesc').value='';$('shortLocation').value='';$('shortTags').value='';
- $('shortEditorVideo').style.filter='none';$('editorOverlayText').textContent='';$('editorOverlayEmoji').textContent='';
+ if($('shortFile'))$('shortFile').value='';
+ if($('shortCaption'))$('shortCaption').value='';
+ if($('shortDesc'))$('shortDesc').value='';
+ if($('shortLocation'))$('shortLocation').value='';
+ if($('shortTags'))$('shortTags').value='';
+ if($('editorOverlayText'))$('editorOverlayText').textContent='';
+ if($('editorOverlayEmoji'))$('editorOverlayEmoji').textContent='';
+ if($('shortEditorVideo'))$('shortEditorVideo').style.filter='none';
  showShortStage('shortStageSelect');
+}
+async function saveShortDraft(){
+ if(!shortEditFile){toast('Choose a Short video first');return}
+ const id='short-draft-'+Date.now(),mediaKey='draft-short-'+id;
+ try{
+   await mediaPut(mediaKey,shortEditFile);
+   let list=JSON.parse(localStorage.getItem('vidozaShortDrafts')||'[]');
+   list.unshift({
+     id:id,mediaKey:mediaKey,title:($('shortCaption').value.trim()||'Untitled Short'),
+     trimStart:shortTrimStart,trimEnd:shortTrimEnd,savedAt:new Date().toLocaleString()
+   });
+   localStorage.setItem('vidozaShortDrafts',JSON.stringify(list));
+   toast('Short draft saved');
+ }catch(e){toast('Draft save failed')}
 }
 async function uploadShort(){
  if(!user){toast('Please login first');return}
  if(!shortEditFile){toast('Choose a Short video first');return}
- const selected=shortTrimEnd-shortTrimStart;
- if(selected<=0||selected>90.001){toast('Short must be 1:30 or less');return}
- const title=($('shortTitle').value.trim()||$('shortCaption').value.trim()||'Vidoza Short').slice(0,100);
- $('shortStatus').textContent='Uploading Short...';
+ const duration=shortTrimEnd-shortTrimStart;
+ if(duration<=0||duration>90.001){toast('Short must be 1:30 or less');return}
+
+ const caption=$('shortCaption').value.trim();
+ const title=(caption||'Vidoza Short').slice(0,100);
+
  try{
-   const id='short-'+Date.now(), mediaKey='short-'+id;
+   $('shortStatus').textContent='Uploading Short...';
+   const id='short-'+Date.now(),mediaKey='short-'+id;
    await mediaPut(mediaKey,shortEditFile);
+
    shorts.unshift({
      id:id,title:title,channel:profileName(),url:'',thumbnail:selectedCoverData,
-     mediaKey:mediaKey,thumbKey:'',description:$('shortDesc').value||$('shortCaption').value,
-     liked:false,saved:false,comments:[],trimStart:shortTrimStart,trimEnd:shortTrimEnd,duration:selected,
-     visibility:$('shortVisibility').value,location:$('shortLocation').value,tags:$('shortTags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
-     audience:$('audience').value,playlist:$('playlist').value,paidPromotion:$('paidPromotion').checked,brands:$('brands').value,
+     mediaKey:mediaKey,thumbKey:'',description:$('shortDesc').value||caption,
+     liked:false,saved:false,comments:[],trimStart:shortTrimStart,trimEnd:shortTrimEnd,duration:duration,
+     visibility:$('shortVisibility').value,audience:$('audience').value,location:$('shortLocation').value,
+     playlist:$('playlist').value,paidPromotion:$('paidPromotion').checked,brands:$('brands').value,
      community:$('community').value,notifySubscribers:$('notifySubscribers').checked,
+     peopleTags:$('shortPeopleTags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
+     tags:$('shortTags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
      editor:{filter:shortFilter,text:shortOverlayText,emoji:shortOverlayEmoji}
    });
+
    save();await hydrateMedia();renderShorts();
    $('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';
-   setTimeout(function(){resetShortFlow();showPage('shorts')},450);
+   setTimeout(function(){resetShortFlow();showPage('shorts')},400);
  }catch(e){
    $('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Upload failed: '+(e.message||'Storage error');
  }
@@ -1484,7 +1617,7 @@ function wire(){
  }});
  $('draftBtn').onclick=saveVideoDraft;
  $('cancelEditBtn').onclick=function(){editVideoId=null;resetUploadForm();showPage('you')};
- if($('shortDraftBtn'))$('shortDraftBtn').onclick=saveShortDraft;
+
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
  $('navHome').onclick=function(){showPage('home')};
 $('navShorts').onclick=function(){showPage('shorts')};
@@ -1498,29 +1631,56 @@ $('createLiveOption').onclick=function(){$('createMenu').style.display='none';sh
 $('startLiveBtn').onclick=function(){if(!user){toast('Please login first');return}$('liveStatus').textContent='Live setup ready.';$('liveStatus').style.color='#16a34a'};
 $('navSocial').onclick=function(){showPage('social');renderSocial()};
 $('navYou').onclick=function(){showPage('you')};
- $('createShortBtn').onclick=function(){showPage('shortUpload');renderMyShortsEditorList()};$('searchGo').onclick=doSearch;
+
  if($('shortFile'))$('shortFile').onchange=function(){if(this.files[0])openShortFromFile(this.files[0])};
  if($('shortBackBtn'))$('shortBackBtn').onclick=function(){showPage('home')};
  if($('editorBackBtn'))$('editorBackBtn').onclick=function(){resetShortFlow()};
  if($('detailsBackBtn'))$('detailsBackBtn').onclick=function(){showShortStage('shortStageEdit')};
  if($('editorTapPlay'))$('editorTapPlay').onclick=function(){const v=$('shortEditorVideo');if(v.paused){v.play();this.style.display='none'}else{v.pause();this.style.display='grid'}};
- if($('shortEditorVideo'))$('shortEditorVideo').onclick=function(){const b=$('editorTapPlay');if(this.paused){this.play();b.style.display='none'}else{this.pause();b.style.display='grid'}};
- document.querySelectorAll('.editorTool').forEach(function(b){b.onclick=function(){editorToolAction(b.dataset.editorTool)}});
- document.querySelectorAll('.shortSideTool').forEach(function(b){b.onclick=function(){toast(b.querySelector('small').textContent+' selected')}});
+ if($('shortEditorVideo'))$('shortEditorVideo').onclick=function(){const p=$('editorTapPlay');if(this.paused){this.play();p.style.display='none'}else{this.pause();p.style.display='grid'}};
+ document.querySelectorAll('.editorTool,[data-editor-tool]').forEach(function(b){b.onclick=function(){editorToolAction(b.dataset.editorTool)}});
+ document.querySelectorAll('.captureTool').forEach(function(b){b.onclick=function(){toast(b.querySelector('span').textContent+' selected')}});
  if($('openTrimBtn'))$('openTrimBtn').onclick=function(){$('trimPanel').classList.add('open')};
  if($('closeTrimBtn'))$('closeTrimBtn').onclick=function(){$('trimPanel').classList.remove('open')};
- $('trimStart').oninput=updateShortTrim;$('trimEnd').oninput=updateShortTrim;
- 
+ if($('trimDoneBtn'))$('trimDoneBtn').onclick=function(){$('trimPanel').classList.remove('open')};
+ if($('trimStart'))$('trimStart').oninput=updateShortTrim;
+ if($('trimEnd'))$('trimEnd').oninput=updateShortTrim;
  if($('shortNextBtn'))$('shortNextBtn').onclick=goShortDetails;
  if($('shortUploadBtn'))$('shortUploadBtn').onclick=uploadShort;
  if($('shortDraftBtn'))$('shortDraftBtn').onclick=saveShortDraft;
  if($('visibilityRow'))$('visibilityRow').onclick=function(){const v=$('shortVisibility');v.value=v.value==='public'?'unlisted':v.value==='unlisted'?'private':'public';$('visibilityValue').textContent=v.options[v.selectedIndex].text};
  if($('audienceRow'))$('audienceRow').onclick=function(){const a=$('audience');a.value=a.value==='general'?'kids':'general';$('audienceValue').textContent=a.value==='kids'?'Made for kids':'Not made for kids'};
  if($('descriptionRow'))$('descriptionRow').onclick=function(){const d=prompt('Description',$('shortDesc').value);if(d!==null)$('shortDesc').value=d};
- if($('locationRow'))$('locationRow').onclick=function(){const l=prompt('Location',$('shortLocation').value);if(l!==null){$('shortLocation').value=l;$('locationValue').textContent=l}};
+ if($('tagPeopleRow'))$('tagPeopleRow').onclick=function(){const t=prompt('Tag people',$('shortPeopleTags').value);if(t!==null)$('shortPeopleTags').value=t};
+ if($('locationRow'))$('locationRow').onclick=function(){const l=prompt('Location',$('shortLocation').value);if(l!==null)$('shortLocation').value=l};
  if($('playlistRow'))$('playlistRow').onclick=function(){const p=prompt('Playlist',$('playlist').value);if(p!==null)$('playlist').value=p};
  if($('promotionRow'))$('promotionRow').onclick=function(){$('paidPromotion').checked=!$('paidPromotion').checked;toast($('paidPromotion').checked?'Paid promotion enabled':'Paid promotion disabled')};
- if($('advancedRow'))$('advancedRow').onclick=function(){const off=confirm('Turn off comments?');$('community').value=off?'off':'allow';};
+ if($('advancedRow'))$('advancedRow').onclick=function(){const off=confirm('Turn off comments?');$('community').value=off?'off':'allow'};
+ document.querySelectorAll('[data-chip]').forEach(function(b){b.onclick=function(){toast(b.textContent.trim()+' selected')}});
+
+ $('createShortBtn').onclick=function(){showPage('shortUpload');renderMyShortsEditorList()};$('searchGo').onclick=doSearch;
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
  $('uploadBtn').onclick=uploadVideo;
  $('photoPostBtn').onclick=createPhotoPost;
 

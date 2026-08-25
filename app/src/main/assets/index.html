@@ -21,7 +21,19 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}
 .nav{position:fixed;left:0;right:0;bottom:0;height:66px;background:#fff;border-top:1px solid #e5e7eb;display:flex;z-index:30}.nav button{flex:1;border:0;background:#fff;font-size:11px}.nav b{display:block;font-size:21px;margin-bottom:3px}.nav .plus b{font-size:29px}
 .section{padding:16px}.h1{font-size:24px;font-weight:800;margin:0 0 16px}.field{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0 12px}.btn{border:0;border-radius:20px;padding:10px 16px;font-weight:700}.primary{background:#e11d48;color:#fff}.soft{background:#eee}.divider{height:1px;background:#e5e7eb;margin:15px 0}.row{display:flex;align-items:center;gap:10px}.menu button{width:100%;padding:15px 6px;background:#fff;border:0;border-bottom:1px solid #eee;text-align:left;font-size:16px}
 .actions{display:flex;gap:8px;overflow:auto;padding:10px 12px}.action{border:0;background:#eee;border-radius:18px;padding:9px 13px;min-width:75px}
-.empty{text-align:center;color:#777;padding:35px}.short{height:calc(100vh - 140px);background:#111;color:#fff;position:relative;display:grid;place-items:center;overflow:hidden}.short video{width:100%;height:100%;object-fit:cover}.shortCaption{position:absolute;left:14px;bottom:16px;right:80px}.shortRail{position:absolute;right:10px;bottom:16px;display:grid;gap:10px}.shortRail button{width:46px;height:46px;border:0;border-radius:50%;background:#ffffff22;color:#fff}
+.empty{text-align:center;color:#777;padding:35px}.short{margin:0 12px 18px;background:#111;color:#fff;border-radius:14px;overflow:hidden;position:relative}
+.short video{display:block;width:100%;max-height:620px;aspect-ratio:9/16;object-fit:cover;background:#000}
+.short .shortPlaceholder{height:420px;display:grid;place-items:center;font-size:64px}
+.shortCaption{padding:12px 12px 6px}
+.shortRail{display:flex;gap:8px;padding:8px 12px 12px;position:static}
+.shortRail button{min-width:62px;height:40px;border:0;border-radius:20px;background:#ffffff22;color:#fff;padding:0 10px}
+.shortRail button.active{background:#e11d48;color:#fff}
+.shortCommentBox{display:flex;gap:8px;padding:0 12px 12px}
+.shortCommentBox input{flex:1;min-width:0;padding:10px;border:0;border-radius:18px}
+.shortCommentBox button{border:0;border-radius:18px;padding:0 14px;background:#fff;color:#111}
+.shortComments{padding:0 12px 12px;font-size:13px}
+.shortComments div{padding:6px 0;border-top:1px solid #ffffff22}
+
 #auth{display:none;position:fixed;inset:0;background:#f7f7f8;z-index:5000;align-items:center;justify-content:center;padding:18px}.authCard{width:100%;max-width:420px;background:#fff;border-radius:20px;padding:28px;box-shadow:0 10px 40px #0002}.authInput{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;margin:6px 0 11px}.authMsg{text-align:center;min-height:20px;font-size:14px;margin:10px 0}.link{border:0;background:none;color:#e11d48;font-weight:700}
 .notice{background:#fff3cd;color:#664d03;padding:10px;border-radius:9px;font-size:13px;margin-bottom:12px}
 </style>
@@ -77,13 +89,22 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}
 
  <div id="player" class="page"></div>
 
- <div id="settings" class="page section"><div class="h1">Settings</div><div class="menu"><button id="privacyBtn">🔒 Privacy Policy</button><button id="termsBtn">📄 Terms</button><button id="guidelinesBtn">🛡 Community Guidelines</button><button id="supportBtn">🎧 Help & Support</button><button id="settingsLogout">🚪 Logout</button></div></div>
+ 
+<div id="live" class="page section">
+<div class="h1">Go Live</div>
+<div class="notice">Live streaming setup</div>
+<input id="liveTitle" class="field" placeholder="Live title">
+<select id="liveCategory" class="field"><option>Music</option><option>News</option><option>Gaming</option><option>Learning</option><option>Other</option></select>
+<button class="btn primary" id="startLiveBtn">🔴 Start Live</button>
+<div id="liveStatus" class="authMsg"></div>
+</div>
+<div id="settings" class="page section"><div class="h1">Settings</div><div class="menu"><button id="privacyBtn">🔒 Privacy Policy</button><button id="termsBtn">📄 Terms</button><button id="guidelinesBtn">🛡 Community Guidelines</button><button id="supportBtn">🎧 Help & Support</button><button id="settingsLogout">🚪 Logout</button></div></div>
 
  <div id="support" class="page section"><div class="h1">Help & Support</div><input id="supportContact" class="field" placeholder="Email / Mobile"><textarea id="supportText" class="field" rows="6" placeholder="Describe your problem"></textarea><button class="btn primary" id="supportSubmit">Submit Ticket</button><div id="supportStatus" class="authMsg"></div></div>
 
  <div id="policy" class="page section"><div id="policyContent"></div></div>
 
- <div class="nav"><button id="navHome"><b>⌂</b>Home</button><button id="navShorts"><b>♬</b>Shorts</button><button class="plus" id="navCreate"><b>⊕</b>Create</button><button id="navSubs"><b>▣</b>Subscriptions</button><button id="navYou"><b>◉</b>You</button></div>
+ <div class="nav"><button id="navHome"><b>⌂</b>Home</button><button id="navShorts"><b>♬</b>Shorts</button><button class="plus" id="navCreate"><b>＋</b>Create</button><button id="navSubs"><b>▣</b>Subscriptions</button><button id="navYou"><b>◉</b>You</button></div>
 </div>
 
 <script>
@@ -136,8 +157,88 @@ function renderHome(){
  bindCards($('feed'));renderChannel()
 }
 function renderShorts(){
- $('shortFeed').innerHTML=shorts.length?shorts.map(function(v){return '<div class="short">'+(v.url?'<video controls playsinline src="'+esc(v.url)+'"></video>':'<div style="font-size:70px">▶</div>')+'<div class="shortCaption"><b>'+esc(v.channel)+'</b><br>'+esc(v.title)+'</div><div class="shortRail"><button data-like-short="'+esc(v.id)+'">♥</button><button data-comment-short="'+esc(v.id)+'">💬</button><button data-share-short="'+esc(v.id)+'">↗</button><button data-save-short="'+esc(v.id)+'">▣</button></div></div>'}).join(''):'<div class="empty">No Shorts yet. Tap Create Short.</div>';
- document.querySelectorAll('[data-share-short]').forEach(function(b){b.onclick=function(){shareText('Vidoza Short')}})
+ const seen={};
+ const unique=shorts.filter(function(v){
+   const key=String(v.id||v.url||v.title);
+   if(seen[key])return false;
+   seen[key]=true;
+   return true;
+ });
+ shorts=unique;
+ save();
+ if(!shorts.length){
+   $('shortFeed').innerHTML='<div class="empty">No Shorts yet. Tap Create Short.</div>';
+   return;
+ }
+ $('shortFeed').innerHTML=shorts.map(function(v){
+   const comments=v.comments||[];
+   return '<div class="short" data-short="'+esc(v.id)+'">'+
+     (v.url?'<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video>':'<div class="shortPlaceholder">▶</div>')+
+     '<div class="shortCaption"><b>'+esc(v.channel)+'</b><br>'+esc(v.title)+'</div>'+
+     '<div class="shortRail">'+
+       '<button class="'+(v.liked?'active':'')+'" data-short-like="'+esc(v.id)+'">♥ '+(v.liked?'Liked':'Like')+'</button>'+
+       '<button data-short-comment="'+esc(v.id)+'">💬 Comment</button>'+
+       '<button data-short-share="'+esc(v.id)+'">↗ Share</button>'+
+       '<button class="'+(v.saved?'active':'')+'" data-short-save="'+esc(v.id)+'">▣ '+(v.saved?'Saved':'Save')+'</button>'+
+       '<button data-short-download="'+esc(v.id)+'">⬇ Download</button>'+
+     '</div>'+
+     '<div class="shortCommentBox"><input data-comment-input="'+esc(v.id)+'" placeholder="Write a comment"><button data-comment-post="'+esc(v.id)+'">Post</button></div>'+
+     '<div class="shortComments">'+(comments.length?comments.map(function(c){return '<div>'+esc(c)+'</div>'}).join(''):'<div style="opacity:.7">No comments yet</div>')+'</div>'+
+   '</div>';
+ }).join('');
+
+ document.querySelectorAll('[data-short-like]').forEach(function(b){
+   b.onclick=function(){shortLike(b.dataset.shortLike)}
+ });
+ document.querySelectorAll('[data-short-save]').forEach(function(b){
+   b.onclick=function(){shortSave(b.dataset.shortSave)}
+ });
+ document.querySelectorAll('[data-short-share]').forEach(function(b){
+   b.onclick=function(){let v=shorts.find(function(x){return String(x.id)===String(b.dataset.shortShare)});if(v)shareText(v.title)}
+ });
+ document.querySelectorAll('[data-short-download]').forEach(function(b){
+   b.onclick=function(){downloadShort(b.dataset.shortDownload)}
+ });
+ document.querySelectorAll('[data-short-comment]').forEach(function(b){
+   b.onclick=function(){
+     const inp=document.querySelector('[data-comment-input="'+CSS.escape(b.dataset.shortComment)+'"]');
+     if(inp)inp.focus();
+   }
+ });
+ document.querySelectorAll('[data-comment-post]').forEach(function(b){
+   b.onclick=function(){postShortComment(b.dataset.commentPost)}
+ });
+}
+function findShort(id){return shorts.find(function(v){return String(v.id)===String(id)})}
+function shortLike(id){
+ if(!user){toast('Please login first');return}
+ const v=findShort(id);if(!v)return;
+ v.liked=!v.liked;save();renderShorts();
+}
+function shortSave(id){
+ if(!user){toast('Please login first');return}
+ const v=findShort(id);if(!v)return;
+ v.saved=!v.saved;save();renderShorts();
+}
+function postShortComment(id){
+ if(!user){toast('Please login first');return}
+ const inp=document.querySelector('[data-comment-input="'+CSS.escape(String(id))+'"]');
+ if(!inp||!inp.value.trim())return;
+ const v=findShort(id);if(!v)return;
+ v.comments=v.comments||[];v.comments.unshift(inp.value.trim());inp.value='';save();renderShorts();
+}
+function downloadShort(id){
+ const v=findShort(id);if(!v||!v.url){toast('This Short has no downloadable file');return}
+ try{
+   const a=document.createElement('a');
+   a.href=v.url;
+   a.download=(v.title||'vidoza-short').replace(/[^a-z0-9_-]/gi,'_')+'.mp4';
+   a.target='_blank';
+   document.body.appendChild(a);
+   a.click();
+   a.remove();
+   toast('Download started');
+ }catch(e){toast('Download is not available on this device')}
 }
 function renderAccount(){
  let name=user?(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]:'Vidoza User';
@@ -152,7 +253,7 @@ function openVideo(id){
  selected=videos.find(function(v){return String(v.id)===String(id)});
  if(!selected)return;
  let media=selected.url?'<video controls playsinline autoplay style="width:100%;aspect-ratio:16/9;background:#000" src="'+esc(selected.url)+'"></video>':'<div class="thumb">▶</div>';
- $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b><div class="sub"><span id="subCount">'+(selected.subscribers||0)+'</span> subscribers</div></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p><div class="divider"></div><b>Comments</b><div class="row" style="margin-top:10px"><input id="commentInput" class="field" style="margin:0" placeholder="Add a comment"><button class="btn primary" id="postComment">Post</button></div><div id="commentList"></div></div>';
+ $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="downloadAction">⬇<br>Download</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b><div class="sub"><span id="subCount">'+(selected.subscribers||0)+'</span> subscribers</div></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p><div class="divider"></div><b>Comments</b><div class="row" style="margin-top:10px"><input id="commentInput" class="field" style="margin:0" placeholder="Add a comment"><button class="btn primary" id="postComment">Post</button></div><div id="commentList"></div></div>';
  showPage('player');
  $('likeAction').onclick=toggleLike;
 $('saveAction').onclick=toggleSave;
@@ -171,6 +272,19 @@ function postComment(){
  const input=$('commentInput');const text=input.value.trim();
  if(!text)return;
  selected.comments=selected.comments||[];selected.comments.unshift(text);save();input.value='';renderComments();
+}
+function downloadVideo(v){
+ if(!v||!v.url){toast('This video has no downloadable file');return}
+ try{
+   const a=document.createElement('a');
+   a.href=v.url;
+   a.download=(v.title||'vidoza-video').replace(/[^a-z0-9_-]/gi,'_')+'.mp4';
+   a.target='_blank';
+   document.body.appendChild(a);
+   a.click();
+   a.remove();
+   toast('Download started');
+ }catch(e){toast('Download is not available on this device')}
 }
 function toggleLike(){
  if(!user){toast('Please login first');return}
@@ -230,7 +344,7 @@ function uploadVideo(){
  if(!f||!t){toast('Select video and title');return}
  $('uploadStatus').style.color='#111';$('uploadStatus').textContent='Preparing video…';
  fileToData(f,function(url){
-  $('uploadStatus').textContent='Processing video…';
+  $('uploadStatus').textContent='Processing video… please wait';
   let tf=$('thumbFile').files[0];
   fileToData(tf,function(th){
    videos.unshift({id:'local-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,url:url,thumbnail:th,isShort:false,liked:false,saved:false,subscribed:false});
@@ -242,11 +356,13 @@ function uploadShort(){
  if(!user){toast('Please login first');return}
  let f=$('shortFile').files[0],t=$('shortTitle').value.trim();
  if(!f||!t){toast('Select Short video and title');return}
- $('shortStatus').textContent='Processing Short…';
+ $('shortStatus').textContent='Processing Short… please wait';
  fileToData(f,function(url){
   let tf=$('shortThumb').files[0];
   fileToData(tf,function(th){
-   shorts.unshift({id:'short-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],url:url,thumbnail:th,description:$('shortDesc').value});
+   const duplicate=shorts.some(function(x){return x.url===url || (x.title===t && x.channel===((user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]))});
+   if(duplicate){$('shortStatus').style.color='#b45309';$('shortStatus').textContent='This Short is already added.';return;}
+   shorts.unshift({id:'short-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],url:url,thumbnail:th,description:$('shortDesc').value,liked:false,saved:false,comments:[]});
    save();renderShorts();$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short added successfully.';featureMessage('Short uploaded successfully');setTimeout(function(){showPage('shorts')},700)
   })
  })
@@ -255,7 +371,17 @@ function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(
 
 function wire(){
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
- $('navHome').onclick=function(){showPage('home')};$('navShorts').onclick=function(){showPage('shorts')};$('navCreate').onclick=function(){showPage('upload')};$('navSubs').onclick=function(){toast('Subscriptions')};$('navYou').onclick=function(){showPage('you')};
+ $('navHome').onclick=function(){showPage('home')};
+$('navShorts').onclick=function(){showPage('shorts')};
+$('navCreate').onclick=function(){$('createMenu').style.display='flex'};
+$('closeCreateMenu').onclick=function(){$('createMenu').style.display='none'};
+$('createMenu').onclick=function(e){if(e.target===$('createMenu'))$('createMenu').style.display='none'};
+$('createVideoOption').onclick=function(){$('createMenu').style.display='none';showPage('upload')};
+$('createShortOption').onclick=function(){$('createMenu').style.display='none';showPage('shortUpload')};
+$('createLiveOption').onclick=function(){$('createMenu').style.display='none';showPage('live')};
+$('startLiveBtn').onclick=function(){if(!user){toast('Please login first');return}$('liveStatus').textContent='Live setup ready.';$('liveStatus').style.color='#16a34a'};
+$('navSubs').onclick=function(){toast('Subscriptions')};
+$('navYou').onclick=function(){showPage('you')};
  $('createShortBtn').onclick=function(){showPage('shortUpload')};$('searchGo').onclick=doSearch;
  $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;
  $('logoutBtn').onclick=logout;$('settingsLogout').onclick=logout;
@@ -288,5 +414,14 @@ async function boot(){
 window.addEventListener('load',boot);
 })();
 </script>
+
+<div id="createMenu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:2000;align-items:flex-end;justify-content:center">
+<div style="width:100%;max-width:520px;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px 24px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><b style="font-size:20px">Create</b><button id="closeCreateMenu" class="icon">✕</button></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<button id="createVideoOption" style="border:0;background:#f3f4f6;border-radius:16px;padding:18px 8px"><div style="font-size:30px">🎬</div><b>Video</b></button>
+<button id="createShortOption" style="border:0;background:#f3f4f6;border-radius:16px;padding:18px 8px"><div style="font-size:30px">⚡</div><b>Short</b></button>
+<button id="createLiveOption" style="border:0;background:#f3f4f6;border-radius:16px;padding:18px 8px"><div style="font-size:30px">🔴</div><b>Live</b></button>
+</div></div></div>
 </body>
 </html>

@@ -6,7 +6,7 @@
 <title>Vidoza</title>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}html,body{margin:0;padding:0 0 32px;background:#fff;color:#111;font-family:Arial,sans-serif;min-height:100%;overflow-x:hidden}
+*{box-sizing:border-box}html,body{margin:0;padding:32px 0 32px;background:#fff;color:#111;font-family:Arial,sans-serif;min-height:100%;overflow-x:hidden}
 button,input,textarea,select{font:inherit}button{cursor:pointer}
 #boot{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:99999}
 #boot .box{text-align:center}.vlogo{width:64px;height:64px;border-radius:16px;background:#e11d48;color:#fff;display:grid;place-items:center;font-size:30px;font-weight:800;margin:auto}
@@ -50,9 +50,12 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
 #auth{display:none;position:fixed;inset:0;background:#f7f7f8;z-index:5000;align-items:center;justify-content:center;padding:18px}.authCard{width:100%;max-width:420px;background:#fff;border-radius:20px;padding:28px;box-shadow:0 10px 40px #0002}.authInput{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;margin:6px 0 11px}.authMsg{text-align:center;min-height:20px;font-size:14px;margin:10px 0}.link{border:0;background:none;color:#e11d48;font-weight:700}
 .notice{background:#fff3cd;color:#664d03;padding:10px;border-radius:9px;font-size:13px;margin-bottom:12px}
 @media (max-width:600px){
-  .top{height:76px;min-height:76px;padding:20px 14px 8px}
+  #createMenu{padding-bottom:120px!important}
+  #createMenu>div{width:calc(100% - 24px);max-width:440px}
+
+  .top{height:68px;min-height:68px;padding:10px 14px 8px}
   .logo{font-size:20px}
-  .mark{width:42px;height:42px;min-width:42px}
+  .mark{width:40px;height:40px;min-width:40px}
   .icon{font-size:24px;padding:6px}
   .page{padding-bottom:145px}
   .thumb{max-height:none}
@@ -105,6 +108,12 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
  <div id="upload" class="page section"><div class="h1">Upload video</div><div class="notice">Select a video and publish it. Upload status will be shown below.</div><input id="videoFile" class="field" type="file" accept="video/*"><input id="thumbFile" class="field" type="file" accept="image/*"><input id="uploadTitle" class="field" placeholder="Video title"><textarea id="uploadDesc" class="field" rows="4" placeholder="Description"></textarea><select id="visibility" class="field"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select><button class="btn primary" id="uploadBtn">Upload & Publish</button><div id="uploadStatus" class="authMsg"></div></div>
 
  <div id="shortUpload" class="page section"><div class="h1">Create Short</div><input id="shortFile" class="field" type="file" accept="video/*"><input id="shortThumb" class="field" type="file" accept="image/*"><input id="shortTitle" class="field" placeholder="Short title"><textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea><button class="btn primary" id="shortUploadBtn">Upload Short</button><div id="shortStatus" class="authMsg"></div></div>
+
+ 
+<div id="subscriptions" class="page section">
+  <div class="h1">Subscriptions</div>
+  <div id="subscriptionList"></div>
+</div>
 
  <div id="you" class="page section"><div class="h1">You</div><div id="account"></div><div class="divider"></div><div class="menu"><button id="historyBtn">◷ History</button><button id="savedBtn">▣ Saved videos</button><button id="likedBtn">♥ Liked videos</button><button id="channelBtn">▤ Your channel</button><button id="youShortBtn">＋ Create Short</button><button id="youSettingsBtn">⚙ Settings</button><button id="logoutBtn" style="color:#e11d48;font-weight:700">🚪 Logout</button></div><div id="youList"></div></div>
 
@@ -263,6 +272,15 @@ function downloadShort(id){
    toast('Download started');
  }catch(e){toast('Download is not available on this device')}
 }
+function renderSubscriptions(){
+ const subscribed=videos.filter(function(v){return v.subscribed});
+ $('subscriptionList').innerHTML=subscribed.length
+   ? subscribed.map(card).join('')
+   : '<div class="empty">You have not subscribed to any channel yet.<br><button class="btn primary" id="findChannels" style="margin-top:12px">Explore Channels</button></div>';
+ bindCards($('subscriptionList'));
+ const find=$('findChannels');
+ if(find)find.onclick=function(){showPage('home')};
+}
 function renderAccount(){
  let name=user?(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]:'Vidoza User';
  $('account').innerHTML='<div class="row"><div class="avatar">'+esc(name[0].toUpperCase())+'</div><div><b>'+esc(name)+'</b><div class="sub">'+esc(user?user.email:'')+'</div></div></div>';
@@ -325,6 +343,7 @@ function toggleSubscribe(){
  selected.subscribers=(selected.subscribers||0)+(selected.subscribed?1:-1);
  if(selected.subscribers<0)selected.subscribers=0;
  save();
+ if(current==='subscriptions')renderSubscriptions();
  $('subAction').textContent=selected.subscribed?'Subscribed':'Subscribe';
  $('subAction').className='btn '+(selected.subscribed?'soft':'primary');
  $('subCount').textContent=selected.subscribers;
@@ -403,7 +422,7 @@ $('createVideoOption').onclick=function(){$('createMenu').style.display='none';s
 $('createShortOption').onclick=function(){$('createMenu').style.display='none';showPage('shortUpload')};
 $('createLiveOption').onclick=function(){$('createMenu').style.display='none';showPage('live')};
 $('startLiveBtn').onclick=function(){if(!user){toast('Please login first');return}$('liveStatus').textContent='Live setup ready.';$('liveStatus').style.color='#16a34a'};
-$('navSubs').onclick=function(){toast('Subscriptions')};
+$('navSubs').onclick=function(){showPage('subscriptions');renderSubscriptions()};
 $('navYou').onclick=function(){showPage('you')};
  $('createShortBtn').onclick=function(){showPage('shortUpload')};$('searchGo').onclick=doSearch;
  $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;
@@ -438,13 +457,13 @@ window.addEventListener('load',boot);
 })();
 </script>
 
-<div id="createMenu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:2000;align-items:flex-end;justify-content:center">
-<div style="width:100%;max-width:520px;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px 24px">
+<div id="createMenu" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:5000;align-items:flex-end;justify-content:center;padding-bottom:115px">
+<div style="width:calc(100% - 28px);max-width:460px;background:#fff;border-radius:20px;padding:14px 14px 16px;box-shadow:0 10px 35px rgba(0,0,0,.22)">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><b style="font-size:20px">Create</b><button id="closeCreateMenu" class="icon">✕</button></div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-<button id="createVideoOption" style="border:0;background:#f3f4f6;border-radius:16px;padding:18px 8px"><div style="font-size:30px">🎬</div><b>Video</b></button>
-<button id="createShortOption" style="border:0;background:#f3f4f6;border-radius:16px;padding:18px 8px"><div style="font-size:30px">⚡</div><b>Short</b></button>
-<button id="createLiveOption" style="border:0;background:#f3f4f6;border-radius:16px;padding:18px 8px"><div style="font-size:30px">🔴</div><b>Live</b></button>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+<button id="createVideoOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">🎬</div><b>Video</b></button>
+<button id="createShortOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">⚡</div><b>Short</b></button>
+<button id="createLiveOption" style="border:0;background:#f3f4f6;border-radius:14px;padding:12px 6px"><div style="font-size:30px">🔴</div><b>Live</b></button>
 </div></div></div>
 </body>
 </html>

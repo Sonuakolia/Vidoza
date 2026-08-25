@@ -360,6 +360,15 @@ body{padding:0!important;background:#fff!important}
  #shorts.page{bottom:100px!important}
 }
 </style>
+
+<style id="vidoza-creator-tools-v21">
+.checkRow{display:flex!important;align-items:center!important;gap:8px!important;margin:10px 0!important;font-size:15px!important}
+.checkRow input{width:20px!important;height:20px!important}
+.profilePhotoWrap{position:relative;width:88px;height:88px;flex:0 0 88px}
+.profilePhoto{width:88px!important;height:88px!important;border-radius:50%!important;object-fit:cover!important;display:block!important}
+.photoEditBadge{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;cursor:pointer;border:3px solid #fff}
+#draftList .card{background:#fff!important}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -413,7 +422,32 @@ body{padding:0!important;background:#fff!important}
 
  <div id="search" class="page section"><div class="row"><input id="searchInput" class="field" style="margin:0" placeholder="Search Vidoza"><button class="btn primary" id="searchGo">Search</button></div><div id="searchResults"></div></div>
 
- <div id="upload" class="page section"><div class="h1">Upload video</div><div class="notice">Select a video and publish it. Upload status will be shown below.</div><input id="videoFile" class="field" type="file" accept="video/*"><input id="thumbFile" class="field" type="file" accept="image/*"><input id="uploadTitle" class="field" placeholder="Video title"><textarea id="uploadDesc" class="field" rows="4" placeholder="Description"></textarea><select id="visibility" class="field"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select><button class="btn primary" id="uploadBtn">Upload & Publish</button><div id="uploadStatus" class="authMsg"></div></div>
+ <div id="upload" class="page section">
+<div class="h1" id="uploadHeading">Upload Video</div>
+<div class="notice">Upload a video, save it as a draft, or publish it.</div>
+<input id="videoFile" class="field" type="file" accept="video/*">
+<input id="thumbFile" class="field" type="file" accept="image/*">
+<input id="uploadTitle" class="field" placeholder="Video title">
+<textarea id="uploadDesc" class="field" rows="4" placeholder="Description"></textarea>
+
+<div class="h2">Details</div>
+<select id="visibility" class="field"><option value="public">Visibility: Public</option><option value="unlisted">Visibility: Unlisted</option><option value="private">Visibility: Private</option></select>
+<select id="audience" class="field"><option value="general">Audience: Not made for kids</option><option value="kids">Audience: Made for kids</option></select>
+<input id="location" class="field" placeholder="Location">
+<input id="playlist" class="field" placeholder="Add to playlist">
+<label class="checkRow"><input id="paidPromotion" type="checkbox"> Paid promotion</label>
+<input id="brands" class="field" placeholder="Brands / brand partner">
+<select id="community" class="field"><option value="allow">Community: Allow comments</option><option value="review">Community: Hold potentially inappropriate comments</option><option value="off">Community: Turn off comments</option></select>
+<input id="tags" class="field" placeholder="Tags (comma separated)">
+<label class="checkRow"><input id="notifySubscribers" type="checkbox" checked> Notify subscribers</label>
+
+<div class="row" style="gap:8px;margin-top:12px">
+<button class="btn soft" id="draftBtn">Save Draft</button>
+<button class="btn primary" id="uploadBtn">Upload & Publish</button>
+</div>
+<button class="btn soft" id="cancelEditBtn" style="display:none;width:100%;margin-top:8px">Cancel Edit</button>
+<div id="uploadStatus" class="authMsg"></div>
+</div>
 
  
 <div id="photoUpload" class="page section">
@@ -429,7 +463,19 @@ body{padding:0!important;background:#fff!important}
   <div id="photoPostStatus" class="authMsg"></div>
 </div>
 
- <div id="shortUpload" class="page section"><div class="h1">Create Short</div><input id="shortFile" class="field" type="file" accept="video/*"><input id="shortThumb" class="field" type="file" accept="image/*"><input id="shortTitle" class="field" placeholder="Short title"><textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea><button class="btn primary" id="shortUploadBtn">Upload Short</button><div id="shortStatus" class="authMsg"></div></div>
+ <div id="shortUpload" class="page section">
+<div class="h1">Create Short</div>
+<input id="shortFile" class="field" type="file" accept="video/*">
+<input id="shortThumb" class="field" type="image/*" accept="image/*">
+<input id="shortTitle" class="field" placeholder="Short title">
+<textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea>
+<select id="shortVisibility" class="field"><option value="public">Visibility: Public</option><option value="unlisted">Visibility: Unlisted</option><option value="private">Visibility: Private</option></select>
+<input id="shortLocation" class="field" placeholder="Location">
+<input id="shortTags" class="field" placeholder="Tags (comma separated)">
+<button class="btn primary" id="shortUploadBtn">Upload Short</button>
+<button class="btn soft" id="shortDraftBtn" style="width:100%;margin-top:8px">Save Short Draft</button>
+<div id="shortStatus" class="authMsg"></div>
+</div>
 
  
 <div id="subscriptions" class="page section">
@@ -461,6 +507,7 @@ body{padding:0!important;background:#fff!important}
 <button id="youSettingsBtn">⚙ Settings</button>
 <button id="logoutBtn" style="color:#e11d48;font-weight:700">🚪 Logout</button>
 </div>
+<div class="h2" style="margin-top:20px">Drafts</div><div id="draftList"></div>
 <div id="youList"></div>
 </div>
 
@@ -627,7 +674,7 @@ function showPage(id,push){
  if($(id))$(id).classList.add('active');
  if(push!==false&&stack[stack.length-1]!==id)stack.push(id);
  current=id;window.scrollTo(0,0);
- if(id==='home')renderHome();if(id==='shorts')renderShorts();if(id==='social')renderSocial();if(id==='you'){renderAccount();renderProfileTab('videos')};if(id==='channel')renderChannel();if(id==='subscriptions')renderSubscriptions();
+ if(id==='home')renderHome();if(id==='shorts')renderShorts();if(id==='social')renderSocial();if(id==='you'){renderAccount();renderProfileTab('videos');renderDrafts()};if(id==='channel')renderChannel();if(id==='subscriptions')renderSubscriptions();
 }
 window.appBack=function(){if(stack.length>1){stack.pop();showPage(stack[stack.length-1],false);return'handled'}if(current!=='home'){stack=['home'];showPage('home',false);return'handled'}return'exit'};
 
@@ -857,9 +904,16 @@ function renderProfileTab(tab){
  if(tab==='videos')bindCards($('youList'));
 }
 
+function profilePhoto(){
+ return localStorage.getItem('vidozaProfilePhoto')||'';
+}
 function renderAccount(){
- let name=profileName();
- $('account').innerHTML='<div class="row"><div class="avatar" style="width:72px;height:72px;font-size:28px">'+esc(name[0].toUpperCase())+'</div><div style="flex:1"><div class="title" style="font-size:25px">'+esc(name)+'</div><div class="sub">'+esc(user?user.email:'')+'</div><div class="sub">'+esc(profileBio())+'</div></div></div>';
+ let name=profileName(),photo=profilePhoto();
+ $('account').innerHTML='<div class="row"><div class="profilePhotoWrap">'+
+   (photo?'<img class="profilePhoto" src="'+esc(photo)+'">':'<div class="avatar" style="width:88px;height:88px;font-size:30px">'+esc(name[0].toUpperCase())+'</div>')+
+   '<label class="photoEditBadge" for="profilePhotoInput">✎</label></div>'+
+   '<div style="flex:1"><div class="title" style="font-size:25px">'+esc(name)+'</div><div class="sub">'+esc(user?user.email:'')+'</div><div class="sub">'+esc(profileBio())+'</div></div></div>'+
+   '<input id="profilePhotoInput" type="file" accept="image/*" style="display:none">';
 }
 function renderChannel(){
  let name=profileName();
@@ -867,11 +921,12 @@ function renderChannel(){
  if($('channelVideos')){
   $('channelVideos').innerHTML=videos.filter(function(v){return v.uploaded&&!v.isShort}).map(channelCard).join('')||'<div class="empty">Your uploaded videos will appear here.</div>';
   bindCards($('channelVideos'));
+  $('channelVideos').querySelectorAll('[data-edit-video]').forEach(function(b){b.onclick=function(e){e.stopPropagation();startEditVideo(b.dataset.editVideo)}});
   $('channelVideos').querySelectorAll('[data-delete-video]').forEach(function(b){b.onclick=function(e){e.stopPropagation();deleteVideo(b.dataset.deleteVideo)}});
  }
 }
 function channelCard(v){
- return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">4:20</span></div><div class="vidozaVidoza"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div style="flex:1"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div><button class="btn soft" data-delete-video="'+esc(v.id)+'">Delete</button></div></div>'
+ return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">4:20</span></div><div class="vidozaVidoza"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div style="flex:1"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div><button class="btn soft" data-edit-video="'+esc(v.id)+'">Edit</button><button class="btn soft" data-delete-video="'+esc(v.id)+'">Delete</button></div></div>'
 }
 async function deleteVideo(id){
  const v=videos.find(function(x){return String(x.id)===String(id)});
@@ -982,20 +1037,133 @@ async function signup(){
 async function logout(){try{if(db)await db.auth.signOut()}catch(e){}user=null;showAuth();$('app').style.display='none';stack=['home'];current='home'}
 
 function fileToData(file,cb){if(!file){cb('');return}let r=new FileReader();r.onload=function(){cb(r.result)};r.readAsDataURL(file)}
+
+let editVideoId=null;
+let drafts=JSON.parse(localStorage.getItem('vidozaDrafts')||'[]');
+
+function videoDetailsFromForm(){
+ return {
+  visibility:$('visibility').value,
+  audience:$('audience').value,
+  location:$('location').value.trim(),
+  playlist:$('playlist').value.trim(),
+  paidPromotion:$('paidPromotion').checked,
+  brands:$('brands').value.trim(),
+  community:$('community').value,
+  tags:$('tags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
+  notifySubscribers:$('notifySubscribers').checked
+ };
+}
+function fillVideoDetails(v){
+ const d=v||{};
+ $('visibility').value=d.visibility||'public';
+ $('audience').value=d.audience||'general';
+ $('location').value=d.location||'';
+ $('playlist').value=d.playlist||'';
+ $('paidPromotion').checked=!!d.paidPromotion;
+ $('brands').value=d.brands||'';
+ $('community').value=d.community||'allow';
+ $('tags').value=(d.tags||[]).join(', ');
+ $('notifySubscribers').checked=d.notifySubscribers!==false;
+}
+function resetUploadForm(){
+ editVideoId=null;
+ $('uploadHeading').textContent='Upload Video';
+ $('videoFile').value='';$('thumbFile').value='';
+ $('uploadTitle').value='';$('uploadDesc').value='';
+ fillVideoDetails({});
+ $('uploadBtn').textContent='Upload & Publish';
+ $('draftBtn').style.display='inline-block';
+ $('cancelEditBtn').style.display='none';
+}
+function startEditVideo(id){
+ const v=videos.find(function(x){return String(x.id)===String(id)});
+ if(!v)return;
+ editVideoId=id;
+ $('uploadHeading').textContent='Edit Video';
+ $('videoFile').value='';$('thumbFile').value='';
+ $('uploadTitle').value=v.title||'';
+ $('uploadDesc').value=v.description||'';
+ fillVideoDetails(v);
+ $('uploadBtn').textContent='Save Changes';
+ $('draftBtn').style.display='none';
+ $('cancelEditBtn').style.display='block';
+ showPage('upload');
+}
+function renderDrafts(){
+ const box=$('draftList');if(!box)return;
+ drafts=JSON.parse(localStorage.getItem('vidozaDrafts')||'[]');
+ box.innerHTML=drafts.map(function(d){
+   return '<div class="card" style="padding:12px;margin-bottom:10px"><div class="title">'+esc(d.title||'Untitled draft')+'</div><div class="sub">Draft · '+esc(d.savedAt||'')+'</div><div class="row" style="gap:8px;margin-top:8px"><button class="btn primary" data-draft-edit="'+esc(d.id)+'">Edit</button><button class="btn soft" data-draft-publish="'+esc(d.id)+'">Publish</button><button class="btn soft" data-draft-delete="'+esc(d.id)+'">Delete</button></div></div>';
+ }).join('')||'<div class="empty">No drafts yet.</div>';
+ box.querySelectorAll('[data-draft-edit]').forEach(function(b){b.onclick=function(){openDraft(b.dataset.draftEdit)}});
+ box.querySelectorAll('[data-draft-publish]').forEach(function(b){b.onclick=function(){publishDraft(b.dataset.draftPublish)}});
+ box.querySelectorAll('[data-draft-delete]').forEach(function(b){b.onclick=function(){deleteDraft(b.dataset.draftDelete)}});
+}
+async function saveVideoDraft(){
+ if(!user){toast('Please login first');return}
+ const f=$('videoFile').files[0],tf=$('thumbFile').files[0];
+ if(!f && !editVideoId){toast('Select a video first');return}
+ const id=editVideoId||('draft-'+Date.now());
+ try{
+  let d=drafts.find(function(x){return x.id===id})||{id:id};
+  if(f){d.mediaKey='draft-video-'+id;await mediaPut(d.mediaKey,f)}
+  if(tf){d.thumbKey='draft-thumb-'+id;await mediaPut(d.thumbKey,tf)}
+  d.title=$('uploadTitle').value.trim()||'Untitled draft';
+  d.description=$('uploadDesc').value;d.channel=profileName();
+  Object.assign(d,videoDetailsFromForm());d.savedAt=new Date().toLocaleString();
+  const ix=drafts.findIndex(function(x){return x.id===id});if(ix>=0)drafts[ix]=d;else drafts.unshift(d);
+  localStorage.setItem('vidozaDrafts',JSON.stringify(drafts));renderDrafts();
+  toast('Video draft saved');
+ }catch(e){toast('Draft save failed: '+(e.message||'Storage error'))}
+}
+async function openDraft(id){
+ const d=drafts.find(function(x){return String(x.id)===String(id)});if(!d)return;
+ $('uploadHeading').textContent='Edit Draft';editVideoId='draft:'+id;
+ $('videoFile').value='';$('thumbFile').value='';$('uploadTitle').value=d.title||'';$('uploadDesc').value=d.description||'';fillVideoDetails(d);
+ $('uploadBtn').textContent='Publish Draft';$('draftBtn').style.display='none';$('cancelEditBtn').style.display='block';showPage('upload');
+ window._editingDraft=d;
+}
+async function publishDraft(id){
+ const d=drafts.find(function(x){return String(x.id)===String(id)});if(!d)return;
+ try{
+  const id2='local-'+Date.now();
+  const v={id:id2,title:d.title||'Untitled',channel:d.channel||profileName(),views:'0 views',age:'Just now',description:d.description||'',uploaded:true,mediaKey:d.mediaKey,thumbKey:d.thumbKey,url:'',thumbnail:'',isShort:false,liked:false,saved:false,subscribed:false,comments:[]};
+  Object.assign(v,videoDetailsFromDraft(d));videos.unshift(v);
+  drafts=drafts.filter(function(x){return String(x.id)!==String(id)});localStorage.setItem('vidozaDrafts',JSON.stringify(drafts));save();await hydrateMedia();renderDrafts();renderHome();toast('Draft published');
+ }catch(e){toast('Publish failed: '+(e.message||'Storage error'))}
+}
+function videoDetailsFromDraft(d){return {visibility:d.visibility||'public',audience:d.audience||'general',location:d.location||'',playlist:d.playlist||'',paidPromotion:!!d.paidPromotion,brands:d.brands||'',community:d.community||'allow',tags:d.tags||[],notifySubscribers:d.notifySubscribers!==false}}
+async function deleteDraft(id){
+ const d=drafts.find(function(x){return String(x.id)===String(id)});if(!d)return;
+ if(d.mediaKey)await mediaDelete(d.mediaKey);if(d.thumbKey)await mediaDelete(d.thumbKey);
+ drafts=drafts.filter(function(x){return String(x.id)!==String(id)});localStorage.setItem('vidozaDrafts',JSON.stringify(drafts));renderDrafts();toast('Draft deleted');
+}
+
 async function uploadVideo(){
  if(!user){toast('Please login first');return}
  let f=$('videoFile').files[0],t=$('uploadTitle').value.trim();
+ if(editVideoId && String(editVideoId).indexOf('draft:')===0){toast('Use Publish Draft from Drafts to publish this draft');return}
+ if(editVideoId){
+   const v=videos.find(function(x){return String(x.id)===String(editVideoId)});if(!v)return;
+   if(f){if(v.mediaKey)await mediaDelete(v.mediaKey);v.mediaKey='video-'+v.id;await mediaPut(v.mediaKey,f)}
+   const tf=$('thumbFile').files[0];if(tf){if(v.thumbKey)await mediaDelete(v.thumbKey);v.thumbKey='thumb-'+v.id;await mediaPut(v.thumbKey,tf)}
+   v.title=t||v.title;v.description=$('uploadDesc').value;Object.assign(v,videoDetailsFromForm());
+   save();await hydrateMedia();renderHome();renderChannel();toast('Video updated');resetUploadForm();showPage('channel');return;
+ }
  if(!f||!t){toast('Select video and title');return}
  $('uploadStatus').style.color='#111';$('uploadStatus').textContent='Saving video… please wait';
  try{
   const id='local-'+Date.now(),mediaKey='video-'+id,tf=$('thumbFile').files[0],thumbKey=tf?'thumb-'+id:'';
   await mediaPut(mediaKey,f);if(tf)await mediaPut(thumbKey,tf);
-  videos.unshift({id:id,title:t,channel:profileName(),views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,mediaKey:mediaKey,thumbKey:thumbKey,url:'',thumbnail:'',isShort:false,liked:false,saved:false,subscribed:false,comments:[]});
-  save();await hydrateMedia();renderHome();
+  const v={id:id,title:t,channel:profileName(),views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,mediaKey:mediaKey,thumbKey:thumbKey,url:'',thumbnail:'',isShort:false,liked:false,saved:false,subscribed:false,comments:[]};
+  Object.assign(v,videoDetailsFromForm());videos.unshift(v);
+  save();await hydrateMedia();renderHome();renderChannel();
   $('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video uploaded successfully.';
-  featureMessage('Video uploaded successfully');setTimeout(function(){showPage('home')},500);
+  featureMessage('Video uploaded successfully');setTimeout(function(){resetUploadForm();showPage('home')},500);
  }catch(e){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Video save failed: '+(e.message||'Storage error')}
 }
+
 async function uploadShort(){
  if(!user){toast('Please login first');return}
  let f=$('shortFile').files[0],t=$('shortTitle').value.trim();
@@ -1016,6 +1184,15 @@ function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(
 
 function wire(){
  $('storyClose').onclick=function(){$('storyViewer').style.display='none'};
+ document.addEventListener('change',function(e){if(e.target&&e.target.id==='profilePhotoInput'){
+   const f=this.files[0]; if(!f)return;
+   const r=new FileReader();
+   r.onload=function(){localStorage.setItem('vidozaProfilePhoto',r.result);renderAccount();renderChannel();toast('Profile photo updated')};
+   r.readAsDataURL(f);
+ }});
+ $('draftBtn').onclick=saveVideoDraft;
+ $('cancelEditBtn').onclick=function(){editVideoId=null;resetUploadForm();showPage('you')};
+ $('shortDraftBtn').onclick=saveShortDraft;
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
  $('navHome').onclick=function(){showPage('home')};
 $('navShorts').onclick=function(){showPage('shorts')};

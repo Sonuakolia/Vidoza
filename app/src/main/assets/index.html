@@ -242,6 +242,103 @@ body{padding:0!important;background:#fff!important}
  .videoInfo .sub{font-size:13px!important}
 }
 </style>
+
+<style id="vidoza-shorts-v19">
+/* Bottom navigation must never cover the last content area. */
+#app>.page{padding-bottom:145px!important}
+#app>#home.page{padding-bottom:145px!important}
+#app>.nav{bottom:0!important;height:82px!important;min-height:82px!important;padding-bottom:8px!important}
+#app>.nav button{height:72px!important}
+
+/* Shorts: full-screen vertical video, with controls on the right. */
+#shorts.page{
+  position:fixed!important;
+  left:0!important;right:0!important;
+  top:env(safe-area-inset-top,0px)!important;
+  bottom:82px!important;
+  width:100%!important;height:auto!important;
+  min-height:0!important;
+  padding:0!important;
+  background:#000!important;
+  overflow-y:auto!important;
+  z-index:100!important;
+}
+#shortFeed{width:100%!important;height:100%!important;background:#000!important}
+.short{
+  position:relative!important;
+  width:100%!important;
+  height:calc(100vh - 82px - env(safe-area-inset-top,0px))!important;
+  min-height:500px!important;
+  margin:0!important;
+  background:#000!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+}
+.shortVideoWrap{position:absolute!important;inset:0!important;background:#000!important;overflow:hidden!important}
+.shortVideoWrap video{
+  position:absolute!important;inset:0!important;
+  width:100%!important;height:100%!important;
+  max-height:none!important;aspect-ratio:auto!important;
+  object-fit:contain!important;background:#000!important;
+}
+.shortPlaceholder{position:absolute!important;inset:0!important;height:auto!important;display:grid!important;place-items:center!important;background:#111!important;color:#fff!important;font-size:60px!important}
+.shortGradient{position:absolute!important;inset:0!important;pointer-events:none!important;background:linear-gradient(to bottom,transparent 45%,transparent 55%,rgba(0,0,0,.78) 100%)!important}
+.shortActions{
+  position:absolute!important;
+  right:10px!important;
+  bottom:130px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+  z-index:20!important;
+}
+.shortActions button{
+  width:58px!important;min-width:58px!important;
+  min-height:54px!important;
+  border:0!important;background:rgba(0,0,0,.45)!important;
+  color:#fff!important;border-radius:18px!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  gap:2px!important;padding:4px!important;
+  backdrop-filter:blur(4px)!important;
+}
+.shortActions button b{font-size:22px!important;line-height:24px!important}
+.shortActions button span{font-size:10px!important;line-height:12px!important;white-space:normal!important;text-align:center!important}
+.shortActions button.active{background:#e11d48!important;color:#fff!important}
+.shortBottom{
+  position:absolute!important;
+  left:14px!important;right:78px!important;bottom:22px!important;
+  z-index:20!important;color:#fff!important;
+}
+.shortCreator{display:flex!important;align-items:center!important;gap:9px!important;margin-bottom:8px!important}
+.shortAvatar{width:38px!important;height:38px!important;min-width:38px!important;border-radius:50%!important;background:#e5e7eb!important;color:#111!important;display:grid!important;place-items:center!important;font-weight:800!important}
+.shortCreatorName{font-size:16px!important;font-weight:800!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.shortSubscribe{border:1px solid #fff!important;background:#fff!important;color:#111!important;border-radius:16px!important;padding:7px 12px!important;font-weight:800!important;white-space:nowrap!important}
+.shortTitle{font-size:17px!important;font-weight:700!important;line-height:1.35!important;max-height:48px!important;overflow:hidden!important}
+.shortViews{font-size:13px!important;opacity:.9!important;margin-top:3px!important}
+.shortTrack{height:3px!important;background:#ffffff55!important;margin-top:9px!important;border-radius:2px!important;overflow:hidden!important}
+.shortTrack span{display:block!important;width:0;height:100%!important;background:#fff!important}
+.shortProgress{position:absolute!important;left:0!important;right:0!important;bottom:0!important;height:3px!important;background:#ffffff55!important;z-index:30!important}
+.shortProgress span{display:block!important;width:0;height:100%!important;background:#fff!important}
+.shortCommentPanel{
+  display:none!important;
+  position:absolute!important;left:0!important;right:0!important;bottom:0!important;
+  max-height:55%!important;background:#fff!important;color:#111!important;
+  z-index:50!important;border-radius:18px 18px 0 0!important;padding:12px!important;overflow:auto!important
+}
+.shortCommentBox{display:flex!important;gap:8px!important;padding:0!important}
+.shortCommentBox input{flex:1!important;min-width:0!important}
+.shortCommentBox button{flex:0 0 auto!important;padding:10px 15px!important}
+@media(max-width:600px){
+  #app>.nav{height:82px!important;min-height:82px!important}
+  .short{height:calc(100vh - 82px - env(safe-area-inset-top,0px))!important}
+  .shortActions{right:8px!important;bottom:125px!important;gap:9px!important}
+  .shortActions button{width:54px!important;min-width:54px!important}
+  .shortBottom{left:12px!important;right:70px!important;bottom:18px!important}
+  .shortCreatorName{font-size:14px!important}
+  .shortSubscribe{padding:6px 10px!important;font-size:12px!important}
+}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -518,13 +615,12 @@ function renderHome(){
 }
 function renderShorts(){
  const seen={};
- const unique=shorts.filter(function(v){
+ shorts=shorts.filter(function(v){
    const key=String(v.id||v.url||v.title);
    if(seen[key])return false;
    seen[key]=true;
    return true;
  });
- shorts=unique;
  save();
  if(!shorts.length){
    $('shortFeed').innerHTML='<div class="empty">No Shorts yet. Tap Create Short.</div>';
@@ -532,47 +628,55 @@ function renderShorts(){
  }
  $('shortFeed').innerHTML=shorts.map(function(v){
    const comments=v.comments||[];
+   const likes=v.likes||0;
+   const views=v.views||'0 views';
    return '<div class="short" data-short="'+esc(v.id)+'">'+
-     (v.url?'<video controls playsinline preload="Vidozadata" src="'+esc(v.url)+'"></video>':'<div class="shortPlaceholder">▶</div>')+
-     '<div class="shortCaption"><b>'+esc(v.channel)+'</b><br>'+esc(v.title)+'</div>'+
-     '<div class="shortRail">'+
-       '<button class="'+(v.liked?'active':'')+'" data-short-like="'+esc(v.id)+'">♥ '+(v.liked?'Liked':'Like')+'</button>'+
-       '<button data-short-comment="'+esc(v.id)+'">💬 Comment</button>'+
-       '<button data-short-share="'+esc(v.id)+'">↗ Share</button>'+
-       '<button class="'+(v.saved?'active':'')+'" data-short-save="'+esc(v.id)+'">▣ '+(v.saved?'Saved':'Save')+'</button>'+
-       '<button data-short-download="'+esc(v.id)+'">⬇ Download</button>'+
-       '<button data-short-report="'+esc(v.id)+'">⚑ Report</button>'+
+     '<div class="shortVideoWrap">'+
+       (v.url?'<video playsinline preload="metadata" src="'+esc(v.url)+'"></video>':'<div class="shortPlaceholder">▶</div>')+
+       '<div class="shortGradient"></div>'+
+       '<div class="shortProgress"><span></span></div>'+
+       '<div class="shortActions">'+
+         '<button class="'+(v.liked?'active':'')+'" data-short-like="'+esc(v.id)+'"><b>♥</b><span>'+(v.liked? 'Liked':String(likes))+'</span></button>'+
+         '<button data-short-comment="'+esc(v.id)+'"><b>💬</b><span>'+comments.length+'</span></button>'+
+         '<button data-short-share="'+esc(v.id)+'"><b>↗</b><span>Share</span></button>'+
+         '<button class="'+(v.saved?'active':'')+'" data-short-save="'+esc(v.id)+'"><b>▣</b><span>'+(v.saved?'Saved':'Save')+'</span></button>'+
+         '<button data-short-download="'+esc(v.id)+'"><b>↓</b><span>Download</span></button>'+
+         '<button data-short-report="'+esc(v.id)+'"><b>⚑</b><span>Report</span></button>'+
+       '</div>'+
+       '<div class="shortBottom">'+
+         '<div class="shortCreator"><div class="shortAvatar">'+esc((v.channel||'V')[0])+'</div><div class="shortCreatorName">@'+esc(v.channel||'Vidoza Creator')+'</div><button class="shortSubscribe" data-short-subscribe="'+esc(v.id)+'">'+(v.subscribed?'Subscribed':'Subscribe')+'</button></div>'+
+         '<div class="shortTitle">'+esc(v.title||'Vidoza Short')+'</div>'+
+         '<div class="shortViews">'+esc(views)+'</div>'+
+         '<div class="shortTrack"><span></span></div>'+
+       '</div>'+
      '</div>'+
-     '<div class="shortCommentBox"><input data-comment-input="'+esc(v.id)+'" placeholder="Write a comment"><button data-comment-post="'+esc(v.id)+'">Post</button></div>'+
-     '<div class="shortComments">'+(comments.length?comments.map(function(c){return '<div>'+esc(c)+'</div>'}).join(''):'<div style="opacity:.7">No comments yet</div>')+'</div>'+
+     '<div class="shortCommentPanel"><div class="shortCommentBox"><input data-comment-input="'+esc(v.id)+'" placeholder="Write a comment"><button data-comment-post="'+esc(v.id)+'">Post</button></div>'+
+     '<div class="shortComments">'+(comments.length?comments.map(function(c){return '<div>'+esc(c)+'</div>'}).join(''):'<div style="opacity:.7">No comments yet</div>')+'</div></div>'+
    '</div>';
  }).join('');
 
- document.querySelectorAll('[data-short-like]').forEach(function(b){
-   b.onclick=function(){shortLike(b.dataset.shortLike)}
- });
- document.querySelectorAll('[data-short-save]').forEach(function(b){
-   b.onclick=function(){shortSave(b.dataset.shortSave)}
- });
- document.querySelectorAll('[data-short-share]').forEach(function(b){
-   b.onclick=function(){let v=shorts.find(function(x){return String(x.id)===String(b.dataset.shortShare)});if(v)shareText(v.title)}
- });
- document.querySelectorAll('[data-short-download]').forEach(function(b){
-   b.onclick=function(){downloadShort(b.dataset.shortDownload)}
- });
- document.querySelectorAll('[data-short-report]').forEach(function(b){
-   b.onclick=function(){reportVideo(findShort(b.dataset.shortReport))}
- });
- document.querySelectorAll('[data-short-comment]').forEach(function(b){
+ document.querySelectorAll('[data-short-like]').forEach(function(b){b.onclick=function(){shortLike(b.dataset.shortLike)}});
+ document.querySelectorAll('[data-short-save]').forEach(function(b){b.onclick=function(){shortSave(b.dataset.shortSave)}});
+ document.querySelectorAll('[data-short-share]').forEach(function(b){b.onclick=function(){let v=findShort(b.dataset.shortShare);if(v)shareText(v.title)}});
+ document.querySelectorAll('[data-short-download]').forEach(function(b){b.onclick=function(){downloadShort(b.dataset.shortDownload)}});
+ document.querySelectorAll('[data-short-report]').forEach(function(b){b.onclick=function(){reportVideo(findShort(b.dataset.shortReport))}});
+ document.querySelectorAll('[data-short-comment]').forEach(function(b){b.onclick=function(){let inp=document.querySelector('[data-comment-input="'+CSS.escape(b.dataset.shortComment)+'"]');if(inp)inp.focus()}});
+ document.querySelectorAll('[data-comment-post]').forEach(function(b){b.onclick=function(){postShortComment(b.dataset.commentPost)}});
+ document.querySelectorAll('[data-short-subscribe]').forEach(function(b){
    b.onclick=function(){
-     const inp=document.querySelector('[data-comment-input="'+CSS.escape(b.dataset.shortComment)+'"]');
-     if(inp)inp.focus();
+     const v=findShort(b.dataset.shortSubscribe);
+     if(v){v.subscribed=!v.subscribed;save();renderShorts()}
    }
  });
- document.querySelectorAll('[data-comment-post]').forEach(function(b){
-   b.onclick=function(){postShortComment(b.dataset.commentPost)}
+ document.querySelectorAll('.shortVideoWrap video').forEach(function(video){
+   video.addEventListener('timeupdate',function(){
+     const bar=video.closest('.shortVideoWrap').querySelector('.shortProgress span');
+     if(bar && video.duration)bar.style.width=(video.currentTime/video.duration*100)+'%';
+   });
+   video.addEventListener('loadedmetadata',function(){video.play().catch(function(){})});
  });
 }
+
 function findShort(id){return shorts.find(function(v){return String(v.id)===String(id)})}
 function shortLike(id){
  if(!user){toast('Please login first');return}

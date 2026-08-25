@@ -55,7 +55,13 @@ button,input,textarea,select{font:inherit}button{cursor:pointer}
 <div class="app" id="app">
  <div class="top"><div class="logo"><span class="mark">V▶</span>Vidoza</div><div class="spacer"></div><button class="icon" id="searchBtn">⌕</button><button class="icon" id="settingsBtn">⚙</button></div>
 
- <div id="home" class="page active"><div id="chips" class="chips"></div><div id="feed"></div></div>
+ <div id="home" class="page active">
+      <div id="chips" class="chips"></div>
+      <div class="section" style="padding-top:4px">
+        <div id="featureStatus" class="notice" style="display:none"></div>
+      </div>
+      <div id="feed"></div>
+    </div>
 
  <div id="shorts" class="page"><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
 
@@ -91,13 +97,20 @@ let db=null,user=null,current='home',stack=['home'],selected=null,category='All'
 let videos=JSON.parse(localStorage.getItem('vidozaVideosSafe')||'null')||[
  {id:'demo1',title:'Welcome to Vidoza',channel:'Vidoza Official',views:'12K views',age:'Today',category:'Learning',description:'Welcome to Vidoza.',liked:false,saved:false,subscribed:false},
  {id:'demo2',title:'Vidoza Music India',channel:'Vidoza Music',views:'5.1K views',age:'Today',category:'Music',description:'Music on Vidoza.',liked:false,saved:false,subscribed:false},
- {id:'demo3',title:'Creator News',channel:'Vidoza News',views:'8.4K views',age:'1 day ago',category:'News',description:'Latest creator stories.',liked:false,saved:false,subscribed:false}
+ {id:'demo3',title:'Creator News',channel:'Vidoza News',views:'8.4K views',age:'1 day ago',category:'News',description:'Latest creator stories.',liked:false,saved:false,subscribed:false},
+ {id:'demo4',title:'Gaming Highlights',channel:'Vidoza Gaming',views:'7.2K views',age:'Today',category:'Gaming',description:'Gaming highlights on Vidoza.',liked:false,saved:false,subscribed:false},
+ {id:'demo5',title:'Vidoza Live',channel:'Vidoza Live',views:'Live now',age:'Now',category:'Live',description:'Live video demo.',liked:false,saved:false,subscribed:false}
 ];
 let shorts=JSON.parse(localStorage.getItem('vidozaShortsSafe')||'[]');
 function $(id){return document.getElementById(id)}
 function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function save(){localStorage.setItem('vidozaVideosSafe',JSON.stringify(videos));localStorage.setItem('vidozaShortsSafe',JSON.stringify(shorts))}
 function toast(t){alert(t)}
+function featureMessage(t){
+ const el=$('featureStatus'); if(!el)return;
+ el.textContent=t; el.style.display='block';
+ setTimeout(function(){el.style.display='none'},2500);
+}
 function showPage(id,push){
  document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});
  if($(id))$(id).classList.add('active');
@@ -139,13 +152,46 @@ function openVideo(id){
  selected=videos.find(function(v){return String(v.id)===String(id)});
  if(!selected)return;
  let media=selected.url?'<video controls playsinline autoplay style="width:100%;aspect-ratio:16/9;background:#000" src="'+esc(selected.url)+'"></video>':'<div class="thumb">▶</div>';
- $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p></div>';
+ $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b><div class="sub"><span id="subCount">'+(selected.subscribers||0)+'</span> subscribers</div></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p><div class="divider"></div><b>Comments</b><div class="row" style="margin-top:10px"><input id="commentInput" class="field" style="margin:0" placeholder="Add a comment"><button class="btn primary" id="postComment">Post</button></div><div id="commentList"></div></div>';
  showPage('player');
- $('likeAction').onclick=toggleLike;$('saveAction').onclick=toggleSave;$('shareAction').onclick=function(){shareText(selected.title)};$('subAction').onclick=toggleSubscribe;$('commentAction').onclick=function(){toast('Comments can be added after backend tables are connected.')};
+ $('likeAction').onclick=toggleLike;
+$('saveAction').onclick=toggleSave;
+$('shareAction').onclick=function(){shareText(selected.title)};
+$('subAction').onclick=toggleSubscribe;
+$('commentAction').onclick=function(){document.getElementById('commentInput').focus()};
+$('postComment').onclick=postComment;
+renderComments();
 }
-function toggleLike(){if(!user){toast('Please login first');return}selected.liked=!selected.liked;save();openVideo(selected.id)}
-function toggleSave(){if(!user){toast('Please login first');return}selected.saved=!selected.saved;save();openVideo(selected.id)}
-function toggleSubscribe(){if(!user){toast('Please login first');return}selected.subscribed=!selected.subscribed;save();openVideo(selected.id)}
+function renderComments(){
+ const list=selected.comments||[];
+ $('commentList').innerHTML=list.map(function(c){return '<div style="padding:9px 0;border-bottom:1px solid #eee">'+esc(c)+'</div>'}).join('')||'<div class="sub" style="margin-top:10px">No comments yet.</div>';
+}
+function postComment(){
+ if(!user){toast('Please login first');return}
+ const input=$('commentInput');const text=input.value.trim();
+ if(!text)return;
+ selected.comments=selected.comments||[];selected.comments.unshift(text);save();input.value='';renderComments();
+}
+function toggleLike(){
+ if(!user){toast('Please login first');return}
+ selected.liked=!selected.liked;save();
+ $('likeAction').querySelector('span').textContent=selected.liked?'Liked':'Like';
+}
+function toggleSave(){
+ if(!user){toast('Please login first');return}
+ selected.saved=!selected.saved;save();
+ $('saveAction').querySelector('span').textContent=selected.saved?'Saved':'Save';
+}
+function toggleSubscribe(){
+ if(!user){toast('Please login first');return}
+ selected.subscribed=!selected.subscribed;
+ selected.subscribers=(selected.subscribers||0)+(selected.subscribed?1:-1);
+ if(selected.subscribers<0)selected.subscribers=0;
+ save();
+ $('subAction').textContent=selected.subscribed?'Subscribed':'Subscribe';
+ $('subAction').className='btn '+(selected.subscribed?'soft':'primary');
+ $('subCount').textContent=selected.subscribers;
+}
 function shareText(title){
  try{
   if(window.Native&&Native.share){Native.share(title,'Watch on Vidoza: '+title);return}
@@ -188,7 +234,7 @@ function uploadVideo(){
   let tf=$('thumbFile').files[0];
   fileToData(tf,function(th){
    videos.unshift({id:'local-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,url:url,thumbnail:th,isShort:false,liked:false,saved:false,subscribed:false});
-   save();renderHome();$('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video added successfully.';setTimeout(function(){showPage('home')},700)
+   save();renderHome();$('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video added successfully.';featureMessage('Video uploaded successfully');setTimeout(function(){showPage('home')},700)
   })
  })
 }
@@ -201,7 +247,7 @@ function uploadShort(){
   let tf=$('shortThumb').files[0];
   fileToData(tf,function(th){
    shorts.unshift({id:'short-'+Date.now(),title:t,channel:(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0],url:url,thumbnail:th,description:$('shortDesc').value});
-   save();renderShorts();$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short added successfully.';setTimeout(function(){showPage('shorts')},700)
+   save();renderShorts();$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short added successfully.';featureMessage('Short uploaded successfully');setTimeout(function(){showPage('shorts')},700)
   })
  })
 }

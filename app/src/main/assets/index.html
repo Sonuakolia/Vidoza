@@ -482,6 +482,19 @@ video::-webkit-media-controls{display:none!important}
 video::-webkit-media-controls-enclosure{display:none!important}
 video::-webkit-media-controls-panel{display:none!important}
 </style>
+
+<style id="vidoza-v29-upload">
+.videoCreatePage{padding:0!important;background:#fff!important}
+.videoStage{display:none!important;min-height:calc(100vh - 82px)}
+.videoStage.active{display:block!important}
+.videoSelectShell{min-height:calc(100vh - 82px);background:#000;color:#fff}
+.videoSelectTop{height:72px;padding:0 18px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;text-align:center;font-size:20px}
+.v29Circle{width:46px;height:46px;border:0;border-radius:50%;background:#ffffff1a;color:#fff;font-size:24px}
+.videoSelectMain{height:calc(100vh - 154px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}.videoSelectIcon{font-size:72px}.videoSelectMain h2{font-size:28px;margin:15px 0 6px}.videoSelectMain p{color:#aaa;max-width:300px}.v29PrimaryPick{margin-top:20px;background:#fff;color:#111;padding:14px 24px;border-radius:24px;font-weight:800}
+.videoEditorShell{min-height:calc(100vh - 82px);background:#000;color:#fff;padding-bottom:25px}.videoEditorTop{height:70px;display:grid;grid-template-columns:48px 1fr 70px;align-items:center;padding:0 16px;text-align:center}.v29NextMini{border:0;background:#fff;color:#111;border-radius:18px;padding:8px 14px;font-weight:800}.videoPreviewWrap{position:relative;aspect-ratio:16/9;background:#111;margin:10px 0;overflow:hidden}.videoPreviewWrap video{width:100%;height:100%;object-fit:contain;background:#000}.videoPreviewPlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border:0;border-radius:50%;background:#ffffffcf;font-size:30px}.videoEditTools{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px}.videoEditTools button{border:0;background:#1f1f1f;color:#fff;border-radius:16px;padding:14px 6px;display:flex;flex-direction:column;gap:5px;align-items:center}.videoEditTools span{font-size:24px}.videoTrimBox{display:none;background:#151515;padding:14px 18px;margin:0 18px;border-radius:16px}.videoTrimBox.open{display:block}.videoTrimBox input{width:100%}.videoTrimBox label{display:block;margin-top:8px}
+.videoDetailsStage{padding:0 0 135px!important;background:#fff!important}.v29DetailsTop{height:76px;display:flex;align-items:center;gap:18px;padding:0 22px}.v29DetailsTop h2{font-size:27px;margin:0}.v29PlainBack{border:0;background:transparent;font-size:31px}.videoDetailsHero{display:grid;grid-template-columns:150px 1fr;gap:18px;padding:18px 22px;border-bottom:1px solid #eee}.videoDetailsCover{height:100px;border-radius:14px;background:#222 center/cover no-repeat;position:relative}.videoDetailsCover label{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:#000b;color:#fff;border-radius:15px;padding:6px 9px;white-space:nowrap;font-size:12px}.videoDetailsText input,.videoDetailsText textarea{width:100%;border:0;border-bottom:1px solid #eee;padding:10px 0;font-size:18px;outline:none;resize:none}
+.v29DetailRow{width:100%;border:0;background:#fff;display:grid;grid-template-columns:46px 1fr 24px;align-items:center;text-align:left;padding:16px 24px;font-size:19px}.v29DetailRow span{font-size:25px}.v29DetailRow em{font-style:normal;font-size:28px;color:#777}.v29DetailRow div{display:flex;flex-direction:column}.v29DetailRow small{font-size:13px;color:#777}.v29HiddenFields{display:none}.videoPublishBar{position:fixed;left:0;right:0;bottom:82px;background:#fff;padding:12px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;z-index:9998}.videoDraftBtn,.videoPublishBtn{height:58px;border:0;border-radius:20px;font-size:18px;font-weight:800}.videoDraftBtn{background:#f0f0f2}.videoPublishBtn{background:#e11d48;color:#fff}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -535,34 +548,97 @@ video::-webkit-media-controls-panel{display:none!important}
 
  <div id="search" class="page section"><div class="row"><input id="searchInput" class="field" style="margin:0" placeholder="Search Vidoza"><button class="btn primary" id="searchGo">Search</button></div><div id="searchResults"></div></div>
 
- <div id="upload" class="page section">
-<div class="h1" id="uploadHeading">Upload Video</div>
-<div class="notice">Upload a video, save it as a draft, or publish it.</div>
-<input id="videoFile" class="field" type="file" accept="video/*">
-<input id="thumbFile" class="field" type="file" accept="image/*">
-<input id="uploadTitle" class="field" placeholder="Video title">
-<textarea id="uploadDesc" class="field" rows="4" placeholder="Description"></textarea>
-
-<div class="h2">Details</div>
-<select id="visibility" class="field"><option value="public">Visibility: Public</option><option value="unlisted">Visibility: Unlisted</option><option value="private">Visibility: Private</option></select>
-<select id="audience" class="field"><option value="general">Audience: Not made for kids</option><option value="kids">Audience: Made for kids</option></select>
-<input id="location" class="field" placeholder="Location">
-<input id="playlist" class="field" placeholder="Add to playlist">
-<label class="checkRow"><input id="paidPromotion" type="checkbox"> Paid promotion</label>
-<input id="brands" class="field" placeholder="Brands / brand partner">
-<select id="community" class="field"><option value="allow">Community: Allow comments</option><option value="review">Community: Hold potentially inappropriate comments</option><option value="off">Community: Turn off comments</option></select>
-<input id="tags" class="field" placeholder="Tags (comma separated)">
-<label class="checkRow"><input id="notifySubscribers" type="checkbox" checked> Notify subscribers</label>
-
-<div class="row" style="gap:8px;margin-top:12px">
-<button class="btn soft" id="draftBtn">Save Draft</button>
-<button class="btn primary" id="uploadBtn">Upload & Publish</button>
-</div>
-<button class="btn soft" id="cancelEditBtn" style="display:none;width:100%;margin-top:8px">Cancel Edit</button>
-<div id="uploadStatus" class="authMsg"></div>
-</div>
-
  
+<div id="upload" class="page videoCreatePage">
+  <div id="videoStageSelect" class="videoStage active">
+    <div class="videoSelectShell">
+      <div class="videoSelectTop">
+        <button id="videoBackBtn" class="v29Circle" type="button">✕</button>
+        <b>Create video</b>
+        <span></span>
+      </div>
+      <div class="videoSelectMain">
+        <div class="videoSelectIcon">▶</div>
+        <h2>Choose a video</h2>
+        <p>Select a video from your phone to start editing.</p>
+        <label for="videoFile" class="v29PrimaryPick">Choose from gallery</label>
+        <input id="videoFile" type="file" accept="video/*" style="display:none">
+      </div>
+    </div>
+  </div>
+
+  <div id="videoStageEdit" class="videoStage">
+    <div class="videoEditorShell">
+      <div class="videoEditorTop">
+        <button id="videoEditorBackBtn" class="v29Circle" type="button">←</button>
+        <b>Edit video</b>
+        <button id="videoNextBtn" class="v29NextMini" type="button">Next</button>
+      </div>
+      <div class="videoPreviewWrap">
+        <video id="videoEditPreview" playsinline></video>
+        <button id="videoPreviewPlay" class="videoPreviewPlay" type="button">▶</button>
+      </div>
+      <div class="videoEditTools">
+        <button type="button" id="videoCoverTool"><span>▣</span><b>Cover</b></button>
+        <button type="button" id="videoTrimTool"><span>✂</span><b>Trim</b></button>
+        <button type="button" id="videoReplaceTool"><span>↻</span><b>Replace</b></button>
+      </div>
+      <div id="videoTrimBox" class="videoTrimBox">
+        <label>Start <span id="videoTrimStartText">0:00</span></label>
+        <input id="videoTrimStart" type="range" min="0" max="1" value="0" step="0.1">
+        <label>End <span id="videoTrimEndText">0:00</span></label>
+        <input id="videoTrimEnd" type="range" min="0" max="1" value="1" step="0.1">
+      </div>
+    </div>
+  </div>
+
+  <div id="videoStageDetails" class="videoStage videoDetailsStage">
+    <div class="v29DetailsTop">
+      <button id="videoDetailsBackBtn" class="v29PlainBack" type="button">←</button>
+      <h2>Video details</h2>
+    </div>
+
+    <div class="videoDetailsHero">
+      <div id="videoDetailsCover" class="videoDetailsCover">
+        <label for="thumbFile">✎ Edit cover</label>
+      </div>
+      <input id="thumbFile" type="file" accept="image/*" style="display:none">
+      <div class="videoDetailsText">
+        <input id="uploadTitle" placeholder="Add title">
+        <textarea id="uploadDesc" rows="4" placeholder="Add description"></textarea>
+      </div>
+    </div>
+
+    <div class="v29DetailRows">
+      <button class="v29DetailRow" id="videoVisibilityRow" type="button"><span>◎</span><div><small>Visibility</small><b id="videoVisibilityValue">Public</b></div><em>›</em></button>
+      <button class="v29DetailRow" id="videoAudienceRow" type="button"><span>◉</span><div><small>Audience</small><b id="videoAudienceValue">Not made for kids</b></div><em>›</em></button>
+      <button class="v29DetailRow" id="videoLocationRow" type="button"><span>⌖</span><b>Location</b><em>›</em></button>
+      <button class="v29DetailRow" id="videoPlaylistRow" type="button"><span>☷</span><b>Add to playlist</b><em>＋</em></button>
+      <button class="v29DetailRow" id="videoPromotionRow" type="button"><span>₹</span><b>Paid promotion & brands</b><em>›</em></button>
+      <button class="v29DetailRow" id="videoMoreRow" type="button"><span>⚙</span><b>More options</b><em>›</em></button>
+    </div>
+
+    <div class="v29HiddenFields">
+      <select id="visibility"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select>
+      <select id="audience"><option value="general">Not made for kids</option><option value="kids">Made for kids</option></select>
+      <input id="location">
+      <input id="playlist">
+      <input id="paidPromotion" type="checkbox">
+      <input id="brands">
+      <select id="community"><option value="allow">Allow comments</option><option value="review">Review comments</option><option value="off">Turn off comments</option></select>
+      <input id="tags">
+      <input id="notifySubscribers" type="checkbox" checked>
+    </div>
+
+    <div class="videoPublishBar">
+      <button id="draftBtn" class="videoDraftBtn" type="button">Save draft</button>
+      <button id="uploadBtn" class="videoPublishBtn" type="button">Publish</button>
+    </div>
+    <button id="cancelEditBtn" style="display:none"></button>
+    <div id="uploadStatus" class="authMsg"></div>
+  </div>
+</div>
+
 <div id="photoUpload" class="page section">
   <div class="h1">Create Photo Post</div>
   <input id="photoFile" class="field" type="file" accept="image/*">
@@ -1446,9 +1522,59 @@ async function saveShortDraft(){
  }
 }
 
+
+let videoCreateFile=null,videoCreateUrl='',videoCreateDuration=0,videoTrimStartValue=0,videoTrimEndValue=0;
+
+function showVideoStage(id){
+ ['videoStageSelect','videoStageEdit','videoStageDetails'].forEach(function(x){if($(x))$(x).classList.remove('active')});
+ if($(id))$(id).classList.add('active');
+}
+function v29Fmt(sec){
+ sec=Math.max(0,Number(sec)||0);
+ return Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0');
+}
+function openLongVideoEditor(file){
+ videoCreateFile=file;
+ if(videoCreateUrl)try{URL.revokeObjectURL(videoCreateUrl)}catch(e){}
+ videoCreateUrl=URL.createObjectURL(file);
+ $('videoEditPreview').src=videoCreateUrl;
+ $('videoEditPreview').onloadedmetadata=function(){
+   videoCreateDuration=this.duration||0;
+   videoTrimStartValue=0;videoTrimEndValue=videoCreateDuration;
+   $('videoTrimStart').max=videoCreateDuration;$('videoTrimEnd').max=videoCreateDuration;
+   $('videoTrimStart').value=0;$('videoTrimEnd').value=videoCreateDuration;
+   $('videoTrimStartText').textContent='0:00';$('videoTrimEndText').textContent=v29Fmt(videoCreateDuration);
+   showVideoStage('videoStageEdit');
+ }
+}
+function updateLongVideoTrim(){
+ let s=Number($('videoTrimStart').value),e=Number($('videoTrimEnd').value);
+ if(e<=s)e=Math.min(videoCreateDuration,s+.1);
+ videoTrimStartValue=s;videoTrimEndValue=e;
+ $('videoTrimStartText').textContent=v29Fmt(s);$('videoTrimEndText').textContent=v29Fmt(e);
+ try{$('videoEditPreview').currentTime=s}catch(x){}
+}
+function captureLongVideoCover(){
+ const v=$('videoEditPreview');if(!v||!v.videoWidth)return;
+ const c=document.createElement('canvas');c.width=640;c.height=360;
+ const ctx=c.getContext('2d');ctx.fillStyle='#111';ctx.fillRect(0,0,c.width,c.height);
+ const r=Math.min(c.width/v.videoWidth,c.height/v.videoHeight),w=v.videoWidth*r,h=v.videoHeight*r;
+ ctx.drawImage(v,(c.width-w)/2,(c.height-h)/2,w,h);
+ $('videoDetailsCover').style.backgroundImage='url("'+c.toDataURL('image/jpeg',.84)+'")';
+}
+function goVideoDetails(){
+ if(!videoCreateFile){toast('Choose a video first');return}
+ captureLongVideoCover();
+ showVideoStage('videoStageDetails');
+}
+function resetLongVideoFlow(){
+ stopAllMedia();videoCreateFile=null;videoCreateDuration=0;videoTrimStartValue=0;videoTrimEndValue=0;
+ if($('videoFile'))$('videoFile').value='';if($('uploadTitle'))$('uploadTitle').value='';if($('uploadDesc'))$('uploadDesc').value='';
+ showVideoStage('videoStageSelect');
+}
 async function uploadVideo(){
  if(!user){toast('Please login first');return}
- let f=$('videoFile').files[0],t=$('uploadTitle').value.trim();
+ let f=videoCreateFile||$('videoFile').files[0],t=$('uploadTitle').value.trim();
  if(editVideoId && String(editVideoId).indexOf('draft:')===0){toast('Use Publish Draft from Drafts to publish this draft');return}
  if(editVideoId){
    const v=videos.find(function(x){return String(x.id)===String(editVideoId)});if(!v)return;
@@ -1466,7 +1592,7 @@ async function uploadVideo(){
   Object.assign(v,videoDetailsFromForm());videos.unshift(v);
   save();await hydrateMedia();renderHome();renderChannel();
   $('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video uploaded successfully.';
-  featureMessage('Video uploaded successfully');setTimeout(function(){resetUploadForm();showPage('home')},500);
+  featureMessage('Video uploaded successfully');setTimeout(function(){resetUploadForm();resetLongVideoFlow();showPage('home')},500);
  }catch(e){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Video save failed: '+(e.message||'Storage error')}
 }
 
@@ -1615,6 +1741,25 @@ function wire(){
    r.onload=function(){localStorage.setItem('vidozaProfilePhoto',r.result);renderAccount();renderChannel();toast('Profile photo updated')};
    r.readAsDataURL(f);
  }});
+ if($('videoFile'))$('videoFile').onchange=function(){if(this.files[0])openLongVideoEditor(this.files[0])};
+ if($('videoBackBtn'))$('videoBackBtn').onclick=function(){showPage('home')};
+ if($('videoEditorBackBtn'))$('videoEditorBackBtn').onclick=function(){resetLongVideoFlow()};
+ if($('videoDetailsBackBtn'))$('videoDetailsBackBtn').onclick=function(){showVideoStage('videoStageEdit')};
+ if($('videoPreviewPlay'))$('videoPreviewPlay').onclick=function(){const v=$('videoEditPreview');if(v.paused){v.play();this.style.display='none'}else{v.pause();this.style.display='grid'}};
+ if($('videoEditPreview'))$('videoEditPreview').onclick=function(){const b=$('videoPreviewPlay');if(this.paused){this.play();b.style.display='none'}else{this.pause();b.style.display='grid'}};
+ if($('videoNextBtn'))$('videoNextBtn').onclick=goVideoDetails;
+ if($('videoTrimTool'))$('videoTrimTool').onclick=function(){$('videoTrimBox').classList.toggle('open')};
+ if($('videoCoverTool'))$('videoCoverTool').onclick=captureLongVideoCover;
+ if($('videoReplaceTool'))$('videoReplaceTool').onclick=function(){$('videoFile').click()};
+ if($('videoTrimStart'))$('videoTrimStart').oninput=updateLongVideoTrim;
+ if($('videoTrimEnd'))$('videoTrimEnd').oninput=updateLongVideoTrim;
+ if($('videoVisibilityRow'))$('videoVisibilityRow').onclick=function(){const v=$('visibility');v.value=v.value==='public'?'unlisted':v.value==='unlisted'?'private':'public';$('videoVisibilityValue').textContent=v.options[v.selectedIndex].text};
+ if($('videoAudienceRow'))$('videoAudienceRow').onclick=function(){const a=$('audience');a.value=a.value==='general'?'kids':'general';$('videoAudienceValue').textContent=a.value==='kids'?'Made for kids':'Not made for kids'};
+ if($('videoLocationRow'))$('videoLocationRow').onclick=function(){const x=prompt('Location',$('location').value);if(x!==null)$('location').value=x};
+ if($('videoPlaylistRow'))$('videoPlaylistRow').onclick=function(){const x=prompt('Playlist',$('playlist').value);if(x!==null)$('playlist').value=x};
+ if($('videoPromotionRow'))$('videoPromotionRow').onclick=function(){$('paidPromotion').checked=!$('paidPromotion').checked;toast($('paidPromotion').checked?'Paid promotion enabled':'Paid promotion disabled')};
+ if($('videoMoreRow'))$('videoMoreRow').onclick=function(){const x=prompt('Tags (comma separated)',$('tags').value);if(x!==null)$('tags').value=x};
+
  $('draftBtn').onclick=saveVideoDraft;
  $('cancelEditBtn').onclick=function(){editVideoId=null;resetUploadForm();showPage('you')};
 

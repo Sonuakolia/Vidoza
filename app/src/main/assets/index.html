@@ -369,6 +369,24 @@ body{padding:0!important;background:#fff!important}
 .photoEditBadge{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;cursor:pointer;border:3px solid #fff}
 #draftList .card{background:#fff!important}
 </style>
+<style id="vidoza-short-editor-v23">
+.shortEditPreview{width:100%;height:min(62vh,620px);background:#000;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}.shortEditPreview video{width:100%;height:100%;object-fit:contain;background:#000}.shortEditTools{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}.shortTool{min-height:48px}.shortTrimBox{background:#f5f5f5;border-radius:14px;padding:12px;margin:12px 0}.shortTrimBox label{display:block;font-size:13px;margin-top:8px}.shortTrimBox input[type=range]{width:100%}@media(max-width:600px){.shortEditPreview{height:52vh}}
+</style>
+<style id="vidoza-publish-details-v24">
+.creatorDetails{margin-top:14px}
+.detailCard{background:#f7f7f8;border-radius:14px;padding:13px;margin:10px 0}
+.detailCard b{display:block;margin-bottom:5px}
+.detailCard .btn{margin-top:9px}
+.coverPreview{margin-top:10px;width:100%;max-height:260px;overflow:hidden;border-radius:12px;background:#111;display:grid;place-items:center}
+.coverPreview img{display:block;width:100%;max-height:260px;object-fit:cover}
+.creatorDetails .checkRow{background:#fff;border-radius:10px;padding:10px;margin:7px 0!important}
+</style>
+
+<style id="vidoza-short-existing-v25">
+.miniShortThumb{width:76px;height:76px;min-width:76px;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;overflow:hidden}
+.miniShortThumb img{width:100%;height:100%;object-fit:cover}
+#myShortsEditorList .detailCard{margin-bottom:8px}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -465,19 +483,64 @@ body{padding:0!important;background:#fff!important}
 
  <div id="shortUpload" class="page section">
 <div class="h1">Create Short</div>
-<input id="shortFile" class="field" type="file" accept="video/*">
+<div class="notice">Short maximum length: <b>1 minute 30 seconds</b>.</div>
+<div id="myShortsEditorList" style="margin-bottom:14px"></div>
+<div id="shortPickerBox"><label class="btn primary" for="shortFile" style="display:block;text-align:center">＋ New Short from Phone</label><input id="shortFile" type="file" accept="video/*" style="display:none"></div>
+<div id="shortEditor" style="display:none">
+<div class="shortEditPreview"><video id="shortEditVideo" playsinline controls></video></div>
+<div class="h2" style="margin-top:14px">Edit Short</div>
+<div class="shortEditTools">
+<button type="button" class="btn soft shortTool" data-tool="sound">🎵 Add Sound</button>
+<button type="button" class="btn soft shortTool" data-tool="effects">✨ Effects</button>
+<button type="button" class="btn soft shortTool" data-tool="filter">🎨 Filter</button>
+<button type="button" class="btn soft shortTool" data-tool="emoji">😊 Emoji</button>
+</div>
+<div class="shortTrimBox"><b>Trim video</b><div class="sub">Select up to 1:30.</div>
+<label>Start: <span id="trimStartText">0:00</span></label><input id="trimStart" type="range" min="0" max="90" value="0" step="0.1">
+<label>End: <span id="trimEndText">0:00</span></label><input id="trimEnd" type="range" min="0" max="90" value="90" step="0.1">
+<div id="trimDurationText" class="notice">Selected: 0:00 / 1:30</div></div>
 <input id="shortThumb" class="field" type="file" accept="image/*">
+<div class="creatorDetails">
+  <div class="h2">Post Details</div>
+
+  <div class="detailCard">
+    <b>🖼 Cover Photo</b>
+    <div class="sub">Video ka koi frame cover ke liye choose karein ya gallery se photo lagayein.</div>
+    <button type="button" class="btn soft" id="pickCoverFrameBtn">Choose Video Frame</button>
+    <input id="coverGalleryFile" class="field" type="file" accept="image/*">
+    <div id="coverPreview" class="coverPreview"></div>
+  </div>
+
+  <textarea id="shortCaption" class="field" rows="4" placeholder="Write a caption... #trending #reels"></textarea>
+
+  <input id="shortPeopleTags" class="field" placeholder="Tag People (username, @username)">
+  <input id="shortTopics" class="field" placeholder="Add Topics (Entertainment, Travel, Comedy...)">
+  <input id="shortLocation" class="field" placeholder="Add Location">
+  <input id="shortReminder" class="field" type="datetime-local" title="Add Reminder">
+
+  <div class="detailCard">
+    <b>⚙ Advanced Settings</b>
+    <label class="checkRow"><input id="hideCounts" type="checkbox"> Hide Like and View Counts</label>
+    <label class="checkRow"><input id="disableComments" type="checkbox"> Turn off commenting</label>
+    <label class="checkRow"><input id="highestQuality" type="checkbox" checked> Upload at highest quality</label>
+  </div>
+
+  <div class="detailCard">
+    <b>🗓 Schedule Content</b>
+    <div class="sub">Video ko baad mein publish karne ke liye date/time set karein.</div>
+    <label class="checkRow"><input id="scheduleEnabled" type="checkbox"> Schedule this Short</label>
+    <input id="scheduleAt" class="field" type="datetime-local">
+  </div>
+</div>
+
 <input id="shortTitle" class="field" placeholder="Short title">
 <textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea>
 <select id="shortVisibility" class="field"><option value="public">Visibility: Public</option><option value="unlisted">Visibility: Unlisted</option><option value="private">Visibility: Private</option></select>
-<input id="shortLocation" class="field" placeholder="Location">
-<input id="shortTags" class="field" placeholder="Tags (comma separated)">
-<button class="btn primary" id="shortUploadBtn">Upload Short</button>
-<button class="btn soft" id="shortDraftBtn" style="width:100%;margin-top:8px">Save Short Draft</button>
+<input id="shortLocation" class="field" placeholder="Location"><input id="shortTags" class="field" placeholder="Tags (comma separated)">
+<div class="row" style="gap:8px"><button class="btn soft" id="shortChangeBtn" type="button">Change Video</button><button class="btn soft" id="shortDraftBtn" type="button">Save Draft</button><button class="btn primary" id="shortUploadBtn" type="button">Upload Short</button></div>
 <div id="shortStatus" class="authMsg"></div>
-</div>
+</div></div>
 
- 
 <div id="subscriptions" class="page section">
   <div class="h1">Subscriptions</div>
   <div id="subscriptionList"></div>
@@ -1195,22 +1258,133 @@ async function uploadVideo(){
  }catch(e){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Video save failed: '+(e.message||'Storage error')}
 }
 
+
+let shortEditFile=null,shortEditDuration=0,shortTrimStart=0,shortTrimEnd=0;
+function fmtTime(sec){sec=Math.max(0,Number(sec)||0);return Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0')}
+function updateShortTrim(){
+ if(!$('trimStart'))return;
+ let s=Number($('trimStart').value),e=Number($('trimEnd').value);
+ if(e<=s)e=Math.min(90,s+0.1);
+ shortTrimStart=s;shortTrimEnd=e;
+ $('trimStartText').textContent=fmtTime(s);$('trimEndText').textContent=fmtTime(e);
+ $('trimDurationText').textContent='Selected: '+fmtTime(e-s)+' / 1:30';
+ if($('shortEditVideo')&&$('shortEditVideo').duration)try{$('shortEditVideo').currentTime=Math.min(s,$('shortEditVideo').duration-.05)}catch(x){}
+}
+
+function renderMyShortsEditorList(){
+ const box=$('myShortsEditorList');if(!box)return;
+ const mine=(shorts||[]).filter(function(v){return !user||v.channel===profileName()});
+ if(!mine.length){box.innerHTML='';return}
+ box.innerHTML='<div class="h2">My Shorts</div>'+mine.map(function(v){
+   return '<div class="detailCard row" style="align-items:center">'+
+     '<div class="miniShortThumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'</div>'+
+     '<div style="flex:1;min-width:0"><div class="title">'+esc(v.title||'Untitled Short')+'</div><div class="sub">Edit this Short</div></div>'+
+     '<button class="btn soft" data-edit-short="'+esc(v.id)+'">Edit</button></div>';
+ }).join('');
+ box.querySelectorAll('[data-edit-short]').forEach(function(b){
+   b.onclick=function(){openExistingShortEditor(b.dataset.editShort)}
+ });
+}
+async function openExistingShortEditor(id){
+ const v=shorts.find(function(x){return String(x.id)===String(id)});if(!v)return;
+ await hydrateMedia();
+ const current=shorts.find(function(x){return String(x.id)===String(id)})||v;
+ if(!current.url){toast('Video file is not available');return}
+ shortEditFile=null;
+ $('shortPickerBox').style.display='none';
+ $('myShortsEditorList').style.display='none';
+ $('shortEditor').style.display='block';
+ $('shortEditVideo').src=current.url;
+ $('shortEditVideo').onloadedmetadata=function(){
+   shortEditDuration=this.duration||current.duration||0;
+   shortTrimStart=Number(current.trimStart)||0;
+   shortTrimEnd=Math.min(90,Number(current.trimEnd)||Math.min(90,shortEditDuration));
+   $('trimStart').max=Math.min(90,shortEditDuration);$('trimEnd').max=Math.min(90,shortEditDuration);
+   $('trimStart').value=shortTrimStart;$('trimEnd').value=shortTrimEnd;updateShortTrim();
+ };
+ $('shortTitle').value=current.title||'';
+ $('shortDesc').value=current.description||'';
+ $('shortLocation').value=current.publishDetails&&current.publishDetails.location||'';
+ $('shortTags').value=(current.publishDetails&&current.publishDetails.topics||[]).join(', ');
+ $('shortUploadBtn').textContent='Save Short Changes';
+ $('shortStatus').textContent='Editing existing Short';
+ $('shortUploadBtn').onclick=function(){saveExistingShortChanges(current.id)};
+}
+async function saveExistingShortChanges(id){
+ const v=shorts.find(function(x){return String(x.id)===String(id)});if(!v)return;
+ if(shortTrimEnd-shortTrimStart>90){toast('Maximum 1:30');return}
+ v.title=$('shortTitle').value.trim()||v.title;
+ v.description=$('shortDesc').value;
+ v.trimStart=shortTrimStart;v.trimEnd=shortTrimEnd;v.duration=shortTrimEnd-shortTrimStart;
+ v.publishDetails=Object.assign({},v.publishDetails||{},getShortPublishingDetails());
+ save();renderShorts();renderMyShortsEditorList();toast('Short updated');
+ $('shortUploadBtn').textContent='Upload Short';
+ $('shortUploadBtn').onclick=uploadShort;
+ resetShortEditor();
+}
+function openShortEditor(file){
+ shortEditFile=file;$('shortPickerBox').style.display='none';$('shortEditor').style.display='block';
+ $('shortEditVideo').src=URL.createObjectURL(file);
+ $('shortEditVideo').onloadedmetadata=function(){
+  shortEditDuration=this.duration||0;
+  $('trimStart').max=Math.min(90,shortEditDuration);$('trimEnd').max=Math.min(90,shortEditDuration);
+  $('trimEnd').value=Math.min(90,shortEditDuration);updateShortTrim();
+  $('shortStatus').style.color=shortEditDuration>90?'#b45309':'#16a34a';
+  $('shortStatus').textContent=shortEditDuration>90?'Trim this video to 1:30 or less.':'Video ready to edit.';
+ };
+ $('shortEditVideo').ontimeupdate=function(){if(this.currentTime>=shortTrimEnd){this.pause();this.currentTime=shortTrimStart}};
+}
+
+let selectedCoverData='';
+function captureShortCover(){
+ const v=$('shortEditVideo');
+ if(!v || !v.videoWidth){toast('Video is not ready');return}
+ const c=document.createElement('canvas');
+ c.width=640;c.height=Math.round(640*v.videoHeight/v.videoWidth);
+ const ctx=c.getContext('2d');ctx.drawImage(v,0,0,c.width,c.height);
+ selectedCoverData=c.toDataURL('image/jpeg',0.88);
+ $('coverPreview').innerHTML='<img src="'+selectedCoverData+'">';
+}
+function readGalleryCover(file){
+ if(!file)return;
+ const r=new FileReader();
+ r.onload=function(){selectedCoverData=r.result;$('coverPreview').innerHTML='<img src="'+r.result+'">'};
+ r.readAsDataURL(file);
+}
+function getShortPublishingDetails(){
+ return {
+  caption:$('shortCaption').value.trim(),
+  peopleTags:$('shortPeopleTags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
+  topics:$('shortTopics').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
+  location:$('shortLocation').value.trim(),
+  reminder:$('shortReminder').value||'',
+  hideCounts:$('hideCounts').checked,
+  disableComments:$('disableComments').checked,
+  highestQuality:$('highestQuality').checked,
+  scheduleEnabled:$('scheduleEnabled').checked,
+  scheduleAt:$('scheduleAt').value||'',
+  coverData:selectedCoverData||''
+ };
+}
+function resetShortEditor(){selectedCoverData='';shortEditFile=null;shortEditDuration=0;shortTrimStart=0;shortTrimEnd=0;$('shortPickerBox').style.display='block';$('myShortsEditorList').style.display='block';$('shortEditor').style.display='none';$('shortFile').value='';$('shortTitle').value='';$('shortDesc').value='';$('shortThumb').value='';$('shortLocation').value='';$('shortTags').value='';$('shortCaption').value='';$('shortPeopleTags').value='';$('shortTopics').value='';$('shortReminder').value='';$('hideCounts').checked=false;$('disableComments').checked=false;$('highestQuality').checked=true;$('scheduleEnabled').checked=false;$('scheduleAt').value='';$('coverPreview').innerHTML='';$('shortStatus').textContent=''}
+function shortToolAction(tool){toast(({sound:'Add Sound',effects:'Effects',filter:'Filter',emoji:'Emoji'})[tool]+' selected')}
 async function uploadShort(){
  if(!user){toast('Please login first');return}
- let f=$('shortFile').files[0],t=$('shortTitle').value.trim();
- if(!f||!t){toast('Select Short video and title');return}
- $('shortStatus').textContent='Saving Short… please wait';
+ if(!shortEditFile){toast('Choose a Short video first');return}
+ let t=$('shortTitle').value.trim();if(!t){toast('Enter Short title');return}
+ let selected=shortTrimEnd-shortTrimStart;
+ if(selected>90.001){toast('Short maximum is 1:30');return}
+ if(shortEditDuration>90.001&&selected>=shortEditDuration-.01){toast('Trim the video to 1:30 or less');return}
  try{
   const id='short-'+Date.now(),mediaKey='short-'+id,tf=$('shortThumb').files[0],thumbKey=tf?'thumb-'+id:'';
-  await mediaPut(mediaKey,f);if(tf)await mediaPut(thumbKey,tf);
-  const duplicate=shorts.some(function(x){return x.title===t&&x.channel===profileName()});
-  if(duplicate){await mediaDelete(mediaKey);if(thumbKey)await mediaDelete(thumbKey);$('shortStatus').style.color='#b45309';$('shortStatus').textContent='This Short is already added.';return}
-  shorts.unshift({id:id,title:t,channel:profileName(),url:'',thumbnail:'',mediaKey:mediaKey,thumbKey:thumbKey,description:$('shortDesc').value,liked:false,saved:false,comments:[]});
-  save();await hydrateMedia();renderShorts();
-  $('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';
-  featureMessage('Short uploaded successfully');setTimeout(function(){showPage('shorts')},500);
+  await mediaPut(mediaKey,shortEditFile);if(tf)await mediaPut(thumbKey,tf);
+  shorts.unshift({id:id,title:t,channel:profileName(),url:'',thumbnail:'',mediaKey:mediaKey,thumbKey:thumbKey,description:$('shortDesc').value,liked:false,saved:false,comments:[],trimStart:shortTrimStart,trimEnd:shortTrimEnd,duration:selected,editor:{sound:'',effects:[],filter:'none',emoji:[]},
+   publishDetails:getShortPublishingDetails()
+  });
+  save();await hydrateMedia();renderShorts();$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';setTimeout(function(){resetShortEditor();showPage('shorts')},500)
  }catch(e){$('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Short save failed: '+(e.message||'Storage error')}
 }
+
 function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(title)+'</div><p style="line-height:1.7">'+esc(text)+'</p>';showPage('policy')}
 
 function wire(){
@@ -1237,8 +1411,11 @@ $('createLiveOption').onclick=function(){$('createMenu').style.display='none';sh
 $('startLiveBtn').onclick=function(){if(!user){toast('Please login first');return}$('liveStatus').textContent='Live setup ready.';$('liveStatus').style.color='#16a34a'};
 $('navSocial').onclick=function(){showPage('social');renderSocial()};
 $('navYou').onclick=function(){showPage('you')};
- $('createShortBtn').onclick=function(){showPage('shortUpload')};$('searchGo').onclick=doSearch;
- $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;$('photoPostBtn').onclick=createPhotoPost;
+ $('createShortBtn').onclick=function(){showPage('shortUpload');renderMyShortsEditorList()};$('searchGo').onclick=doSearch;
+ $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;$('photoPostBtn').onclick=createPhotoPost;$('shortFile').onchange=function(){if(this.files[0])openShortEditor(this.files[0])};$('shortChangeBtn').onclick=resetShortEditor;$('trimStart').oninput=updateShortTrim;$('trimEnd').oninput=updateShortTrim;document.querySelectorAll('.shortTool').forEach(function(b){b.onclick=function(){shortToolAction(b.dataset.tool)}});
+ $('pickCoverFrameBtn').onclick=captureShortCover;
+ $('coverGalleryFile').onchange=function(){readGalleryCover(this.files[0])};
+
  document.querySelectorAll('.profileTab').forEach(function(b){b.onclick=function(){renderProfileTab(b.dataset.profileTab)}});
  $('socialRefresh').onclick=function(){renderSocial()};
  $('editProfileBtn').onclick=function(){

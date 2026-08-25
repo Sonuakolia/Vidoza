@@ -387,6 +387,45 @@ body{padding:0!important;background:#fff!important}
 .miniShortThumb img{width:100%;height:100%;object-fit:cover}
 #myShortsEditorList .detailCard{margin-bottom:8px}
 </style>
+
+<style id="vidoza-native-short-flow-v26">
+.shortCreatePage{padding:0!important;background:#000!important}
+.shortStage{display:none!important;min-height:calc(100vh - 80px)}
+.shortStage.active{display:block!important}
+.shortCameraShell,.shortEditorShell{position:relative;width:100%;height:calc(100vh - 82px);background:#000;overflow:hidden}
+.shortTopBar,.editorTop{position:absolute;left:14px;right:14px;top:14px;z-index:20;display:flex;align-items:center;justify-content:space-between}
+.circleBtn{width:48px;height:48px;border:0;border-radius:50%;background:#0008;color:#fff;font-size:26px}
+.pillBtn{border:0;border-radius:24px;background:#0008;color:#fff;padding:12px 22px;font-size:17px;font-weight:700}
+.shortCameraPreview,.editorVideoWrap{position:absolute;inset:0;background:#111;overflow:hidden}
+.shortCameraPreview video,.editorVideoWrap video{width:100%;height:100%;object-fit:cover;background:#000}
+.shortCameraPlaceholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#fff;padding:30px;font-size:18px;background:linear-gradient(160deg,#222,#090909)}
+.cameraIcon{font-size:56px;margin-bottom:10px}
+.shortRightTools,.editorRightTools{position:absolute;right:12px;top:32%;z-index:21;display:flex;flex-direction:column;gap:12px}
+.shortSideTool,.editorTool{width:66px;border:0;background:#0008;color:#fff;border-radius:20px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.shortSideTool span,.editorTool span{font-size:22px;font-weight:800}.shortSideTool small,.editorTool small{font-size:11px}
+.shortBottomCreate{position:absolute;left:0;right:0;bottom:18px;z-index:22;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:end;padding:0 22px;color:#fff}
+.galleryPick{display:flex;flex-direction:column;align-items:center;gap:4px}.galleryThumb{width:54px;height:54px;border-radius:10px;background:#ffffff22;display:grid;place-items:center;font-size:28px}
+.recordBtn{width:88px;height:88px;border-radius:50%;border:7px solid #fff;background:#e11d48;justify-self:center}
+.shortModeTabs{justify-self:end}.shortModeTabs button{border:0;background:#ffffff22;color:#fff;border-radius:20px;padding:9px 18px;font-weight:700}
+.editorTapPlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:#ffffffcc;color:#000;display:grid;place-items:center;font-size:34px;z-index:10}
+.editorOverlayText,.editorOverlayEmoji{position:absolute;z-index:12;left:50%;transform:translateX(-50%);color:#fff;font-weight:800;text-shadow:0 2px 5px #000}
+.editorOverlayText{top:30%;font-size:34px}.editorOverlayEmoji{top:45%;font-size:54px}
+.editorBottom{position:absolute;left:20px;right:20px;bottom:22px;z-index:25;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.editorBottomBtn,.editorNextBtn{height:58px;border:0;border-radius:29px;font-size:19px;font-weight:800}.editorBottomBtn{background:#333;color:#fff}.editorNextBtn{background:#fff;color:#111}
+.trimPanel{position:fixed;left:0;right:0;bottom:-100%;z-index:130000;background:#fff;color:#111;border-radius:22px 22px 0 0;padding:18px;transition:.25s;max-height:82vh;overflow:auto}.trimPanel.open{bottom:0}
+.trimHeader{display:flex;justify-content:space-between;align-items:center;font-size:20px}.trimHeader button{border:0;background:#111;color:#fff;border-radius:18px;padding:8px 16px}
+.trimPreview{height:260px;background:#000;margin:12px 0;border-radius:14px;overflow:hidden}.trimPreview video{width:100%;height:100%;object-fit:contain}.trimPanel input[type=range]{width:100%}.trimInfo{margin-top:10px}
+.shortDetailsPage{background:#fff!important;color:#111!important;padding:0 0 120px!important}
+.detailsHeader{height:74px;display:flex;align-items:center;gap:18px;padding:0 20px;border-bottom:1px solid #eee}.plainBack{border:0;background:none;font-size:30px}.detailsTitle{font-size:26px}
+.detailsHero{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:20px;border-bottom:1px solid #ddd}.detailsCover{width:120px;height:180px;background:#222 center/cover no-repeat;border-radius:12px}.detailsHero textarea{border:0;resize:none;font-size:20px;outline:none;padding-top:10px}
+.creatorMini{display:flex;align-items:center;gap:12px;padding:18px 24px;border-bottom:1px solid #eee}
+.detailsList{padding:8px 0}.detailsRow{width:100%;border:0;background:#fff;display:grid;grid-template-columns:46px 1fr 24px;align-items:center;text-align:left;padding:15px 24px;font-size:20px}.detailsRow span{font-size:26px}.detailsRow div{display:flex;flex-direction:column;gap:3px}.detailsRow small{font-size:14px;color:#777}.detailsRow em{font-style:normal;font-size:30px;color:#555}
+.detailsHiddenInputs{display:none}
+.detailsActions{position:fixed;left:0;right:0;bottom:82px;background:#fff;padding:12px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;z-index:9998}.draftAction,.uploadAction{height:58px;border:0;border-radius:29px;font-size:18px;font-weight:800}.draftAction{background:#f0f0f0}.uploadAction{background:#111;color:#fff}
+video::-webkit-media-controls{display:none!important}
+video::-webkit-media-controls-enclosure{display:none!important}
+video::-webkit-media-controls-panel{display:none!important}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -481,65 +520,139 @@ body{padding:0!important;background:#fff!important}
   <div id="photoPostStatus" class="authMsg"></div>
 </div>
 
- <div id="shortUpload" class="page section">
-<div class="h1">Create Short</div>
-<div class="notice">Short maximum length: <b>1 minute 30 seconds</b>.</div>
-<div id="myShortsEditorList" style="margin-bottom:14px"></div>
-<div id="shortPickerBox"><label class="btn primary" for="shortFile" style="display:block;text-align:center">＋ New Short from Phone</label><input id="shortFile" type="file" accept="video/*" style="display:none"></div>
-<div id="shortEditor" style="display:none">
-<div class="shortEditPreview"><video id="shortEditVideo" playsinline controls></video></div>
-<div class="h2" style="margin-top:14px">Edit Short</div>
-<div class="shortEditTools">
-<button type="button" class="btn soft shortTool" data-tool="sound">🎵 Add Sound</button>
-<button type="button" class="btn soft shortTool" data-tool="effects">✨ Effects</button>
-<button type="button" class="btn soft shortTool" data-tool="filter">🎨 Filter</button>
-<button type="button" class="btn soft shortTool" data-tool="emoji">😊 Emoji</button>
+ 
+<div id="shortUpload" class="page shortCreatePage">
+  <div id="shortStageSelect" class="shortStage active">
+    <div class="shortCameraShell">
+      <div class="shortTopBar">
+        <button type="button" id="shortBackBtn" class="circleBtn">←</button>
+        <button type="button" id="shortSoundTop" class="pillBtn">♪ Add sound</button>
+        <button type="button" id="shortMagicTop" class="circleBtn">✦</button>
+      </div>
+
+      <div id="shortCameraPreview" class="shortCameraPreview">
+        <div class="shortCameraPlaceholder">
+          <div class="cameraIcon">◉</div>
+          <div>Select a video to create a Short</div>
+        </div>
+        <video id="shortEditVideo" playsinline muted></video>
+      </div>
+
+      <div class="shortRightTools">
+        <button type="button" class="shortSideTool" data-tool="flip"><span>↻</span><small>Flip</small></button>
+        <button type="button" class="shortSideTool" data-tool="timer"><span>⏱</span><small>Timer</small></button>
+        <button type="button" class="shortSideTool" data-tool="effects"><span>✦</span><small>Effects</small></button>
+        <button type="button" class="shortSideTool" data-tool="speed"><span>1×</span><small>Speed</small></button>
+        <button type="button" class="shortSideTool" data-tool="filter"><span>◌</span><small>Filter</small></button>
+      </div>
+
+      <div class="shortBottomCreate">
+        <label for="shortFile" class="galleryPick">
+          <div class="galleryThumb">＋</div>
+          <span>Add</span>
+        </label>
+        <input id="shortFile" type="file" accept="video/*" style="display:none">
+        <button type="button" id="shortRecordBtn" class="recordBtn"></button>
+        <div class="shortModeTabs"><button class="active">Short</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shortStageEdit" class="shortStage">
+    <div class="shortEditorShell">
+      <div class="editorTop">
+        <button type="button" id="editorBackBtn" class="circleBtn">←</button>
+        <button type="button" id="editorAddSound" class="pillBtn">♪ Add sound</button>
+      </div>
+
+      <div class="editorVideoWrap">
+        <video id="shortEditorVideo" playsinline></video>
+        <div class="editorTapPlay" id="editorTapPlay">▶</div>
+        <div class="editorOverlayText" id="editorOverlayText"></div>
+        <div class="editorOverlayEmoji" id="editorOverlayEmoji"></div>
+      </div>
+
+      <div class="editorRightTools">
+        <button type="button" class="editorTool" data-editor-tool="text"><span>Aa</span><small>Text</small></button>
+        <button type="button" class="editorTool" data-editor-tool="effects"><span>✦</span><small>Effects</small></button>
+        <button type="button" class="editorTool" data-editor-tool="filter"><span>◌</span><small>Filters</small></button>
+        <button type="button" class="editorTool" data-editor-tool="emoji"><span>☺</span><small>Stickers</small></button>
+        <button type="button" class="editorTool" data-editor-tool="captions"><span>▤</span><small>Captions</small></button>
+      </div>
+
+      <div class="editorBottom">
+        <button type="button" id="openTrimBtn" class="editorBottomBtn">☰ Edit</button>
+        <button type="button" id="shortNextBtn" class="editorNextBtn">Next</button>
+      </div>
+    </div>
+
+    <div id="trimPanel" class="trimPanel">
+      <div class="trimHeader"><b>Trim Short</b><button id="closeTrimBtn" type="button">Done</button></div>
+      <div class="trimPreview"><video id="trimVideo" playsinline muted></video></div>
+      <label>Start: <span id="trimStartText">0:00</span></label>
+      <input id="trimStart" type="range" min="0" max="90" step="0.1" value="0">
+      <label>End: <span id="trimEndText">0:00</span></label>
+      <input id="trimEnd" type="range" min="0" max="90" step="0.1" value="90">
+      <div id="trimDurationText" class="trimInfo">Selected: 0:00 / 1:30</div>
+    </div>
+  </div>
+
+  <div id="shortStageDetails" class="shortStage shortDetailsPage">
+    <div class="detailsHeader">
+      <button type="button" id="detailsBackBtn" class="plainBack">←</button>
+      <div class="detailsTitle">Add details</div>
+    </div>
+
+    <div class="detailsHero">
+      <div id="detailsCover" class="detailsCover"></div>
+      <textarea id="shortCaption" placeholder="Caption your Short"></textarea>
+    </div>
+
+    <div class="creatorMini">
+      <div id="detailsAvatar" class="avatar">V</div>
+      <div><b id="detailsCreator">Vidoza Creator</b><div class="sub" id="detailsHandle">@vidoza</div></div>
+    </div>
+
+    <div class="detailsList">
+      <button type="button" class="detailsRow" id="visibilityRow"><span>◎</span><div><small>Visibility</small><b id="visibilityValue">Public</b></div><em>›</em></button>
+      <button type="button" class="detailsRow" id="audienceRow"><span>◉</span><div><small>Audience</small><b id="audienceValue">Not made for kids</b></div><em>›</em></button>
+      <button type="button" class="detailsRow" id="descriptionRow"><span>≡</span><div><b>Add description</b></div><em>›</em></button>
+      <button type="button" class="detailsRow" id="locationRow"><span>⌖</span><div><b>Location</b><small id="locationValue"></small></div><em>›</em></button>
+      <button type="button" class="detailsRow" id="playlistRow"><span>☷</span><div><b>Add to playlists</b></div><em>＋</em></button>
+      <button type="button" class="detailsRow" id="promotionRow"><span>₹</span><div><b>Paid promotion and brands</b></div><em>›</em></button>
+      <button type="button" class="detailsRow" id="advancedRow"><span>⚙</span><div><b>Advanced settings</b></div><em>›</em></button>
+    </div>
+
+    <div class="detailsHiddenInputs">
+      <input id="shortTitle" placeholder="Short title">
+      <textarea id="shortDesc"></textarea>
+      <select id="shortVisibility"><option value="public">Public</option><option value="unlisted">Unlisted</option><option value="private">Private</option></select>
+      <input id="shortLocation">
+      <input id="shortTags">
+      <input id="shortThumb" type="file" accept="image/*">
+      <input id="shortPeopleTags">
+      <input id="shortTopics">
+      <input id="shortReminder" type="datetime-local">
+      <input id="scheduleAt" type="datetime-local">
+      <input id="brands">
+      <input id="playlist">
+      <select id="audience"><option value="general">Not made for kids</option><option value="kids">Made for kids</option></select>
+      <input id="hideCounts" type="checkbox">
+      <input id="disableComments" type="checkbox">
+      <input id="highestQuality" type="checkbox" checked>
+      <input id="scheduleEnabled" type="checkbox">
+      <input id="paidPromotion" type="checkbox">
+      <input id="notifySubscribers" type="checkbox" checked>
+      <select id="community"><option value="allow">Allow comments</option><option value="review">Review comments</option><option value="off">Turn off comments</option></select>
+    </div>
+
+    <div class="detailsActions">
+      <button type="button" id="shortDraftBtn" class="draftAction">Save draft</button>
+      <button type="button" id="shortUploadBtn" class="uploadAction">Upload Short</button>
+    </div>
+    <div id="shortStatus" class="authMsg"></div>
+  </div>
 </div>
-<div class="shortTrimBox"><b>Trim video</b><div class="sub">Select up to 1:30.</div>
-<label>Start: <span id="trimStartText">0:00</span></label><input id="trimStart" type="range" min="0" max="90" value="0" step="0.1">
-<label>End: <span id="trimEndText">0:00</span></label><input id="trimEnd" type="range" min="0" max="90" value="90" step="0.1">
-<div id="trimDurationText" class="notice">Selected: 0:00 / 1:30</div></div>
-<input id="shortThumb" class="field" type="file" accept="image/*">
-<div class="creatorDetails">
-  <div class="h2">Post Details</div>
-
-  <div class="detailCard">
-    <b>🖼 Cover Photo</b>
-    <div class="sub">Video ka koi frame cover ke liye choose karein ya gallery se photo lagayein.</div>
-    <button type="button" class="btn soft" id="pickCoverFrameBtn">Choose Video Frame</button>
-    <input id="coverGalleryFile" class="field" type="file" accept="image/*">
-    <div id="coverPreview" class="coverPreview"></div>
-  </div>
-
-  <textarea id="shortCaption" class="field" rows="4" placeholder="Write a caption... #trending #reels"></textarea>
-
-  <input id="shortPeopleTags" class="field" placeholder="Tag People (username, @username)">
-  <input id="shortTopics" class="field" placeholder="Add Topics (Entertainment, Travel, Comedy...)">
-  <input id="shortLocation" class="field" placeholder="Add Location">
-  <input id="shortReminder" class="field" type="datetime-local" title="Add Reminder">
-
-  <div class="detailCard">
-    <b>⚙ Advanced Settings</b>
-    <label class="checkRow"><input id="hideCounts" type="checkbox"> Hide Like and View Counts</label>
-    <label class="checkRow"><input id="disableComments" type="checkbox"> Turn off commenting</label>
-    <label class="checkRow"><input id="highestQuality" type="checkbox" checked> Upload at highest quality</label>
-  </div>
-
-  <div class="detailCard">
-    <b>🗓 Schedule Content</b>
-    <div class="sub">Video ko baad mein publish karne ke liye date/time set karein.</div>
-    <label class="checkRow"><input id="scheduleEnabled" type="checkbox"> Schedule this Short</label>
-    <input id="scheduleAt" class="field" type="datetime-local">
-  </div>
-</div>
-
-<input id="shortTitle" class="field" placeholder="Short title">
-<textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea>
-<select id="shortVisibility" class="field"><option value="public">Visibility: Public</option><option value="unlisted">Visibility: Unlisted</option><option value="private">Visibility: Private</option></select>
-<input id="shortLocation" class="field" placeholder="Location"><input id="shortTags" class="field" placeholder="Tags (comma separated)">
-<div class="row" style="gap:8px"><button class="btn soft" id="shortChangeBtn" type="button">Change Video</button><button class="btn soft" id="shortDraftBtn" type="button">Save Draft</button><button class="btn primary" id="shortUploadBtn" type="button">Upload Short</button></div>
-<div id="shortStatus" class="authMsg"></div>
-</div></div>
 
 <div id="subscriptions" class="page section">
   <div class="h1">Subscriptions</div>
@@ -1368,21 +1481,105 @@ function getShortPublishingDetails(){
 }
 function resetShortEditor(){selectedCoverData='';shortEditFile=null;shortEditDuration=0;shortTrimStart=0;shortTrimEnd=0;$('shortPickerBox').style.display='block';$('myShortsEditorList').style.display='block';$('shortEditor').style.display='none';$('shortFile').value='';$('shortTitle').value='';$('shortDesc').value='';$('shortThumb').value='';$('shortLocation').value='';$('shortTags').value='';$('shortCaption').value='';$('shortPeopleTags').value='';$('shortTopics').value='';$('shortReminder').value='';$('hideCounts').checked=false;$('disableComments').checked=false;$('highestQuality').checked=true;$('scheduleEnabled').checked=false;$('scheduleAt').value='';$('coverPreview').innerHTML='';$('shortStatus').textContent=''}
 function shortToolAction(tool){toast(({sound:'Add Sound',effects:'Effects',filter:'Filter',emoji:'Emoji'})[tool]+' selected')}
+
+let shortEditFile=null, shortEditUrl='', shortEditDuration=0, shortTrimStart=0, shortTrimEnd=0;
+let shortFilter='none', shortOverlayText='', shortOverlayEmoji='', selectedCoverData='';
+
+function showShortStage(id){
+ ['shortStageSelect','shortStageEdit','shortStageDetails'].forEach(function(x){$(x).classList.remove('active')});
+ $(id).classList.add('active');
+}
+function fmtTime(sec){sec=Math.max(0,Number(sec)||0);return Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0')}
+function openShortFromFile(file){
+ shortEditFile=file;
+ if(shortEditUrl)try{URL.revokeObjectURL(shortEditUrl)}catch(e){}
+ shortEditUrl=URL.createObjectURL(file);
+ $('shortEditVideo').src=shortEditUrl;
+ $('shortEditorVideo').src=shortEditUrl;
+ $('trimVideo').src=shortEditUrl;
+ $('shortEditorVideo').onloadedmetadata=function(){
+   shortEditDuration=this.duration||0;
+   shortTrimStart=0;shortTrimEnd=Math.min(90,shortEditDuration);
+   $('trimStart').max=Math.min(90,shortEditDuration);
+   $('trimEnd').max=Math.min(90,shortEditDuration);
+   $('trimStart').value=0;$('trimEnd').value=shortTrimEnd;
+   updateShortTrim();
+   showShortStage('shortStageEdit');
+ };
+}
+function updateShortTrim(){
+ let s=Number($('trimStart').value),e=Number($('trimEnd').value);
+ if(e<=s)e=Math.min(Number($('trimEnd').max)||90,s+0.1);
+ shortTrimStart=s;shortTrimEnd=e;
+ $('trimStartText').textContent=fmtTime(s);$('trimEndText').textContent=fmtTime(e);
+ $('trimDurationText').textContent='Selected: '+fmtTime(e-s)+' / 1:30';
+ try{$('trimVideo').currentTime=s;$('shortEditorVideo').currentTime=s}catch(e){}
+}
+function editorToolAction(tool){
+ if(tool==='text'){
+   const t=prompt('Add text'); if(t!==null){shortOverlayText=t;$('editorOverlayText').textContent=t}
+ }else if(tool==='emoji'){
+   const e=prompt('Add emoji / sticker','😊'); if(e!==null){shortOverlayEmoji=e;$('editorOverlayEmoji').textContent=e}
+ }else if(tool==='filter'){
+   shortFilter=shortFilter==='none'?'contrast(1.12) saturate(1.18)':shortFilter==='contrast(1.12) saturate(1.18)'?'grayscale(.2) contrast(1.1)':'none';
+   $('shortEditorVideo').style.filter=shortFilter;
+ }else if(tool==='effects'){
+   toast('Effects selected');
+ }else if(tool==='captions'){
+   toast('Captions selected');
+ }
+}
+function captureDetailsCover(){
+ const v=$('shortEditorVideo'); if(!v.videoWidth)return;
+ const c=document.createElement('canvas');c.width=360;c.height=640;
+ const ctx=c.getContext('2d');ctx.fillStyle='#000';ctx.fillRect(0,0,c.width,c.height);
+ const ratio=Math.min(c.width/v.videoWidth,c.height/v.videoHeight);
+ const w=v.videoWidth*ratio,h=v.videoHeight*ratio;
+ ctx.drawImage(v,(c.width-w)/2,(c.height-h)/2,w,h);
+ selectedCoverData=c.toDataURL('image/jpeg',.85);
+ $('detailsCover').style.backgroundImage='url("'+selectedCoverData+'")';
+}
+function goShortDetails(){
+ if(shortTrimEnd-shortTrimStart>90.001){toast('Short maximum is 1:30');return}
+ captureDetailsCover();
+ $('detailsCreator').textContent=profileName();
+ $('detailsHandle').textContent='@'+profileName().replace(/\s+/g,'');
+ $('detailsAvatar').textContent=profileName().charAt(0).toUpperCase();
+ $('shortTitle').value=$('shortTitle').value||'Vidoza Short';
+ showShortStage('shortStageDetails');
+}
+function resetShortFlow(){
+ stopAllMedia();
+ shortEditFile=null;shortEditDuration=0;shortTrimStart=0;shortTrimEnd=0;shortOverlayText='';shortOverlayEmoji='';shortFilter='none';selectedCoverData='';
+ $('shortFile').value='';$('shortCaption').value='';$('shortDesc').value='';$('shortLocation').value='';$('shortTags').value='';
+ $('shortEditorVideo').style.filter='none';$('editorOverlayText').textContent='';$('editorOverlayEmoji').textContent='';
+ showShortStage('shortStageSelect');
+}
 async function uploadShort(){
  if(!user){toast('Please login first');return}
  if(!shortEditFile){toast('Choose a Short video first');return}
- let t=$('shortTitle').value.trim();if(!t){toast('Enter Short title');return}
- let selected=shortTrimEnd-shortTrimStart;
- if(selected>90.001){toast('Short maximum is 1:30');return}
- if(shortEditDuration>90.001&&selected>=shortEditDuration-.01){toast('Trim the video to 1:30 or less');return}
+ const selected=shortTrimEnd-shortTrimStart;
+ if(selected<=0||selected>90.001){toast('Short must be 1:30 or less');return}
+ const title=($('shortTitle').value.trim()||$('shortCaption').value.trim()||'Vidoza Short').slice(0,100);
+ $('shortStatus').textContent='Uploading Short...';
  try{
-  const id='short-'+Date.now(),mediaKey='short-'+id,tf=$('shortThumb').files[0],thumbKey=tf?'thumb-'+id:'';
-  await mediaPut(mediaKey,shortEditFile);if(tf)await mediaPut(thumbKey,tf);
-  shorts.unshift({id:id,title:t,channel:profileName(),url:'',thumbnail:'',mediaKey:mediaKey,thumbKey:thumbKey,description:$('shortDesc').value,liked:false,saved:false,comments:[],trimStart:shortTrimStart,trimEnd:shortTrimEnd,duration:selected,editor:{sound:'',effects:[],filter:'none',emoji:[]},
-   publishDetails:getShortPublishingDetails()
-  });
-  save();await hydrateMedia();renderShorts();$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';setTimeout(function(){resetShortEditor();showPage('shorts')},500)
- }catch(e){$('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Short save failed: '+(e.message||'Storage error')}
+   const id='short-'+Date.now(), mediaKey='short-'+id;
+   await mediaPut(mediaKey,shortEditFile);
+   shorts.unshift({
+     id:id,title:title,channel:profileName(),url:'',thumbnail:selectedCoverData,
+     mediaKey:mediaKey,thumbKey:'',description:$('shortDesc').value||$('shortCaption').value,
+     liked:false,saved:false,comments:[],trimStart:shortTrimStart,trimEnd:shortTrimEnd,duration:selected,
+     visibility:$('shortVisibility').value,location:$('shortLocation').value,tags:$('shortTags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
+     audience:$('audience').value,playlist:$('playlist').value,paidPromotion:$('paidPromotion').checked,brands:$('brands').value,
+     community:$('community').value,notifySubscribers:$('notifySubscribers').checked,
+     editor:{filter:shortFilter,text:shortOverlayText,emoji:shortOverlayEmoji}
+   });
+   save();await hydrateMedia();renderShorts();
+   $('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';
+   setTimeout(function(){resetShortFlow();showPage('shorts')},450);
+ }catch(e){
+   $('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Upload failed: '+(e.message||'Storage error');
+ }
 }
 
 function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(title)+'</div><p style="line-height:1.7">'+esc(text)+'</p>';showPage('policy')}
@@ -1412,7 +1609,28 @@ $('startLiveBtn').onclick=function(){if(!user){toast('Please login first');retur
 $('navSocial').onclick=function(){showPage('social');renderSocial()};
 $('navYou').onclick=function(){showPage('you')};
  $('createShortBtn').onclick=function(){showPage('shortUpload');renderMyShortsEditorList()};$('searchGo').onclick=doSearch;
- $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;$('photoPostBtn').onclick=createPhotoPost;$('shortFile').onchange=function(){if(this.files[0])openShortEditor(this.files[0])};$('shortChangeBtn').onclick=resetShortEditor;$('trimStart').oninput=updateShortTrim;$('trimEnd').oninput=updateShortTrim;document.querySelectorAll('.shortTool').forEach(function(b){b.onclick=function(){shortToolAction(b.dataset.tool)}});
+ $('shortFile').onchange=function(){if(this.files[0])openShortFromFile(this.files[0])};
+ $('shortBackBtn').onclick=function(){showPage('home')};
+ $('editorBackBtn').onclick=function(){resetShortFlow()};
+ $('detailsBackBtn').onclick=function(){showShortStage('shortStageEdit')};
+ $('editorTapPlay').onclick=function(){const v=$('shortEditorVideo');if(v.paused){v.play();this.style.display='none'}else{v.pause();this.style.display='grid'}};
+ $('shortEditorVideo').onclick=function(){const b=$('editorTapPlay');if(this.paused){this.play();b.style.display='none'}else{this.pause();b.style.display='grid'}};
+ document.querySelectorAll('.editorTool').forEach(function(b){b.onclick=function(){editorToolAction(b.dataset.editorTool)}});
+ document.querySelectorAll('.shortSideTool').forEach(function(b){b.onclick=function(){toast(b.querySelector('small').textContent+' selected')}});
+ $('openTrimBtn').onclick=function(){$('trimPanel').classList.add('open')};
+ $('closeTrimBtn').onclick=function(){$('trimPanel').classList.remove('open')};
+ 
+ $('shortNextBtn').onclick=goShortDetails;
+ $('shortUploadBtn').onclick=uploadShort;
+ $('shortDraftBtn').onclick=saveShortDraft;
+ $('visibilityRow').onclick=function(){const v=$('shortVisibility');v.value=v.value==='public'?'unlisted':v.value==='unlisted'?'private':'public';$('visibilityValue').textContent=v.options[v.selectedIndex].text};
+ $('audienceRow').onclick=function(){const a=$('audience');a.value=a.value==='general'?'kids':'general';$('audienceValue').textContent=a.value==='kids'?'Made for kids':'Not made for kids'};
+ $('descriptionRow').onclick=function(){const d=prompt('Description',$('shortDesc').value);if(d!==null)$('shortDesc').value=d};
+ $('locationRow').onclick=function(){const l=prompt('Location',$('shortLocation').value);if(l!==null){$('shortLocation').value=l;$('locationValue').textContent=l}};
+ $('playlistRow').onclick=function(){const p=prompt('Playlist',$('playlist').value);if(p!==null)$('playlist').value=p};
+ $('promotionRow').onclick=function(){$('paidPromotion').checked=!$('paidPromotion').checked;toast($('paidPromotion').checked?'Paid promotion enabled':'Paid promotion disabled')};
+ $('advancedRow').onclick=function(){const off=confirm('Turn off comments?');$('community').value=off?'off':'allow';};
+ $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;$('photoPostBtn').onclick=createPhotoPost;document.querySelectorAll('.shortTool').forEach(function(b){b.onclick=function(){shortToolAction(b.dataset.tool)}});
  $('pickCoverFrameBtn').onclick=captureShortCover;
  $('coverGalleryFile').onchange=function(){readGalleryCover(this.files[0])};
 

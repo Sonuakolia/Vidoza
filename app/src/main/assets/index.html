@@ -466,7 +466,7 @@ body{padding:0!important;background:#fff!important}
  <div id="shortUpload" class="page section">
 <div class="h1">Create Short</div>
 <input id="shortFile" class="field" type="file" accept="video/*">
-<input id="shortThumb" class="field" type="image/*" accept="image/*">
+<input id="shortThumb" class="field" type="file" accept="image/*">
 <input id="shortTitle" class="field" placeholder="Short title">
 <textarea id="shortDesc" class="field" rows="4" placeholder="Description"></textarea>
 <select id="shortVisibility" class="field"><option value="public">Visibility: Public</option><option value="unlisted">Visibility: Unlisted</option><option value="private">Visibility: Private</option></select>
@@ -1140,6 +1140,37 @@ async function deleteDraft(id){
  drafts=drafts.filter(function(x){return String(x.id)!==String(id)});localStorage.setItem('vidozaDrafts',JSON.stringify(drafts));renderDrafts();toast('Draft deleted');
 }
 
+
+async function saveShortDraft(){
+ if(!user){toast('Please login first');return}
+ const f=$('shortFile').files[0];
+ if(!f){toast('Select a Short video first');return}
+ const id='short-draft-'+Date.now();
+ try{
+  const mediaKey='draft-short-'+id, tf=$('shortThumb').files[0], thumbKey=tf?'draft-short-thumb-'+id:'';
+  await mediaPut(mediaKey,f);
+  if(tf)await mediaPut(thumbKey,tf);
+  const sd={
+   id:id,title:$('shortTitle').value.trim()||'Untitled Short draft',
+   description:$('shortDesc').value,channel:profileName(),
+   mediaKey:mediaKey,thumbKey:thumbKey,
+   visibility:$('shortVisibility').value,
+   location:$('shortLocation').value.trim(),
+   tags:$('shortTags').value.split(',').map(function(x){return x.trim()}).filter(Boolean),
+   savedAt:new Date().toLocaleString()
+  };
+  let list=JSON.parse(localStorage.getItem('vidozaShortDrafts')||'[]');
+  list.unshift(sd);
+  localStorage.setItem('vidozaShortDrafts',JSON.stringify(list));
+  $('shortStatus').style.color='#16a34a';
+  $('shortStatus').textContent='Short draft saved successfully.';
+  toast('Short draft saved');
+ }catch(e){
+  $('shortStatus').style.color='#dc2626';
+  $('shortStatus').textContent='Draft save failed: '+(e.message||'Storage error');
+ }
+}
+
 async function uploadVideo(){
  if(!user){toast('Please login first');return}
  let f=$('videoFile').files[0],t=$('uploadTitle').value.trim();
@@ -1185,14 +1216,14 @@ function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(
 function wire(){
  $('storyClose').onclick=function(){$('storyViewer').style.display='none'};
  document.addEventListener('change',function(e){if(e.target&&e.target.id==='profilePhotoInput'){
-   const f=this.files[0]; if(!f)return;
+   const f=e.target.files[0]; if(!f)return;
    const r=new FileReader();
    r.onload=function(){localStorage.setItem('vidozaProfilePhoto',r.result);renderAccount();renderChannel();toast('Profile photo updated')};
    r.readAsDataURL(f);
  }});
  $('draftBtn').onclick=saveVideoDraft;
  $('cancelEditBtn').onclick=function(){editVideoId=null;resetUploadForm();showPage('you')};
- $('shortDraftBtn').onclick=saveShortDraft;
+ if($('shortDraftBtn'))$('shortDraftBtn').onclick=saveShortDraft;
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
  $('navHome').onclick=function(){showPage('home')};
 $('navShorts').onclick=function(){showPage('shorts')};

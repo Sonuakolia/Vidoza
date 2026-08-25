@@ -339,6 +339,27 @@ body{padding:0!important;background:#fff!important}
   .shortSubscribe{padding:6px 10px!important;font-size:12px!important}
 }
 </style>
+
+<style id="vidoza-final-shell-v20">
+#app>.page{padding-bottom:150px!important}
+#app>#home.page{padding-bottom:150px!important}
+#app>.nav{
+  bottom:24px!important;
+  height:76px!important;
+  min-height:76px!important;
+  border-radius:18px 18px 0 0!important;
+  box-shadow:0 -2px 12px rgba(0,0,0,.12)!important;
+}
+#app>.nav button{height:68px!important;padding-top:4px!important;padding-bottom:4px!important}
+#app>.nav b{line-height:24px!important}
+#shorts.page{bottom:100px!important}
+.storyItem{cursor:pointer!important}
+@media(max-width:600px){
+ #app>.nav{bottom:24px!important}
+ #app>.page,#app>#home.page{padding-bottom:150px!important}
+ #shorts.page{bottom:100px!important}
+}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -419,6 +440,8 @@ body{padding:0!important;background:#fff!important}
  <div id="you" class="page section">
 <div class="h1">You</div>
 <div id="account"></div>
+<div class="row" style="gap:8px;margin:12px 0"><button class="btn primary" id="editProfileBtn">Edit Profile</button><button class="btn soft" id="shareProfileBtnTop">↗ Share</button></div>
+<div id="profileEditBox" style="display:none"><input id="profileNameInput" class="field" placeholder="Profile name"><textarea id="profileBioInput" class="field" rows="3" placeholder="Bio"></textarea><button class="btn primary" id="saveProfileBtn">Save Profile</button></div>
 <div class="profileTabs" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0">
   <button class="btn soft profileTab active" data-profile-tab="videos">Videos</button>
   <button class="btn soft profileTab" data-profile-tab="reels">Reels</button>
@@ -534,10 +557,26 @@ async function mediaDelete(key){
   });
  }catch(e){}
 }
+async function makeAutoThumb(v){
+ if(!v.url||v.thumbnail)return;
+ try{
+  const video=document.createElement('video');
+  video.muted=true;video.playsInline=true;video.preload='metadata';video.src=v.url;
+  await new Promise(function(resolve){video.onloadedmetadata=resolve;video.onerror=resolve});
+  if(!video.videoWidth)return;
+  video.currentTime=Math.min(1,Math.max(0,(video.duration||1)/4));
+  await new Promise(function(resolve){video.onseeked=resolve;setTimeout(resolve,700)});
+  const canvas=document.createElement('canvas');
+  canvas.width=640;canvas.height=Math.max(360,Math.round(640*video.videoHeight/video.videoWidth));
+  const ctx=canvas.getContext('2d');ctx.drawImage(video,0,0,canvas.width,canvas.height);
+  v.thumbnail=canvas.toDataURL('image/jpeg',0.82);
+ }catch(e){}
+}
 async function hydrateMedia(){
  const all=videos.concat(shorts);
  for(const v of all){
   if(v._objectUrl){try{URL.revokeObjectURL(v._objectUrl)}catch(e){};v._objectUrl='';}
+  if(v._thumbObjectUrl){try{URL.revokeObjectURL(v._thumbObjectUrl)}catch(e){};v._thumbObjectUrl='';}
   if(v.mediaKey){
    const b=await mediaGet(v.mediaKey);
    if(b){v.url=URL.createObjectURL(b);v._objectUrl=v.url}
@@ -546,6 +585,7 @@ async function hydrateMedia(){
    const b=await mediaGet(v.thumbKey);
    if(b){v.thumbnail=URL.createObjectURL(b);v._thumbObjectUrl=v.thumbnail}
   }
+  if(!v.thumbnail)await makeAutoThumb(v);
  }
 }
 
@@ -576,7 +616,13 @@ function featureMessage(t){
  el.textContent=t; el.style.display='block';
  setTimeout(function(){el.style.display='none'},2500);
 }
+function stopAllMedia(){
+ document.querySelectorAll('video,audio').forEach(function(m){
+   try{m.pause();m.currentTime=0}catch(e){}
+ });
+}
 function showPage(id,push){
+ stopAllMedia();
  document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active')});
  if($(id))$(id).classList.add('active');
  if(push!==false&&stack[stack.length-1]!==id)stack.push(id);
@@ -727,8 +773,15 @@ function profileBio(){
 function renderSocial(){
  const storyNames=['Your story','Music India','Vidoza News','Gaming','Learning'];
  $('storiesBar').innerHTML=storyNames.map(function(n,i){
-   return '<div style="min-width:72px;text-align:center"><div class="avatar" style="width:62px;height:62px;margin:auto;border:3px solid #e11d48">'+esc(n[0])+'</div><div class="sub" style="margin-top:5px">'+esc(n)+'</div></div>';
+   return '<button class="storyItem" data-story-name="'+esc(n)+'" style="min-width:78px;border:0;background:transparent;text-align:center;padding:0"><div class="avatar" style="width:62px;height:62px;margin:auto;border:3px solid #e11d48">'+esc(n[0])+'</div><div class="sub" style="margin-top:5px">'+esc(n)+'</div></button>';
  }).join('');
+ $('storiesBar').querySelectorAll('[data-story-name]').forEach(function(b){
+   b.onclick=function(){
+     $('storyViewerName').textContent=b.dataset.storyName;
+     $('storyViewerAvatar').textContent=b.dataset.storyName.charAt(0);
+     $('storyViewer').style.display='flex';
+   };
+ });
 
  const list=posts.slice().sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)});
  $('socialFeed').innerHTML=list.map(function(p){
@@ -962,6 +1015,7 @@ async function uploadShort(){
 function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(title)+'</div><p style="line-height:1.7">'+esc(text)+'</p>';showPage('policy')}
 
 function wire(){
+ $('storyClose').onclick=function(){$('storyViewer').style.display='none'};
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
  $('navHome').onclick=function(){showPage('home')};
 $('navShorts').onclick=function(){showPage('shorts')};
@@ -979,6 +1033,23 @@ $('navYou').onclick=function(){showPage('you')};
  $('uploadBtn').onclick=uploadVideo;$('shortUploadBtn').onclick=uploadShort;$('photoPostBtn').onclick=createPhotoPost;
  document.querySelectorAll('.profileTab').forEach(function(b){b.onclick=function(){renderProfileTab(b.dataset.profileTab)}});
  $('socialRefresh').onclick=function(){renderSocial()};
+ $('editProfileBtn').onclick=function(){
+   $('profileEditBox').style.display='block';
+   $('profileNameInput').value=profileName();
+   $('profileBioInput').value=profileBio();
+ };
+ $('saveProfileBtn').onclick=async function(){
+   const n=$('profileNameInput').value.trim(),b=$('profileBioInput').value.trim();
+   if(!n){toast('Enter profile name');return}
+   if(user){
+     user.user_metadata=user.user_metadata||{};
+     user.user_metadata.full_name=n;user.user_metadata.bio=b;
+     if(db){try{await db.auth.updateUser({data:{full_name:n,bio:b}})}catch(e){}}
+   }
+   localStorage.setItem('vidozaProfileName',n);localStorage.setItem('vidozaProfileBio',b);
+   $('profileEditBox').style.display='none';renderAccount();renderChannel();toast('Profile updated');
+ };
+ $('shareProfileBtnTop').onclick=function(){shareText(profileName()+' on Vidoza')};
  $('logoutBtn').onclick=logout;$('settingsLogout').onclick=logout;
  $('channelBtn').onclick=function(){showPage('channel')};
  $('viewChannelBtn').onclick=function(){showPage('channel')};
@@ -1041,5 +1112,12 @@ window.addEventListener('load',boot);
 
 
 
+
+<div id="storyViewer" style="display:none;position:fixed;inset:0;background:#000;z-index:120000;color:#fff;align-items:center;justify-content:center">
+  <button id="storyClose" style="position:absolute;right:16px;top:calc(16px + env(safe-area-inset-top,0px));z-index:2;border:0;background:#ffffff22;color:#fff;border-radius:50%;width:44px;height:44px;font-size:24px">×</button>
+  <div style="width:min(420px,92vw);height:min(720px,82vh);border-radius:18px;background:linear-gradient(160deg,#111,#e11d48);display:flex;align-items:center;justify-content:center;text-align:center;padding:25px">
+    <div><div id="storyViewerAvatar" class="avatar" style="width:80px;height:80px;margin:auto;font-size:30px">V</div><h2 id="storyViewerName">Vidoza Story</h2><p>Vidoza Story</p></div>
+  </div>
+</div>
 </body>
 </html>

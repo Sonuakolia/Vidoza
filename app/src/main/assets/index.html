@@ -542,6 +542,172 @@ video::-webkit-media-controls-panel{display:none!important}
 /* Bottom nav shouldn't cover creator canvas */
 #shortUpload.active~.nav,#upload.active~.nav{display:none!important}
 </style>
+
+<style id="vidoza-v31-creator-overlay">
+/* Creator pages cover the whole WebView. No Vidoza header or bottom nav underneath. */
+#upload.page.active,
+#shortUpload.page.active{
+  position:fixed!important;
+  inset:0!important;
+  z-index:250000!important;
+  width:100vw!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  background:#000!important;
+}
+
+/* LONG VIDEO — simple gallery-first screen, no fake giant play icon */
+#upload .videoSelectShell,
+#upload .videoEditorShell{
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  padding:calc(env(safe-area-inset-top,0px) + 8px) 0 calc(env(safe-area-inset-bottom,0px) + 8px)!important;
+  background:#000!important;
+}
+#upload .videoSelectTop{
+  height:62px!important;
+  display:grid!important;
+  grid-template-columns:54px 1fr 54px!important;
+  align-items:center!important;
+  padding:0 14px!important;
+  font-size:21px!important;
+  color:#fff!important;
+}
+#upload .videoGalleryLike{
+  height:calc(100% - 62px)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-end!important;
+  align-items:stretch!important;
+  padding:18px!important;
+  gap:14px!important;
+}
+#upload .videoLargePreview{
+  flex:1 1 auto!important;
+  width:100%!important;
+  min-height:0!important;
+  aspect-ratio:auto!important;
+  border-radius:18px!important;
+  background:linear-gradient(180deg,#171717,#080808)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+}
+#upload .videoLargeIcon{
+  display:none!important;
+}
+#upload .videoPickBottom{
+  width:100%!important;
+  height:58px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:29px!important;
+  background:#fff!important;
+  color:#111!important;
+  font-size:18px!important;
+  font-weight:800!important;
+}
+
+/* SHORT — clean camera-style canvas. Hide empty video element until a file exists. */
+#shortUpload .shortFullShell,
+#shortUpload .shortEditShell{
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  padding:calc(env(safe-area-inset-top,0px) + 8px) 0 calc(env(safe-area-inset-bottom,0px) + 8px)!important;
+  background:#000!important;
+}
+#shortUpload .shortFullCanvas,
+#shortUpload .shortEditCanvas{
+  position:relative!important;
+  width:calc(100% - 20px)!important;
+  height:100%!important;
+  margin:0 10px!important;
+  border-radius:22px!important;
+  overflow:hidden!important;
+  background:linear-gradient(180deg,#202020,#050505)!important;
+}
+#shortCameraVideo{
+  display:none!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  background:#000!important;
+}
+#shortCameraVideo.has-media{
+  display:block!important;
+}
+#shortUpload .shortTopIcon{
+  top:18px!important;
+}
+#shortUpload .shortSound{
+  top:20px!important;
+}
+#shortUpload .shortRightRail{
+  top:28%!important;
+  right:12px!important;
+}
+#shortUpload .shortBottomRail{
+  left:14px!important;
+  right:14px!important;
+  bottom:18px!important;
+  grid-template-columns:82px 1fr 158px!important;
+}
+#shortUpload .shortModeTabs{
+  overflow:hidden!important;
+  white-space:nowrap!important;
+}
+#shortUpload .shortModeTabs button{
+  font-size:15px!important;
+  padding:8px 8px!important;
+}
+#shortUpload .shortRecordBtn{
+  width:88px!important;
+  height:88px!important;
+}
+#shortUpload .shortGalleryTile{
+  width:56px!important;
+  height:56px!important;
+}
+
+/* Edit screen */
+#shortUpload .shortEditCanvas video{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  background:#000!important;
+}
+#shortUpload .shortEditRightRail{
+  top:27%!important;
+  right:12px!important;
+}
+#shortUpload .shortEditBottom{
+  bottom:18px!important;
+}
+
+/* Details stages can scroll normally while still full-screen */
+#shortStageDetails.shortStage.active,
+#videoStageDetails.videoStage.active{
+  height:100%!important;
+  overflow-y:auto!important;
+  background:#fff!important;
+  padding-bottom:100px!important;
+}
+#shortUpload .shortPublishBar,
+#upload .videoPublishBar{
+  bottom:0!important;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important;
+}
+</style>
+
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -702,9 +868,9 @@ video::-webkit-media-controls-panel{display:none!important}
           <button id="shortRecordBtn" class="shortRecordBtn" type="button"></button>
 
           <div class="shortModeTabs">
-            <button type="button">Video</button>
-            <button type="button" class="active">Short</button>
-            <button type="button">Live</button>
+            <button type="button" id="shortModeVideo">Video</button>
+            <button type="button" id="shortModeShort" class="active">Short</button>
+            <button type="button" id="shortModeLive">Live</button>
           </div>
         </div>
       </div>
@@ -1593,6 +1759,7 @@ function fmtTime(sec){
 }
 function openShortFromFile(file){
  shortEditFile=file;
+ if($('shortCameraVideo'))$('shortCameraVideo').classList.add('has-media');
  if(shortEditUrl)try{URL.revokeObjectURL(shortEditUrl)}catch(e){}
  shortEditUrl=URL.createObjectURL(file);
 
@@ -1653,6 +1820,7 @@ function goShortDetails(){
 }
 function resetShortFlow(){
  stopAllMedia();
+ if($('shortCameraVideo'))$('shortCameraVideo').classList.remove('has-media');
  shortEditFile=null;shortEditDuration=0;shortTrimStart=0;shortTrimEnd=0;shortOverlayText='';shortOverlayEmoji='';shortFilter='none';selectedCoverData='';
  if($('shortFile'))$('shortFile').value='';
  if($('shortCaption'))$('shortCaption').value='';
@@ -1723,7 +1891,7 @@ function wire(){
    r.readAsDataURL(f);
  }});
  if($('videoFile'))$('videoFile').onchange=function(){if(this.files[0])openLongVideoEditor(this.files[0])};
- if($('videoBackBtn'))$('videoBackBtn').onclick=function(){showPage('home')};
+ if($('videoBackBtn'))$('videoBackBtn').onclick=function(){resetLongVideoFlow();showPage('home')};
  if($('videoEditorBackBtn'))$('videoEditorBackBtn').onclick=function(){resetLongVideoFlow()};
  if($('videoDetailsBackBtn'))$('videoDetailsBackBtn').onclick=function(){showVideoStage('videoStageEdit')};
  if($('videoPreviewPlay'))$('videoPreviewPlay').onclick=function(){const v=$('videoEditPreview');if(v.paused){v.play();this.style.display='none'}else{v.pause();this.style.display='grid'}};
@@ -1750,16 +1918,31 @@ $('navShorts').onclick=function(){showPage('shorts')};
 $('navCreate').onclick=function(){$('createMenu').style.display='flex'};
 $('closeCreateMenu').onclick=function(){$('createMenu').style.display='none'};
 $('createMenu').onclick=function(e){if(e.target===$('createMenu'))$('createMenu').style.display='none'};
-$('createVideoOption').onclick=function(){$('createMenu').style.display='none';showPage('upload')};
-$('createShortOption').onclick=function(){$('createMenu').style.display='none';showPage('shortUpload')};
+$('createVideoOption').onclick=function(){
+ $('createMenu').style.display='none';
+ resetLongVideoFlow();
+ showPage('upload');
+ setTimeout(function(){if($('videoFile'))$('videoFile').click()},120);
+};
+$('createShortOption').onclick=function(){
+ $('createMenu').style.display='none';
+ resetShortFlow();
+ showPage('shortUpload');
+};
 $('createPhotoOption').onclick=function(){$('createMenu').style.display='none';showPage('photoUpload')};
 $('createLiveOption').onclick=function(){$('createMenu').style.display='none';showPage('live')};
 $('startLiveBtn').onclick=function(){if(!user){toast('Please login first');return}$('liveStatus').textContent='Live setup ready.';$('liveStatus').style.color='#16a34a'};
 $('navSocial').onclick=function(){showPage('social');renderSocial()};
 $('navYou').onclick=function(){showPage('you')};
 
+if($('shortModeVideo'))$('shortModeVideo').onclick=function(){resetShortFlow();showPage('upload');setTimeout(function(){if($('videoFile'))$('videoFile').click()},120)};
+if($('shortModeShort'))$('shortModeShort').onclick=function(){showShortStage('shortStageSelect')};
+if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();showPage('live')};
+
+
  if($('shortFile'))$('shortFile').onchange=function(){if(this.files[0])openShortFromFile(this.files[0])};
- if($('shortBackBtn'))$('shortBackBtn').onclick=function(){showPage('home')};
+ if($('shortRecordBtn'))$('shortRecordBtn').onclick=function(){if($('shortFile'))$('shortFile').click()};
+ if($('shortBackBtn'))$('shortBackBtn').onclick=function(){resetShortFlow();showPage('home')};
  if($('editorBackBtn'))$('editorBackBtn').onclick=function(){resetShortFlow()};
  if($('detailsBackBtn'))$('detailsBackBtn').onclick=function(){showShortStage('shortStageEdit')};
  if($('editorTapPlay'))$('editorTapPlay').onclick=function(){const v=$('shortEditorVideo');if(v.paused){v.play();this.style.display='none'}else{v.pause();this.style.display='grid'}};

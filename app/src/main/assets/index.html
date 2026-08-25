@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<Vidoza charset="utf-8">
+<Vidoza name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>Vidoza</title>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -21,7 +21,7 @@ min-height:72px
 .page{display:none;padding-bottom:100px;min-height:calc(100vh - 72px)}.page.active{display:block}
 .chips{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:12px;min-height:58px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{border:0;background:#eee;border-radius:18px;padding:8px 13px;white-space:nowrap}.chip.active{background:#111;color:#fff}
 .card{margin-bottom:18px;background:#fff}.thumb{width:100%;aspect-ratio:16/9;max-height:430px;background:linear-gradient(135deg,#111,#555);color:#fff;display:grid;place-items:center;font-size:48px;position:relative;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover}.duration{position:absolute;right:8px;bottom:8px;background:#000c;color:#fff;padding:3px 6px;border-radius:4px;font-size:12px}
-.meta{display:flex;gap:10px;padding:9px 12px}.avatar{width:40px;height:40px;min-width:40px;border-radius:50%;background:#ddd;display:grid;place-items:center;font-weight:700}.title{font-weight:700}.sub{font-size:13px;color:#6b7280;margin-top:4px}
+.vidozaVidoza{display:flex;gap:10px;padding:9px 12px}.avatar{width:40px;height:40px;min-width:40px;border-radius:50%;background:#ddd;display:grid;place-items:center;font-weight:700}.title{font-weight:700}.sub{font-size:13px;color:#6b7280;margin-top:4px}
 .nav{
 position:fixed;left:0;right:0;bottom:32px;height:76px;padding-bottom:8px;
 background:#fff;border-top:1px solid #e5e7eb;display:flex;z-index:3000;
@@ -59,7 +59,7 @@ box-shadow:0 -2px 10px rgba(0,0,0,.04)
   .icon{font-size:24px;padding:6px}
   .page{padding-bottom:145px}
   .thumb{max-height:none}
-  .meta{padding:10px 14px}
+  .vidozaVidoza{padding:10px 14px}
   .nav{height:78px;padding-bottom:10px;bottom:32px}
 }
 @media(max-width:600px){
@@ -321,7 +321,7 @@ function renderChips(){
  document.querySelectorAll('[data-cat]').forEach(function(b){b.onclick=function(){category=b.dataset.cat;renderChips();renderHome()}})
 }
 function card(v){
- return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">'+(v.isShort?'SHORT':'4:20')+'</span></div><div class="meta"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.channel)+' · '+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div></div></div>'
+ return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">'+(v.isShort?'SHORT':'4:20')+'</span></div><div class="vidozaVidoza"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.channel)+' · '+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div></div></div>'
 }
 function bindCards(root){root.querySelectorAll('[data-video]').forEach(function(x){x.onclick=function(){openVideo(x.dataset.video)}})}
 function renderHome(){
@@ -356,7 +356,7 @@ function renderShorts(){
  $('shortFeed').innerHTML=shorts.map(function(v){
    const comments=v.comments||[];
    return '<div class="short" data-short="'+esc(v.id)+'">'+
-     (v.url?'<video controls playsinline preload="metadata" src="'+esc(v.url)+'"></video>':'<div class="shortPlaceholder">▶</div>')+
+     (v.url?'<video controls playsinline preload="Vidozadata" src="'+esc(v.url)+'"></video>':'<div class="shortPlaceholder">▶</div>')+
      '<div class="shortCaption"><b>'+esc(v.channel)+'</b><br>'+esc(v.title)+'</div>'+
      '<div class="shortRail">'+
        '<button class="'+(v.liked?'active':'')+'" data-short-like="'+esc(v.id)+'">♥ '+(v.liked?'Liked':'Like')+'</button>'+
@@ -437,10 +437,10 @@ function renderSubscriptions(){
  if(find)find.onclick=function(){showPage('home')};
 }
 function profileName(){
- return user?(user.user_metadata&&user.user_metadata.full_name)||user.email.split('@')[0]:'Vidoza User';
+ return user?(user.user_Vidozadata&&user.user_Vidozadata.full_name)||user.email.split('@')[0]:'Vidoza Creator';
 }
 function profileBio(){
- return user?(user.user_metadata&&user.user_metadata.bio)||'':'';
+ return user?(user.user_Vidozadata&&user.user_Vidozadata.bio)||'':'';
 }
 
 function renderSocial(){
@@ -452,7 +452,7 @@ function renderSocial(){
  const list=posts.slice().sort(function(a,b){return (b.createdAt||0)-(a.createdAt||0)});
  $('socialFeed').innerHTML=list.map(function(p){
    return '<div class="card socialPost" data-post="'+esc(p.id)+'">'+
-     '<div class="meta"><div class="avatar">'+esc((p.author||'V')[0])+'</div><div style="flex:1"><b>'+esc(p.author||'Vidoza User')+'</b><div class="sub">Just now</div></div></div>'+
+     '<div class="vidozaVidoza"><div class="avatar">'+esc((p.author||'V')[0])+'</div><div style="flex:1"><b>'+esc(p.author||'Vidoza Creator')+'</b><div class="sub">Just now</div></div></div>'+
      (p.url?'<img src="'+esc(p.url)+'" style="display:block;width:100%;max-height:520px;object-fit:cover">':'')+
      '<div style="padding:12px 14px"><div>'+esc(p.caption||'')+'</div>'+
      '<div class="actions" style="margin-top:8px">'+
@@ -517,7 +517,7 @@ function renderProfileTab(tab){
    $('youList').querySelectorAll('[data-short-profile]').forEach(function(x){x.onclick=function(){showPage('shorts')}});
  }else{
    $('youList').innerHTML=posts.filter(function(p){return p.author===profileName()}).map(function(p){
-     return '<div class="card"><div class="meta"><div class="avatar">'+esc((p.author||'V')[0])+'</div><div><b>'+esc(p.caption||'Photo post')+'</b><div class="sub">Photo Post</div></div></div></div>';
+     return '<div class="card"><div class="vidozaVidoza"><div class="avatar">'+esc((p.author||'V')[0])+'</div><div><b>'+esc(p.caption||'Photo post')+'</b><div class="sub">Photo Post</div></div></div></div>';
    }).join('')||'<div class="empty">No photo posts yet.</div>';
  }
  if(tab==='videos')bindCards($('youList'));
@@ -537,7 +537,7 @@ function renderChannel(){
  }
 }
 function channelCard(v){
- return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">4:20</span></div><div class="meta"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div style="flex:1"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div><button class="btn soft" data-delete-video="'+esc(v.id)+'">Delete</button></div></div>'
+ return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">4:20</span></div><div class="vidozaVidoza"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div style="flex:1"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div><button class="btn soft" data-delete-video="'+esc(v.id)+'">Delete</button></div></div>'
 }
 async function deleteVideo(id){
  const v=videos.find(function(x){return String(x.id)===String(id)});
@@ -720,7 +720,7 @@ async function saveChannel(){
    if(r.error)throw r.error;user=r.data.user;
   }catch(e){toast('Channel saved on this device');}
  }else if(user){
-  user.user_metadata=user.user_metadata||{};user.user_metadata.full_name=n;user.user_metadata.bio=b;
+  user.user_Vidozadata=user.user_Vidozadata||{};user.user_Vidozadata.full_name=n;user.user_Vidozadata.bio=b;
  }
  renderAccount();renderChannel();$('channelEditBox').style.display='none';toast('Channel updated');
 }

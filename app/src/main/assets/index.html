@@ -156,6 +156,92 @@ body{width:100%;min-width:100%;margin:0!important;padding:0!important;overflow-x
 html{width:100vw!important;min-width:100vw!important}
 body{width:100vw!important;min-width:100vw!important}
 </style>
+
+<style id="vidoza-final-ui-v18">
+html,body{margin:0!important;width:100%!important;min-width:100%!important;overflow-x:hidden!important}
+body{padding:0!important;background:#fff!important}
+
+#app{width:100%!important;min-width:100%!important;padding-top:env(safe-area-inset-top,0px)!important}
+#app>.top{
+ width:100%!important;height:70px!important;min-height:70px!important;
+ padding:8px 14px!important;margin:0!important;
+ display:flex!important;align-items:center!important;
+ position:sticky!important;top:0!important;z-index:1000!important;
+ background:#fff!important
+}
+#app>.top .mark{width:42px!important;height:42px!important;min-width:42px!important}
+#app>.top .logo{font-size:21px!important}
+#app>.top .icon{width:44px!important;min-width:44px!important;height:44px!important;font-size:24px!important}
+
+#app>.page{
+ width:100%!important;min-width:100%!important;
+ padding:12px 12px 155px!important;
+ min-height:calc(100vh - 70px)!important;
+}
+#app>#home.page{padding:0 0 155px!important}
+
+#feed{width:100%!important;overflow:visible!important}
+.card{width:100%!important;margin:0 0 20px!important;overflow:hidden!important;background:#fff!important}
+.thumb{
+ width:100%!important;aspect-ratio:16/9!important;
+ min-height:0!important;background:#222!important;
+ position:relative!important;overflow:hidden!important
+}
+.thumb img,.thumb .homePreview{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:cover!important;background:#222!important
+}
+.noThumb{width:100%;height:100%;display:grid;place-items:center;color:#fff;font-size:52px}
+.infoRow{display:flex!important;gap:10px!important;align-items:flex-start!important;padding:12px 14px 14px!important;min-height:72px!important}
+.videoInfo{min-width:0!important;flex:1!important}
+.videoInfo .title{font-size:18px!important;line-height:1.3!important;white-space:normal!important;overflow-wrap:anywhere!important}
+.videoInfo .sub{font-size:14px!important;line-height:1.35!important;white-space:normal!important}
+
+#app>.nav{
+ position:fixed!important;left:0!important;right:0!important;bottom:0!important;
+ width:100%!important;height:78px!important;min-height:78px!important;
+ display:flex!important;z-index:99999!important;
+ background:#fff!important;border-top:1px solid #ddd!important;
+ padding:4px 3px!important;opacity:1!important;visibility:visible!important
+}
+#app>.nav button{
+ flex:1 1 20%!important;width:20%!important;min-width:0!important;height:70px!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:center!important;background:#fff!important;color:#111!important;
+ opacity:1!important;visibility:visible!important;font-size:12px!important;
+ border:0!important;padding:3px 2px!important
+}
+#app>.nav b{color:#111!important;font-size:23px!important;line-height:25px!important}
+#app>.nav .plus b{font-size:31px!important}
+
+#shorts.page{background:#111!important;padding-left:0!important;padding-right:0!important;padding-bottom:155px!important}
+#shortFeed{width:100%!important}
+.short{
+ width:100%!important;margin:0 0 18px!important;
+ border-radius:0!important;background:#111!important;overflow:hidden!important
+}
+.short video{
+ display:block!important;width:100%!important;height:auto!important;
+ max-height:calc(100vh - 190px)!important;aspect-ratio:9/16!important;
+ object-fit:contain!important;background:#000!important
+}
+.shortPlaceholder{
+ width:100%!important;height:min(72vh,640px)!important;
+ display:grid!important;place-items:center!important;background:#111!important
+}
+.shortCaption{padding:12px 14px!important;font-size:16px!important;line-height:1.4!important}
+.shortRail{padding:8px 12px 12px!important;overflow-x:auto!important}
+.shortRail button{flex:0 0 auto!important;min-width:82px!important;color:#fff!important}
+
+@media(max-width:600px){
+ #app>.top{height:70px!important;min-height:70px!important}
+ #app>.page{padding-bottom:155px!important}
+ #app>#home.page{padding-bottom:155px!important}
+ .thumb{aspect-ratio:16/9!important}
+ .videoInfo .title{font-size:17px!important}
+ .videoInfo .sub{font-size:13px!important}
+}
+</style>
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -408,7 +494,11 @@ function renderChips(){
  document.querySelectorAll('[data-cat]').forEach(function(b){b.onclick=function(){category=b.dataset.cat;renderChips();renderHome()}})
 }
 function card(v){
- return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'<span class="duration">'+(v.isShort?'SHORT':'4:20')+'</span></div><div class="vidozaVidoza"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.channel)+' · '+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div></div></div>'
+ const media=v.thumbnail
+   ? '<img src="'+esc(v.thumbnail)+'" alt="">'
+   : (v.url ? '<video class="homePreview" muted playsinline preload="metadata" src="'+esc(v.url)+'"></video>'
+             : '<div class="noThumb">▶</div>');
+ return '<div class="card" data-video="'+esc(v.id)+'"><div class="thumb">'+media+'<span class="duration">'+(v.isShort?'SHORT':'4:20')+'</span></div><div class="infoRow"><div class="avatar">'+esc((v.channel||'V')[0])+'</div><div class="videoInfo"><div class="title">'+esc(v.title)+'</div><div class="sub">'+esc(v.channel)+' · '+esc(v.views||'0 views')+' · '+esc(v.age||'Just now')+'</div></div></div></div>'
 }
 function bindCards(root){root.querySelectorAll('[data-video]').forEach(function(x){x.onclick=function(){openVideo(x.dataset.video)}})}
 function renderHome(){

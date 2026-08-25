@@ -49,6 +49,79 @@ button{cursor:pointer}
 }
 </style>
 
+
+<style id="vidoza-shell-fix-v15">
+html,body{width:100%;min-height:100%;margin:0;overflow-x:hidden}
+body{padding:0!important}
+
+/* Login screen: keep the complete card below the Android status bar. */
+#auth{
+  position:fixed!important;
+  top:0!important;left:0!important;right:0!important;bottom:0!important;
+  width:100%!important;height:100%!important;min-height:100%!important;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 18px)!important;
+  overflow-y:auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#auth .authCard{
+  width:100%!important;
+  max-width:420px!important;
+  max-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 36px)!important;
+  overflow-y:auto!important;
+  margin:auto!important;
+}
+
+/* Logged-in shell: reserve the Android status-bar area only here. */
+#app{
+  width:100%!important;
+  min-height:100vh!important;
+  padding-top:env(safe-area-inset-top,0px)!important;
+  padding-bottom:0!important;
+}
+
+/* Header stays completely below the status bar. */
+#app>.top{
+  position:sticky!important;
+  top:0!important;
+  height:64px!important;
+  min-height:64px!important;
+  padding:8px 12px!important;
+  margin:0!important;
+}
+
+/* Page content starts below the header and leaves room for bottom nav. */
+#app>.page{
+  min-height:calc(100vh - 64px - env(safe-area-inset-top,0px))!important;
+  padding-bottom:112px!important;
+}
+#app>#home.page{padding-bottom:112px!important}
+
+/* Bottom navigation stays visible above Android's gesture/navigation area. */
+#app>.nav{
+  bottom:env(safe-area-inset-bottom,0px)!important;
+  height:76px!important;
+  min-height:76px!important;
+  padding-bottom:6px!important;
+}
+
+/* Create overlay must also respect the Android bottom area. */
+#createMenu{
+  padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
+}
+
+/* Prevent header controls from shrinking into each other. */
+#app>.top .logo{flex:0 0 auto!important}
+#app>.top .spacer{flex:1 1 auto!important;min-width:8px!important}
+#app>.top .icon{flex:0 0 42px!important;width:42px!important;height:42px!important}
+
+/* Very small screens */
+@media(max-height:650px){
+  #auth{align-items:flex-start!important}
+  #auth .authCard{margin-top:8px!important}
+}
+</style>
+
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>

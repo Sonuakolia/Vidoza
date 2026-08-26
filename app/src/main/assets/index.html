@@ -1644,14 +1644,23 @@ function setupAuth(){
 }
 function showAuth(){ $('auth').style.display='flex' }
 function hideAuth(){ $('auth').style.display='none' }
+async function ensureDb(){
+ if(db)return db;
+ if(window.supabase&&window.supabase.createClient){
+   try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)}catch(e){}
+ }
+ return db;
+}
 async function login(){
- if(!db){$('loginMsg').textContent='Connection is not ready. Please try again.';return}
+ await ensureDb();
+ if(!db){$('loginMsg').textContent='Internet connection is not ready. Please try again.';return}
  let e=$('loginEmail').value.trim(),p=$('loginPassword').value;
  if(!e||!p){$('loginMsg').textContent='Enter email and password.';return}
  $('loginMsg').textContent='Logging in...';
  try{let r=await db.auth.signInWithPassword({email:e,password:p});if(r.error)throw r.error;user=r.data.user;hideAuth();$('app').style.display='block';showPage('home',false);renderAccount()}catch(err){$('loginMsg').textContent=err.message||'Login failed'}}
 async function signup(){
- if(!db){$('signupMsg').textContent='Connection is not ready.';return}
+ await ensureDb();
+ if(!db){$('signupMsg').textContent='Internet connection is not ready.';return}
  let n=$('signupName').value.trim(),e=$('signupEmail').value.trim(),p=$('signupPassword').value;
  if(!n||!e||p.length<6){$('signupMsg').textContent='Enter name, email and 6+ character password.';return}
  $('signupMsg').textContent='Creating account...';
@@ -1690,7 +1699,7 @@ function fillVideoDetails(v){
 }
 function resetUploadForm(){
  editVideoId=null;
- $('uploadHeading').textContent='Upload Video';
+ if($('uploadHeading'))$('uploadHeading').textContent='Upload Video';
  $('videoFile').value='';$('thumbFile').value='';
  $('uploadTitle').value='';$('uploadDesc').value='';
  fillVideoDetails({});
@@ -2185,21 +2194,44 @@ function showSaved(){let a=videos.filter(function(v){return v.saved});$('youList
 function showLiked(){let a=videos.filter(function(v){return v.liked});$('youList').innerHTML=a.map(card).join('')||'<div class="empty">No liked videos yet.</div>';bindCards($('youList'))}
 
 async function boot(){
- setupAuth();wire();
- $('bootText').textContent='Starting Vidoza…';
- try{await hydrateMedia()}catch(e){}
- renderHome();renderShorts();
+ let startupError='';
  try{
-  if(window.supabase&&window.supabase.createClient){
-   db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+   try{setupAuth()}catch(e){startupError='Auth setup: '+(e.message||e)}
+   try{wire()}catch(e){startupError=startupError||('UI setup: '+(e.message||e))}
+   if($('bootText'))$('bootText').textContent='Starting Vidoza…';
+
+   try{await hydrateMedia()}catch(e){}
+   try{renderHome()}catch(e){startupError=startupError||('Home: '+(e.message||e))}
+   try{renderShorts()}catch(e){startupError=startupError||('Shorts: '+(e.message||e))}
+
    try{
-    let r=await db.auth.getSession();
-    if(r&&r.data&&r.data.session){user=r.data.session.user;$('app').style.display='block';renderAccount();hideAuth()}
+     if(window.supabase&&window.supabase.createClient){
+       db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+       try{
+         let r=await db.auth.getSession();
+         if(r&&r.data&&r.data.session){
+           user=r.data.session.user;
+           if($('app'))$('app').style.display='block';
+           try{renderAccount()}catch(e){}
+           try{hideAuth()}catch(e){}
+         }
+       }catch(e){}
+     }
    }catch(e){}
-  }
- }catch(e){}
- $('boot').style.display='none';
- if(!user){$('app').style.display='block';showAuth()}
+ }catch(e){
+   startupError=startupError||String(e&&e.message||e);
+ }finally{
+   if($('boot'))$('boot').style.display='none';
+   if(!user){
+     if($('app'))$('app').style.display='block';
+     try{showAuth()}catch(e){
+       if($('auth'))$('auth').style.display='flex';
+     }
+   }
+   if(startupError&&$('loginMsg')){
+     $('loginMsg').textContent='App started. Some screen setup was skipped.';
+   }
+ }
 }
 window.addEventListener('load',boot);
 })();
@@ -2223,5 +2255,19 @@ window.addEventListener('load',boot);
     <div><div id="storyViewerAvatar" class="avatar" style="width:80px;height:80px;margin:auto;font-size:30px">V</div><h2 id="storyViewerName">Vidoza Story</h2><p>Vidoza Story</p></div>
   </div>
 </div>
+
+<script>
+setTimeout(function(){
+  var b=document.getElementById('boot');
+  var a=document.getElementById('auth');
+  var app=document.getElementById('app');
+  if(b && b.style.display!=='none'){
+    b.style.display='none';
+    if(app)app.style.display='block';
+    if(a)a.style.display='flex';
+  }
+},5000);
+</script>
+
 </body>
 </html>

@@ -796,13 +796,91 @@ video::-webkit-media-controls-panel{display:none!important}
 @media(max-width:600px){.libraryItem{grid-template-columns:110px 1fr 30px}.libraryThumb{width:110px}}
 </style>
 
+
+<style id="vidoza-india-login-v37">
+/* V37 — approved India-inspired login background, kept light so login stays readable */
+#auth{
+  background:
+    radial-gradient(circle at 15% 24%, rgba(37,99,235,.10) 0 9%, transparent 9.5%),
+    linear-gradient(160deg,
+      rgba(255,153,51,.22) 0%,
+      rgba(255,255,255,.96) 33%,
+      rgba(255,255,255,.97) 62%,
+      rgba(19,136,8,.18) 100%) !important;
+  isolation:isolate;
+}
+#auth::before{
+  content:"";
+  position:fixed;
+  left:-55px;
+  top:11vh;
+  width:250px;
+  height:250px;
+  border:16px solid rgba(30,64,175,.075);
+  border-radius:50%;
+  z-index:-1;
+  background:
+    repeating-conic-gradient(from 0deg,
+      rgba(30,64,175,.07) 0deg 2deg,
+      transparent 2deg 15deg);
+  box-shadow:inset 0 0 0 52px rgba(255,255,255,.52);
+}
+#auth::after{
+  content:"🇮🇳";
+  position:fixed;
+  right:22px;
+  bottom:28px;
+  font-size:64px;
+  opacity:.16;
+  transform:rotate(-4deg);
+  z-index:-1;
+}
+#auth .authCard{
+  background:rgba(255,255,255,.82)!important;
+  border:1px solid rgba(255,255,255,.88)!important;
+  box-shadow:0 18px 55px rgba(15,23,42,.14)!important;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+#auth .authCard::before{
+  content:"WATCH  •  CREATE  •  CONNECT";
+  display:block;
+  text-align:center;
+  color:#6b7280;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:2.2px;
+  margin-bottom:14px;
+}
+#auth .vlogo{
+  background:linear-gradient(145deg,#ff9933 0%,#e11d48 48%,#7c3aed 100%)!important;
+  box-shadow:0 10px 28px rgba(225,29,72,.20);
+}
+#auth .authCard > div:first-child > div:last-child{
+  color:#6b7280!important;
+}
+#auth .authCard > div:first-child > div:last-child::after{
+  content:"  🇮🇳";
+}
+#auth .primary{
+  background:linear-gradient(90deg,#e11d48,#7c3aed)!important;
+}
+#auth .link{color:#d41445!important}
+@media(max-width:600px){
+  #auth{padding-left:14px!important;padding-right:14px!important}
+  #auth::before{width:205px;height:205px;left:-70px;top:13vh;border-width:13px}
+  #auth::after{font-size:52px;right:14px;bottom:18px}
+  #auth .authCard{border-radius:24px!important;padding:24px 20px!important}
+}
+</style>
+
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
 
 <div id="auth">
  <div class="authCard">
-  <div style="text-align:center"><div class="vlogo">V</div><h1>Vidoza</h1><div style="color:#777">India's video platform</div></div>
+  <div style="text-align:center"><div class="vlogo">V</div><h1>Vidoza</h1><div style="color:#777">Bharat ka Apna Video Platform</div></div>
   <div id="loginBox">
    <h2>Welcome back</h2>
    <input id="loginEmail" class="authInput" type="email" placeholder="Email address">

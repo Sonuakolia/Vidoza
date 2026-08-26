@@ -930,8 +930,41 @@ video::-webkit-media-controls-panel{display:none!important}
 #shortUploadBtn:disabled,#uploadBtn:disabled{opacity:.55;pointer-events:none}
 </style>
 
+
+<style id="vidoza-clean-final-v43">
+.cleanHomeBar{height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#fff;border-bottom:1px solid #eee}
+.cleanHomeBar b{font-size:21px}.cleanHomeBar button{width:40px;height:40px;border:0;border-radius:50%;background:#f2f2f4;font-size:22px}
+.cleanShortsTop{position:sticky;top:0;z-index:80;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;background:#050505;color:#fff}
+.cleanShortsTop>b{font-size:23px}.cleanShortsTop>div{display:flex;gap:8px}.cleanShortsTop button{height:40px;border:0;border-radius:20px;padding:0 13px;font-weight:800}.cleanShortsTop button:first-child{width:40px;padding:0;background:#242424;color:#fff;font-size:21px}.cleanShortsTop button:last-child{background:#fff;color:#111}
+.cleanShortEmpty{min-height:calc(100vh - 190px);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:24px}
+.cleanShortEmptyIcon{width:78px;height:78px;border-radius:24px;background:#1d1d1d;display:grid;place-items:center;font-size:34px}.cleanShortEmpty h2{margin:16px 0 5px}.cleanShortEmpty p{margin:0;color:#aaa}
+.shortSelectClean{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#050505;color:#fff;padding:28px;text-align:center}
+.roundClose{position:absolute;left:22px;top:22px;width:52px;height:52px;border-radius:50%;border:0;background:#242424;color:#fff;font-size:32px}
+.shortSelectIcon{font-size:64px;margin-bottom:12px}.shortSelectClean h1{font-size:30px;margin:4px 0}.shortSelectClean p{color:#bbb;font-size:16px;margin:8px 0 22px}.bigWhiteBtn{border:0;border-radius:28px;background:#fff;color:#111;padding:15px 28px;font-size:17px;font-weight:900}.shortSelectHint{margin-top:14px;color:#888;font-size:12px;max-width:320px}
+.globalUploadOverlay{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.76);align-items:center;justify-content:center;padding:20px}
+.globalUploadCard{width:min(92vw,430px);background:#fff;border-radius:22px;padding:16px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.globalUploadPreview{width:100%;aspect-ratio:16/9;background:#111;border-radius:15px;overflow:hidden}.globalUploadPreview video{width:100%;height:100%;object-fit:contain;background:#111}
+.globalUploadInfo{display:flex;justify-content:space-between;gap:12px;margin:13px 2px 9px}.globalUploadInfo b{font-size:16px}.globalUploadInfo span{font-size:16px;font-weight:900;color:#e11d48}
+.globalUploadTrack{height:11px;background:#ececf0;border-radius:999px;overflow:hidden}.globalUploadTrack>div{height:100%;width:0;background:linear-gradient(90deg,#e11d48,#7c3aed);transition:width .12s linear}
+.globalUploadSubtext{text-align:center;color:#666;font-size:12px;margin-top:10px}
+#shortUpload .stage{min-height:calc(100vh - 120px)}
+</style>
+
 </head>
 <body>
+
+<div id="globalUploadOverlay" class="globalUploadOverlay" style="display:none">
+  <div class="globalUploadCard">
+    <div class="globalUploadPreview"><video id="globalUploadPreview" muted playsinline></video></div>
+    <div class="globalUploadInfo">
+      <b id="globalUploadTitle">Uploading video…</b>
+      <span id="globalUploadPercent">0%</span>
+    </div>
+    <div class="globalUploadTrack"><div id="globalUploadBar"></div></div>
+    <div id="globalUploadSubtext" class="globalUploadSubtext">Please keep Vidoza open.</div>
+  </div>
+</div>
+
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
 
 <div id="auth">
@@ -961,13 +994,12 @@ video::-webkit-media-controls-panel{display:none!important}
  <div class="top"><div class="logo"><span class="mark">V▶</span>Vidoza</div><div class="spacer"></div><button class="icon notificationIcon" id="notificationBtn">♢<span id="notificationDot"></span></button><button class="icon" id="searchBtn">⌕</button><button class="icon" id="settingsBtn">⚙</button></div>
 
  
-<div id="home" class="page active"><div class="homeHardRefresh"><b>Home</b><button id="homeHardRefreshBtn">↻ Refresh</button></div>
-<div class="homeRefreshBar">
+<div id="home" class="page active">
+<div class="cleanHomeBar">
   <b>Home</b>
-  <button id="homeRefreshBtn" type="button">↻ Refresh</button>
+  <button id="cleanHomeRefreshBtn" type="button">↻</button>
 </div>
-
-  <div class="homeTabs">
+<div class="homeTabs">
     <button id="homeForYouTab" class="homeTab active" type="button">For You</button>
     <button id="homeFollowingTab" class="homeTab" type="button">Following</button>
   </div>
@@ -976,13 +1008,17 @@ video::-webkit-media-controls-panel{display:none!important}
   <div id="feed"></div>
 </div>
 
-<div id="shorts" class="page"><div class="shortsFixedHeader">
-          <b>Shorts</b>
-          <div>
-            <button id="shortsRefreshNowBtn" type="button">↻ Refresh</button>
-            <button id="shortsUploadNowBtn" class="shortsUploadMain" type="button">＋ Upload Short</button>
-          </div>
-        </div><div class="shortFeedTopBar"><b>Shorts</b><div><button id="shortRefreshBtn" type="button">↻</button><button id="shortTopUploadBtn" type="button">＋</button></div></div><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
+
+<div id="shorts" class="page">
+  <div class="cleanShortsTop">
+    <b>Shorts</b>
+    <div>
+      <button id="cleanShortsRefreshBtn" type="button" aria-label="Refresh Shorts">↻</button>
+      <button id="cleanShortsUploadBtn" type="button">＋ Upload</button>
+    </div>
+  </div>
+  <div id="shortFeed"></div>
+</div>
 
  
 <div id="social" class="page section">
@@ -1096,43 +1132,16 @@ video::-webkit-media-controls-panel{display:none!important}
  
 
 
-<div id="shortUpload" class="page shortCreatePage">
+<div id="shortUpload" class="page shortCreatePage"><input id="shortFile" type="file" accept="video/*" style="display:none">
 
-  <div id="shortStageSelect" class="shortStage active">
-    <div class="shortFullShell">
-      <div class="shortFullCanvas">
-        <video id="shortCameraVideo" playsinline muted></video>
-
-        <button id="shortBackBtn" class="shortTopIcon shortClose" type="button">✕</button>
-        <button id="shortAddSoundTop" class="shortSound" type="button">♪ Add sound</button>
-        <button id="shortSettingsBtn" class="shortTopIcon shortGear" type="button">⚙</button>
-
-        <div class="shortRightRail">
-          <button class="captureTool" data-capture-tool="flip"><b>↻</b><span>Flip</span></button>
-          <button class="captureTool" data-capture-tool="timer"><b>⏱</b><span>Timer</span></button>
-          <button class="captureTool" data-capture-tool="length"><b>90s</b><span>Length</span></button>
-          <button class="captureTool" data-capture-tool="effects"><b>✦</b><span>Effects</span></button>
-          <button class="captureTool" data-capture-tool="speed"><b>1×</b><span>Speed</span></button>
-        </div>
-
-        <div class="shortBottomRail">
-          <label for="shortFile" class="shortGallery">
-            <div class="shortGalleryTile">＋</div>
-            <span>Gallery</span>
-          </label>
-          <input id="shortFile" type="file" accept="video/*" style="display:none">
-
-          <button id="shortRecordBtn" class="shortRecordBtn" type="button"></button>
-
-          <div class="shortModeTabs">
-            <button type="button" id="shortModeVideo">Video</button>
-            <button type="button" id="shortModeShort" class="active">Short</button>
-            <button type="button" id="shortModeLive">Live</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div id="shortStageSelect" class="shortStage active"><div class="shortSelectClean">
+      <button id="shortSelectCloseBtn" class="roundClose" type="button">×</button>
+      <div class="shortSelectIcon">▶</div>
+      <h1>Create Short</h1>
+      <p>Choose a vertical video up to 90 seconds.</p>
+      <button id="shortChooseGalleryBtn" class="bigWhiteBtn" type="button">Choose from gallery</button>
+      <div class="shortSelectHint">After selecting, you can trim, add cover, caption and details.</div>
+    </div></div>
 
   <div id="shortStageEdit" class="shortStage">
     <div class="shortEditShell">
@@ -1747,8 +1756,7 @@ function renderShorts(){
  });
  save();
  if(!shorts.length){
-   $('shortFeed').innerHTML='<div class="shortEmptyCreate"><div class="shortEmptyIcon">⚡</div><h2>Create your first Short</h2><p>Upload a vertical video up to 90 seconds.</p><button id="emptyShortUploadBtn" class="btn primary">Upload Short Video</button></div>';
-   setTimeout(function(){if($('emptyShortUploadBtn'))$('emptyShortUploadBtn').onclick=openShortUploader},0);
+   $('shortFeed').innerHTML='<div class="cleanShortEmpty"><div class="cleanShortEmptyIcon">▶</div><h2>No Shorts yet</h2><p>Tap Upload above to select your first Short.</p></div>';
    return;
  }
  $('shortFeed').innerHTML=shorts.map(function(v){
@@ -1778,9 +1786,8 @@ function renderShorts(){
      '<div class="shortCommentPanel"><div class="shortCommentBox"><input data-comment-input="'+esc(v.id)+'" placeholder="Write a comment"><button data-comment-post="'+esc(v.id)+'">Post</button></div>'+
      '<div class="shortComments">'+(comments.length?comments.map(function(c){return '<div>'+esc(c)+'</div>'}).join(''):'<div style="opacity:.7">No comments yet</div>')+'</div></div>'+
    '</div>';
- }).join('')+'<button id="shortFloatingUpload" class="shortFloatingUpload" type="button">＋ Upload Short</button>';
+ }).join('');
 
- if($('shortFloatingUpload'))$('shortFloatingUpload').onclick=openShortUploader;
  document.querySelectorAll('[data-short-like]').forEach(function(b){b.onclick=function(){shortLike(b.dataset.shortLike)}});
  document.querySelectorAll('[data-short-save]').forEach(function(b){b.onclick=function(){shortSave(b.dataset.shortSave)}});
  document.querySelectorAll('[data-short-share]').forEach(function(b){b.onclick=function(){let v=findShort(b.dataset.shortShare);if(v)shareText(v.title)}});
@@ -2235,10 +2242,11 @@ function setVideoUploadProgress(percent,text){
  if($('videoUploadProgressBar'))$('videoUploadProgressBar').style.width=p+'%';
  if($('videoUploadPercent'))$('videoUploadPercent').textContent=p+'%';
  if($('videoUploadProgressText'))$('videoUploadProgressText').textContent=text||'Uploading video…';
- if($('videoPreviewUploadOverlay'))$('videoPreviewUploadOverlay').style.display='block';
- if($('videoPreviewUploadBar'))$('videoPreviewUploadBar').style.width=p+'%';
- if($('videoPreviewUploadPercent'))$('videoPreviewUploadPercent').textContent=p+'%';
- if($('videoPreviewUploadText'))$('videoPreviewUploadText').textContent=text||'Uploading video…';
+
+ if($('globalUploadOverlay'))$('globalUploadOverlay').style.display='flex';
+ if($('globalUploadBar'))$('globalUploadBar').style.width=p+'%';
+ if($('globalUploadPercent'))$('globalUploadPercent').textContent=p+'%';
+ if($('globalUploadTitle'))$('globalUploadTitle').textContent=text||'Uploading video…';
 }
 function showVideoUploadFileInfo(file){
  if(!$('videoUploadFileInfo')||!file)return;
@@ -2266,6 +2274,17 @@ async function uploadVideoToCloud(file,id){
  if(!url)throw new Error('Public video URL was not created');
  return {path:path,url:url};
 }
+function hideGlobalUploadOverlay(delay){
+ setTimeout(function(){if($('globalUploadOverlay'))$('globalUploadOverlay').style.display='none'},delay||700);
+}
+function setGlobalUploadPreview(file){
+ if(!$('globalUploadPreview')||!file)return;
+ try{
+   if(window.__vidozaGlobalPreview)URL.revokeObjectURL(window.__vidozaGlobalPreview);
+   window.__vidozaGlobalPreview=URL.createObjectURL(file);
+   $('globalUploadPreview').src=window.__vidozaGlobalPreview;
+ }catch(e){}
+}
 async function uploadVideo(){
  if(!user){toast('Please login first');return}
  if(videoUploadBusy){toast('Upload is already in progress');return}
@@ -2284,7 +2303,8 @@ async function uploadVideo(){
  if($('videoUploadSuccess'))$('videoUploadSuccess').style.display='none';
  if($('uploadStatus')){$('uploadStatus').style.color='#111';$('uploadStatus').textContent='Uploading video…'}
  showVideoUploadFileInfo(originalFile);
- setVideoUploadProgress(0,'Reading video…');
+ setGlobalUploadPreview(originalFile);
+ setVideoUploadProgress(0,'Uploading video…');
 
  try{
    // 0–80% = actual bytes read from the selected file.
@@ -2336,12 +2356,13 @@ async function uploadVideo(){
 
    setVideoUploadProgress(100,'Upload complete');
    finishVideoUploadUI(v);
-   if($('uploadStatus')){
-     $('uploadStatus').style.color='#16a34a';
-     $('uploadStatus').textContent='✓ Video uploaded successfully';
-   }
+   if($('uploadStatus')){$('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='✓ Video uploaded successfully';}
+   if($('globalUploadSubtext'))$('globalUploadSubtext').textContent='✓ Video uploaded successfully';
+   hideGlobalUploadOverlay(1200);
  }catch(e){
    setVideoUploadProgress(0,'Upload failed — Retry');
+   if($('globalUploadSubtext'))$('globalUploadSubtext').textContent='Upload failed — Retry';
+   hideGlobalUploadOverlay(1800);
    if($('uploadStatus')){
      $('uploadStatus').style.color='#dc2626';
      $('uploadStatus').textContent='Upload failed — Retry: '+(e.message||'Storage error');
@@ -2367,10 +2388,7 @@ function openShortUploader(){
  resetShortFlow();
  showPage('shortUpload');
  showShortStage('shortStageSelect');
- setTimeout(function(){
-   const f=$('shortFile');
-   if(f){f.value='';f.click()}
- },180);
+ if($('shortStatus')){$('shortStatus').style.color='#fff';$('shortStatus').textContent='Choose a video from gallery to create a Short.'}
 }
 function openShortFromFile(file){
  shortEditFile=file;
@@ -2468,6 +2486,11 @@ function setShortUploadProgress(percent,text){
  if($('shortUploadProgressBar'))$('shortUploadProgressBar').style.width=p+'%';
  if($('shortUploadPercent'))$('shortUploadPercent').textContent=p+'%';
  if($('shortUploadProgressText'))$('shortUploadProgressText').textContent=text||'Uploading Short…';
+
+ if($('globalUploadOverlay'))$('globalUploadOverlay').style.display='flex';
+ if($('globalUploadBar'))$('globalUploadBar').style.width=p+'%';
+ if($('globalUploadPercent'))$('globalUploadPercent').textContent=p+'%';
+ if($('globalUploadTitle'))$('globalUploadTitle').textContent=text||'Uploading Short…';
 }
 async function uploadShort(){
  if(!user){toast('Please login first');return}
@@ -2483,6 +2506,7 @@ async function uploadShort(){
 
  const caption=$('shortCaption')?$('shortCaption').value.trim():'';
  const title=(caption||((shortEditFile.name||'Vidoza Short').replace(/\.[^.]+$/,''))).slice(0,100);
+ setGlobalUploadPreview(shortEditFile);
  if($('shortUploadFileInfo')){
    const mb=(shortEditFile.size/1024/1024).toFixed(shortEditFile.size>10*1024*1024?1:2);
    $('shortUploadFileInfo').textContent=(shortEditFile.name||'Selected Short')+' • '+mb+' MB • '+fmtTime(duration);
@@ -2527,8 +2551,12 @@ async function uploadShort(){
    setShortUploadProgress(100,'Upload complete');
    if($('shortStatus')){$('shortStatus').style.color='#16a34a';$('shortStatus').textContent='✓ Short uploaded successfully'}
    if($('shortUploadSuccess'))$('shortUploadSuccess').style.display='block';
+   if($('globalUploadSubtext'))$('globalUploadSubtext').textContent='✓ Short uploaded successfully';
+   hideGlobalUploadOverlay(1200);
  }catch(e){
    setShortUploadProgress(0,'Upload failed — Retry');
+   if($('globalUploadSubtext'))$('globalUploadSubtext').textContent='Upload failed — Retry';
+   hideGlobalUploadOverlay(1800);
    if($('shortStatus')){$('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Upload failed — Retry: '+(e.message||'Storage error')}
  }finally{
    shortUploadBusy=false;
@@ -2538,6 +2566,16 @@ async function uploadShort(){
 function policy(title,text){$('policyContent').innerHTML='<div class="h1">'+esc(title)+'</div><p style="line-height:1.7">'+esc(text)+'</p>';showPage('policy')}
 
 function wire(){
+ if($('cleanHomeRefreshBtn'))$('cleanHomeRefreshBtn').onclick=async function(){
+   this.disabled=true;try{await hydrateMedia();renderHome()}catch(e){}this.disabled=false;
+ };
+ if($('cleanShortsRefreshBtn'))$('cleanShortsRefreshBtn').onclick=async function(){
+   this.disabled=true;try{await hydrateMedia();renderShorts()}catch(e){}this.disabled=false;
+ };
+ if($('cleanShortsUploadBtn'))$('cleanShortsUploadBtn').onclick=openShortUploader;
+ if($('shortChooseGalleryBtn'))$('shortChooseGalleryBtn').onclick=function(){if($('shortFile'))$('shortFile').click()};
+ if($('shortSelectCloseBtn'))$('shortSelectCloseBtn').onclick=function(){showPage('shorts');renderShorts()};
+
  $('storyClose').onclick=function(){$('storyViewer').style.display='none'};
  document.addEventListener('change',function(e){if(e.target&&e.target.id==='profilePhotoInput'){
    const f=e.target.files[0]; if(!f)return;
@@ -2561,7 +2599,7 @@ function wire(){
  if($('videoEditPreview'))$('videoEditPreview').onclick=function(){const b=$('videoPreviewPlay');if(this.paused){this.play();b.style.display='none'}else{this.pause();b.style.display='grid'}};
  if($('videoNextBtn'))$('videoNextBtn').onclick=goVideoDetails;
  if($('videoTrimTool'))$('videoTrimTool').onclick=function(){$('videoTrimBox').classList.toggle('open')};
- if($('videoCoverTool'))$('videoCoverTool').onclick=captureLongVideoCover;
+ if($('videoCoverTool'))$('videoCoverTool').onclick=function(){captureLongVideoCover();toast('Cover selected from current video frame')};
  if($('videoReplaceTool'))$('videoReplaceTool').onclick=function(){$('videoFile').click()};
  if($('videoTrimStart'))$('videoTrimStart').oninput=updateLongVideoTrim;
  if($('videoTrimEnd'))$('videoTrimEnd').oninput=updateLongVideoTrim;
@@ -2593,7 +2631,6 @@ function wire(){
  if($('hqWifiSetting')){$('hqWifiSetting').checked=!!appPrefs.hqWifi;$('hqWifiSetting').onchange=function(){appPrefs.hqWifi=this.checked;save()}};
 
  $('navHome').onclick=async function(){showPage('home');try{await hydrateMedia()}catch(e){}renderHome()};
- if($('homeHardRefreshBtn'))$('homeHardRefreshBtn').onclick=async function(){this.disabled=true;this.textContent='Refreshing…';try{await hydrateMedia();renderHome()}catch(e){}this.disabled=false;this.textContent='↻ Refresh'};
 if($('homeRefreshBtn'))$('homeRefreshBtn').onclick=async function(){
   const b=this;
   b.disabled=true;
@@ -2652,14 +2689,7 @@ if($('creatorBackBtn'))$('creatorBackBtn').onclick=function(){showPage('subscrip
 document.querySelectorAll('.creatorTab').forEach(function(b){b.onclick=function(){renderCreatorTab(b.dataset.creatorTab)}});
 
 
-if($('shortModeVideo'))$('shortModeVideo').onclick=function(){resetShortFlow();showPage('upload');setTimeout(function(){if($('videoFile'))$('videoFile').click()},120)};
-if($('shortModeShort'))$('shortModeShort').onclick=function(){showShortStage('shortStageSelect')};
-if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();showPage('live')};
-
-
  if($('shortFile'))$('shortFile').onchange=function(){if(this.files[0])openShortFromFile(this.files[0])};
-
- if($('shortsUploadNowBtn'))$('shortsUploadNowBtn').onclick=openShortUploader;
  if($('shortsRefreshNowBtn'))$('shortsRefreshNowBtn').onclick=async function(){
    const b=this;b.disabled=true;b.textContent='Refreshing…';
    try{await hydrateMedia();renderShorts();}catch(e){}
@@ -2667,9 +2697,6 @@ if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();sho
  };
  if($('viewShortsAfterUploadBtn'))$('viewShortsAfterUploadBtn').onclick=function(){showPage('shorts');renderShorts()};
  if($('goShortChannelBtn'))$('goShortChannelBtn').onclick=function(){showPage('you');renderProfileTab('reels')};
-
-
- if($('shortTopUploadBtn'))$('shortTopUploadBtn').onclick=openShortUploader;
  if($('shortRefreshBtn'))$('shortRefreshBtn').onclick=async function(){
    const b=this;b.disabled=true;b.textContent='…';
    try{
@@ -2680,9 +2707,6 @@ if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();sho
    }catch(e){toast('Refresh failed')}
    finally{b.disabled=false;b.textContent='↻'}
  };
-
- if($('shortRecordBtn'))$('shortRecordBtn').onclick=function(){if($('shortFile'))$('shortFile').click()};
- if($('shortBackBtn'))$('shortBackBtn').onclick=function(){resetShortFlow();showPage('home')};
  if($('editorBackBtn'))$('editorBackBtn').onclick=function(){resetShortFlow()};
  if($('detailsBackBtn'))$('detailsBackBtn').onclick=function(){showShortStage('shortStageEdit')};
  if($('editorTapPlay'))$('editorTapPlay').onclick=function(){const v=$('shortEditorVideo');if(v.paused){v.play();this.style.display='none'}else{v.pause();this.style.display='grid'}};
@@ -2882,5 +2906,9 @@ window.addEventListener('unhandledrejection',function(e){
 });
 </script>
 
+<button id="createShortBtn" style="display:none" type="button"></button>
+<button id="homeRefreshBtn" type="button" style="display:none"></button>
+<button id="shortRefreshBtn" type="button" style="display:none"></button>
+<button id="shortsRefreshNowBtn" type="button" style="display:none"></button>
 </body>
 </html>

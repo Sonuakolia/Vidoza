@@ -775,6 +775,27 @@ video::-webkit-media-controls-panel{display:none!important}
 .creatorTab.active,.profileTab.active{background:#111!important;color:#fff!important}
 </style>
 
+
+<style id="vidoza-full-ready-v36">
+.notificationIcon{position:relative}.notificationIcon #notificationDot{display:none;position:absolute;right:5px;top:5px;width:8px;height:8px;border-radius:50%;background:#e11d48}
+.libraryHeader{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.libraryTabs,.notificationTabs{display:flex;gap:7px;overflow-x:auto;margin-bottom:10px}
+.libraryTab,.notificationTab{border:0;background:#f1f1f3;border-radius:18px;padding:9px 14px;font-weight:700;white-space:nowrap}
+.libraryTab.active,.notificationTab.active{background:#111;color:#fff}
+.libraryActions{display:flex;justify-content:flex-end;margin-bottom:8px}
+.libraryItem{display:grid;grid-template-columns:125px 1fr 36px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
+.libraryThumb{width:125px;aspect-ratio:16/9;border-radius:10px;background:#111;color:#fff;display:grid;place-items:center;overflow:hidden;font-size:28px}
+.libraryThumb img{width:100%;height:100%;object-fit:cover}.libraryInfo{min-width:0}.libraryInfo b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.notificationItem{width:100%;border:0;border-bottom:1px solid #eee;background:#fff;display:grid;grid-template-columns:48px 1fr;gap:12px;text-align:left;padding:12px 6px}
+.notificationItem.unread{background:#fff7f8}.notificationAvatar{width:48px;height:48px;border-radius:50%;background:#e5e7eb;display:grid;place-items:center;font-weight:800}.notificationItem p{margin:4px 0;color:#555}.notificationItem small{color:#888}
+.settingsGroup{border:1px solid #eee;border-radius:16px;overflow:hidden;margin-bottom:14px;background:#fff}.settingsHeading{padding:12px 14px 7px;font-size:12px;font-weight:800;color:#777;text-transform:uppercase}
+.settingsRow{width:100%;border:0;border-top:1px solid #eee;background:#fff;display:grid;grid-template-columns:42px 1fr 22px;align-items:center;text-align:left;padding:13px 14px}.settingsRow:first-of-type{border-top:0}.settingsRow span{font-size:21px}.settingsRow div{display:flex;flex-direction:column;gap:2px}.settingsRow small,.toggleRow small{color:#777;font-size:12px}.settingsRow em{font-style:normal;font-size:24px;color:#888}
+.toggleRow{display:grid;grid-template-columns:1fr 52px;align-items:center;gap:10px;border-top:1px solid #eee;padding:13px 14px}.toggleRow div{display:flex;flex-direction:column;gap:3px}.toggleRow input{width:48px;height:25px}
+.logoutWide{width:100%;height:52px;border:0;border-radius:14px;background:#fff1f2;color:#e11d48;font-weight:800;font-size:16px}
+.settingInfo{background:#f7f7f8;border-radius:16px;padding:16px}.blockedRow{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee}
+@media(max-width:600px){.libraryItem{grid-template-columns:110px 1fr 30px}.libraryThumb{width:110px}}
+</style>
+
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -803,7 +824,7 @@ video::-webkit-media-controls-panel{display:none!important}
 </div>
 
 <div class="app" id="app">
- <div class="top"><div class="logo"><span class="mark">V▶</span>Vidoza</div><div class="spacer"></div><button class="icon" id="searchBtn">⌕</button><button class="icon" id="settingsBtn">⚙</button></div>
+ <div class="top"><div class="logo"><span class="mark">V▶</span>Vidoza</div><div class="spacer"></div><button class="icon notificationIcon" id="notificationBtn">♢<span id="notificationDot"></span></button><button class="icon" id="searchBtn">⌕</button><button class="icon" id="settingsBtn">⚙</button></div>
 
  
 <div id="home" class="page active">
@@ -1110,6 +1131,40 @@ video::-webkit-media-controls-panel{display:none!important}
 <div id="player" class="page"></div>
 
  
+
+<div id="library" class="page section">
+  <div class="libraryHeader">
+    <button id="libraryBackBtn" class="btn soft">← Back</button>
+    <div class="h1" id="libraryTitle" style="margin:0">Library</div>
+  </div>
+  <div class="libraryTabs">
+    <button class="libraryTab active" data-library="history">History</button>
+    <button class="libraryTab" data-library="saved">Saved</button>
+    <button class="libraryTab" data-library="liked">Liked</button>
+    <button class="libraryTab" data-library="downloads">Downloads</button>
+  </div>
+  <div class="libraryActions">
+    <button id="clearHistoryBtn" class="btn soft">Clear history</button>
+  </div>
+  <div id="libraryList"></div>
+</div>
+
+<div id="notifications" class="page section">
+  <div class="libraryHeader">
+    <button id="notificationsBackBtn" class="btn soft">← Back</button>
+    <div class="h1" style="margin:0">Notifications</div>
+  </div>
+  <div class="notificationTabs">
+    <button class="notificationTab active" data-notification-filter="all">All</button>
+    <button class="notificationTab" data-notification-filter="activity">Activity</button>
+    <button class="notificationTab" data-notification-filter="creator">Creators</button>
+  </div>
+  <div class="row" style="justify-content:flex-end;margin:8px 0">
+    <button id="markAllReadBtn" class="btn soft">Mark all read</button>
+  </div>
+  <div id="notificationList"></div>
+</div>
+
 <div id="live" class="page section">
 <div class="h1">Go Live</div>
 <div class="notice">Live streaming setup</div>
@@ -1118,9 +1173,42 @@ video::-webkit-media-controls-panel{display:none!important}
 <button class="btn primary" id="startLiveBtn">🔴 Start Live</button>
 <div id="liveStatus" class="authMsg"></div>
 </div>
-<div id="settings" class="page section"><div class="h1">Settings</div><div class="menu"><button id="privacyBtn">🔒 Privacy Policy</button><button id="termsBtn">📄 Terms</button><button id="guidelinesBtn">🛡 Community Guidelines</button><button id="supportBtn">🎧 Help & Support</button><button id="settingsLogout">🚪 Logout</button></div></div>
 
- <div id="support" class="page section"><div class="h1">Help & Support</div><input id="supportContact" class="field" placeholder="Email / Mobile"><textarea id="supportText" class="field" rows="6" placeholder="Describe your problem"></textarea><button class="btn primary" id="supportSubmit">Submit Ticket</button><div id="supportStatus" class="authMsg"></div></div>
+<div id="settings" class="page section">
+  <div class="h1">Settings</div>
+
+  <div class="settingsGroup">
+    <div class="settingsHeading">Account</div>
+    <button class="settingsRow" id="accountSettingsBtn"><span>👤</span><div><b>Account</b><small>Profile, channel and account info</small></div><em>›</em></button>
+    <button class="settingsRow" id="privacySettingsBtn"><span>🔒</span><div><b>Privacy</b><small>Private account and blocked users</small></div><em>›</em></button>
+    <button class="settingsRow" id="notificationSettingsBtn"><span>🔔</span><div><b>Notifications</b><small>Likes, comments and creator alerts</small></div><em>›</em></button>
+  </div>
+
+  <div class="settingsGroup">
+    <div class="settingsHeading">Playback</div>
+    <label class="toggleRow"><div><b>Autoplay videos</b><small>Play videos automatically</small></div><input id="autoplaySetting" type="checkbox"></label>
+    <label class="toggleRow"><div><b>Data saver</b><small>Reduce video data usage</small></div><input id="dataSaverSetting" type="checkbox"></label>
+    <label class="toggleRow"><div><b>High quality on Wi‑Fi</b><small>Prefer better playback quality</small></div><input id="hqWifiSetting" type="checkbox"></label>
+  </div>
+
+  <div class="settingsGroup">
+    <div class="settingsHeading">Safety & support</div>
+    <button class="settingsRow" id="blockedUsersBtn"><span>⛔</span><div><b>Blocked users</b><small>Manage blocked profiles</small></div><em>›</em></button>
+    <button class="settingsRow" id="privacyBtn"><span>📄</span><div><b>Privacy policy</b></div><em>›</em></button>
+    <button class="settingsRow" id="termsBtn"><span>📃</span><div><b>Terms of service</b></div><em>›</em></button>
+    <button class="settingsRow" id="guidelinesBtn"><span>🛡</span><div><b>Community guidelines</b></div><em>›</em></button>
+    <button class="settingsRow" id="supportBtn"><span>🎧</span><div><b>Help & support</b></div><em>›</em></button>
+  </div>
+
+  <button class="logoutWide" id="settingsLogout">Logout</button>
+</div>
+
+<div id="settingsDetail" class="page section">
+  <button id="settingsDetailBackBtn" class="btn soft">← Back</button>
+  <div id="settingsDetailContent" style="margin-top:14px"></div>
+</div>
+
+<div id="support" class="page section"><div class="h1">Help & Support</div><input id="supportContact" class="field" placeholder="Email / Mobile"><textarea id="supportText" class="field" rows="6" placeholder="Describe your problem"></textarea><button class="btn primary" id="supportSubmit">Submit Ticket</button><div id="supportStatus" class="authMsg"></div></div>
 
  <div id="policy" class="page section"><div id="policyContent"></div></div>
 
@@ -1145,6 +1233,12 @@ let videos=JSON.parse(localStorage.getItem('vidozaVideosSafe')||'null')||[
 ];
 let shorts=JSON.parse(localStorage.getItem('vidozaShortsSafe')||'[]');
 let posts=JSON.parse(localStorage.getItem('vidozaPostsSafe')||'[]');
+let notifications=JSON.parse(localStorage.getItem('vidozaNotifications')||'[]');
+let historyItems=JSON.parse(localStorage.getItem('vidozaHistory')||'[]');
+let blockedUsers=JSON.parse(localStorage.getItem('vidozaBlockedUsers')||'[]');
+let appPrefs=JSON.parse(localStorage.getItem('vidozaPrefs')||'{"autoplay":true,"dataSaver":false,"hqWifi":true,"privateAccount":false,"notifyLikes":true,"notifyComments":true,"notifyCreators":true}');
+let libraryMode='history',notificationFilter='all';
+
 
 function $(id){return document.getElementById(id)}
 function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -1236,7 +1330,86 @@ function save(){
  localStorage.setItem('vidozaVideosSafe',JSON.stringify(clean(videos)));
  localStorage.setItem('vidozaShortsSafe',JSON.stringify(clean(shorts)));
  localStorage.setItem('vidozaPostsSafe',JSON.stringify(clean(posts)));
+ localStorage.setItem('vidozaNotifications',JSON.stringify(notifications));
+ localStorage.setItem('vidozaHistory',JSON.stringify(historyItems));
+ localStorage.setItem('vidozaBlockedUsers',JSON.stringify(blockedUsers));
+ localStorage.setItem('vidozaPrefs',JSON.stringify(appPrefs));
+
 }
+
+function addNotification(type,title,text,creator){
+ notifications.unshift({id:'n-'+Date.now()+'-'+Math.random(),type:type||'activity',title:title||'Vidoza',text:text||'',creator:creator||'',read:false,createdAt:Date.now()});
+ notifications=notifications.slice(0,100);
+ save();updateNotificationDot();
+}
+function updateNotificationDot(){
+ const d=$('notificationDot');if(!d)return;
+ d.style.display=notifications.some(function(n){return !n.read})?'block':'none';
+}
+function addHistory(v,kind){
+ if(!v)return;
+ historyItems=historyItems.filter(function(x){return !(x.id===v.id&&x.kind===kind)});
+ historyItems.unshift({id:v.id,kind:kind||'video',title:v.title||'Untitled',channel:v.channel||'Vidoza',thumbnail:v.thumbnail||'',at:Date.now()});
+ historyItems=historyItems.slice(0,100);save();
+}
+function renderLibrary(mode){
+ libraryMode=mode||libraryMode;
+ document.querySelectorAll('.libraryTab').forEach(function(b){b.classList.toggle('active',b.dataset.library===libraryMode)});
+ let list=[];
+ if(libraryMode==='history'){
+   list=historyItems.map(function(h){
+     const src=h.kind==='short'?shorts:videos;const v=src.find(function(x){return String(x.id)===String(h.id)});
+     return v||h;
+   });
+ }else if(libraryMode==='saved'){
+   list=videos.filter(function(v){return v.saved}).concat(shorts.filter(function(v){return v.saved}));
+ }else if(libraryMode==='liked'){
+   list=videos.filter(function(v){return v.liked}).concat(shorts.filter(function(v){return v.liked}));
+ }else{
+   list=JSON.parse(localStorage.getItem('vidozaDownloads')||'[]');
+ }
+ $('clearHistoryBtn').style.display=libraryMode==='history'?'inline-block':'none';
+ $('libraryList').innerHTML=list.map(function(v){
+   const isShort=shorts.some(function(s){return String(s.id)===String(v.id)});
+   return '<div class="libraryItem" data-library-id="'+esc(v.id)+'" data-library-kind="'+(isShort?'short':'video')+'">'+
+     '<div class="libraryThumb">'+(v.thumbnail?'<img src="'+esc(v.thumbnail)+'">':'▶')+'</div>'+
+     '<div class="libraryInfo"><b>'+esc(v.title||'Untitled')+'</b><div class="sub">'+esc(v.channel||'Vidoza')+'</div></div>'+
+     '<button class="homeMore">⋮</button></div>';
+ }).join('')||'<div class="empty">Nothing here yet.</div>';
+ $('libraryList').querySelectorAll('[data-library-id]').forEach(function(x){x.onclick=function(e){
+   if(e.target.closest('button'))return;
+   if(x.dataset.libraryKind==='short')showPage('shorts');else openVideo(x.dataset.libraryId);
+ }});
+}
+function renderNotifications(){
+ const list=notifications.filter(function(n){return notificationFilter==='all'||n.type===notificationFilter});
+ $('notificationList').innerHTML=list.map(function(n){
+   return '<button class="notificationItem '+(n.read?'':'unread')+'" data-notification-id="'+esc(n.id)+'">'+
+     '<div class="notificationAvatar">'+esc((n.creator||n.title||'V')[0])+'</div>'+
+     '<div><b>'+esc(n.title)+'</b><p>'+esc(n.text)+'</p><small>'+new Date(n.createdAt).toLocaleString()+'</small></div></button>';
+ }).join('')||'<div class="empty">No notifications yet.</div>';
+ $('notificationList').querySelectorAll('[data-notification-id]').forEach(function(b){b.onclick=function(){
+   const n=notifications.find(function(x){return x.id===b.dataset.notificationId});if(n){n.read=true;save();renderNotifications();updateNotificationDot()}
+ }});
+}
+function showSettingsDetail(type){
+ let body='';
+ if(type==='account')body='<div class="h1">Account</div><div class="settingInfo"><b>'+esc(profileName())+'</b><p>'+esc(user?user.email:'')+'</p><button class="btn primary" id="detailEditProfile">Edit profile</button></div>';
+ if(type==='privacy')body='<div class="h1">Privacy</div><label class="toggleRow"><div><b>Private account</b><small>Only approved followers can see private content</small></div><input id="privateAccountSetting" type="checkbox" '+(appPrefs.privateAccount?'checked':'')+'></label>';
+ if(type==='notifications')body='<div class="h1">Notifications</div>'+
+   '<label class="toggleRow"><div><b>Likes</b><small>Notify when someone likes your content</small></div><input id="notifyLikesSetting" type="checkbox" '+(appPrefs.notifyLikes?'checked':'')+'></label>'+
+   '<label class="toggleRow"><div><b>Comments</b><small>Notify when someone comments</small></div><input id="notifyCommentsSetting" type="checkbox" '+(appPrefs.notifyComments?'checked':'')+'></label>'+
+   '<label class="toggleRow"><div><b>Creator uploads</b><small>Alerts from subscribed creators</small></div><input id="notifyCreatorsSetting" type="checkbox" '+(appPrefs.notifyCreators?'checked':'')+'></label>';
+ if(type==='blocked')body='<div class="h1">Blocked users</div>'+(blockedUsers.length?blockedUsers.map(function(n){return '<div class="blockedRow"><span>'+esc(n)+'</span><button class="btn soft" data-unblock="'+esc(n)+'">Unblock</button></div>'}).join(''):'<div class="empty">No blocked users.</div>');
+ $('settingsDetailContent').innerHTML=body;showPage('settingsDetail');
+ if($('detailEditProfile'))$('detailEditProfile').onclick=function(){showPage('you');$('editProfileBtn').click()};
+ if($('privateAccountSetting'))$('privateAccountSetting').onchange=function(){appPrefs.privateAccount=this.checked;save()};
+ if($('notifyLikesSetting'))$('notifyLikesSetting').onchange=function(){appPrefs.notifyLikes=this.checked;save()};
+ if($('notifyCommentsSetting'))$('notifyCommentsSetting').onchange=function(){appPrefs.notifyComments=this.checked;save()};
+ if($('notifyCreatorsSetting'))$('notifyCreatorsSetting').onchange=function(){appPrefs.notifyCreators=this.checked;save()};
+ document.querySelectorAll('[data-unblock]').forEach(function(b){b.onclick=function(){blockedUsers=blockedUsers.filter(function(x){return x!==b.dataset.unblock});save();showSettingsDetail('blocked')}});
+}
+
 function toast(t){alert(t)}
 function featureMessage(t){
  const el=$('featureStatus'); if(!el)return;
@@ -1428,7 +1601,7 @@ function renderShorts(){
      const bar=video.closest('.shortVideoWrap').querySelector('.shortProgress span');
      if(bar && video.duration)bar.style.width=(video.currentTime/video.duration*100)+'%';
    });
-   video.addEventListener('loadedmetadata',function(){video.play().catch(function(){})});
+   video.addEventListener('loadedmetadata',function(){const s=findShort(video.closest('.short').dataset.short);if(s)addHistory(s,'short');if(appPrefs.autoplay)video.play().catch(function(){})});
  });
 }
 
@@ -1436,7 +1609,7 @@ function findShort(id){return shorts.find(function(v){return String(v.id)===Stri
 function shortLike(id){
  if(!user){toast('Please login first');return}
  const v=findShort(id);if(!v)return;
- v.liked=!v.liked;save();renderShorts();
+ v.liked=!v.liked;if(v.liked&&appPrefs.notifyLikes)addNotification('activity','Short liked','You liked '+v.title,v.channel);save();renderShorts();
 }
 function shortSave(id){
  if(!user){toast('Please login first');return}
@@ -1460,7 +1633,7 @@ function downloadShort(id){
    document.body.appendChild(a);
    a.click();
    a.remove();
-   toast('Download started');
+   let dl=JSON.parse(localStorage.getItem('vidozaDownloads')||'[]');dl.unshift({id:v.id,title:v.title,channel:v.channel,thumbnail:v.thumbnail||'',at:Date.now()});localStorage.setItem('vidozaDownloads',JSON.stringify(dl.slice(0,100)));toast('Download started');
  }catch(e){toast('Download is not available on this device')}
 }
 
@@ -1552,6 +1725,7 @@ async function deleteVideo(id){
 function openVideo(id){
  selected=videos.find(function(v){return String(v.id)===String(id)});
  if(!selected)return;
+ addHistory(selected,'video');
  let media=selected.url?'<video controls playsinline autoplay style="width:100%;aspect-ratio:16/9;background:#000" src="'+esc(selected.url)+'"></video>':'<div class="thumb">▶</div>';
  $('player').innerHTML=media+'<div class="section"><div class="title">'+esc(selected.title)+'</div><div class="sub">'+esc(selected.views||'0 views')+' · '+esc(selected.category||'All')+'</div></div><div class="actions"><button class="action" id="likeAction">♥<br><span>'+(selected.liked?'Liked':'Like')+'</span></button><button class="action" id="commentAction">💬<br>Comment</button><button class="action" id="shareAction">↗<br>Share</button><button class="action" id="downloadAction">⬇<br>Download</button><button class="action" id="reportAction">⚑<br>Report</button><button class="action" id="saveAction">▣<br><span>'+(selected.saved?'Saved':'Save')+'</span></button></div><div class="section"><div class="row"><div class="avatar">'+esc((selected.channel||'V')[0])+'</div><div style="flex:1"><b>'+esc(selected.channel)+'</b><div class="sub"><span id="subCount">'+(selected.subscribers||0)+'</span> subscribers</div></div><button class="btn '+(selected.subscribed?'soft':'primary')+'" id="subAction">'+(selected.subscribed?'Subscribed':'Subscribe')+'</button></div><div class="divider"></div><b>Description</b><p>'+esc(selected.description)+'</p><div class="divider"></div><b>Comments</b><div class="row" style="margin-top:10px"><input id="commentInput" class="field" style="margin:0" placeholder="Add a comment"><button class="btn primary" id="postComment">Post</button></div><div id="commentList"></div></div>';
  showPage('player');
@@ -1582,7 +1756,7 @@ function postComment(){
  if(!user){toast('Please login first');return}
  const input=$('commentInput');const text=input.value.trim();
  if(!text)return;
- selected.comments=selected.comments||[];selected.comments.unshift(text);save();input.value='';renderComments();
+ selected.comments=selected.comments||[];selected.comments.unshift(text);if(appPrefs.notifyComments)addNotification('activity','Comment added','Commented on '+selected.title,selected.channel);save();input.value='';renderComments();
 }
 function downloadVideo(v){
  if(!v||!v.url){toast('This video has no downloadable file');return}
@@ -1608,7 +1782,7 @@ function reportVideo(v){
 }
 function toggleLike(){
  if(!user){toast('Please login first');return}
- selected.liked=!selected.liked;save();
+ selected.liked=!selected.liked;if(selected.liked&&appPrefs.notifyLikes)addNotification('activity','New like','You liked '+selected.title,selected.channel);save();
  $('likeAction').querySelector('span').textContent=selected.liked?'Liked':'Like';
 }
 function toggleSave(){
@@ -1618,7 +1792,7 @@ function toggleSave(){
 }
 function toggleSubscribe(){
  if(!user){toast('Please login first');return}
- selected.subscribed=!selected.subscribed;
+ selected.subscribed=!selected.subscribed;if(selected.subscribed&&appPrefs.notifyCreators)addNotification('creator','Subscribed','You subscribed to '+selected.channel,selected.channel);
  selected.subscribers=(selected.subscribers||0)+(selected.subscribed?1:-1);
  if(selected.subscribers<0)selected.subscribers=0;
  save();
@@ -2046,6 +2220,22 @@ function wire(){
  $('cancelEditBtn').onclick=function(){editVideoId=null;resetUploadForm();showPage('you')};
 
  $('searchBtn').onclick=function(){showPage('search')};$('settingsBtn').onclick=function(){showPage('settings')};
+ if($('notificationBtn'))$('notificationBtn').onclick=function(){showPage('notifications');renderNotifications()};
+ if($('libraryBackBtn'))$('libraryBackBtn').onclick=function(){showPage('you')};
+ if($('notificationsBackBtn'))$('notificationsBackBtn').onclick=function(){showPage('home')};
+ if($('settingsDetailBackBtn'))$('settingsDetailBackBtn').onclick=function(){showPage('settings')};
+ document.querySelectorAll('.libraryTab').forEach(function(b){b.onclick=function(){renderLibrary(b.dataset.library)}});
+ document.querySelectorAll('.notificationTab').forEach(function(b){b.onclick=function(){notificationFilter=b.dataset.notificationFilter;document.querySelectorAll('.notificationTab').forEach(function(x){x.classList.toggle('active',x===b)});renderNotifications()}});
+ if($('clearHistoryBtn'))$('clearHistoryBtn').onclick=function(){if(confirm('Clear watch history?')){historyItems=[];save();renderLibrary('history')}};
+ if($('markAllReadBtn'))$('markAllReadBtn').onclick=function(){notifications.forEach(function(n){n.read=true});save();renderNotifications();updateNotificationDot()};
+ if($('accountSettingsBtn'))$('accountSettingsBtn').onclick=function(){showSettingsDetail('account')};
+ if($('privacySettingsBtn'))$('privacySettingsBtn').onclick=function(){showSettingsDetail('privacy')};
+ if($('notificationSettingsBtn'))$('notificationSettingsBtn').onclick=function(){showSettingsDetail('notifications')};
+ if($('blockedUsersBtn'))$('blockedUsersBtn').onclick=function(){showSettingsDetail('blocked')};
+ if($('autoplaySetting')){$('autoplaySetting').checked=!!appPrefs.autoplay;$('autoplaySetting').onchange=function(){appPrefs.autoplay=this.checked;save()}};
+ if($('dataSaverSetting')){$('dataSaverSetting').checked=!!appPrefs.dataSaver;$('dataSaverSetting').onchange=function(){appPrefs.dataSaver=this.checked;save()}};
+ if($('hqWifiSetting')){$('hqWifiSetting').checked=!!appPrefs.hqWifi;$('hqWifiSetting').onchange=function(){appPrefs.hqWifi=this.checked;save()}};
+
  $('navHome').onclick=function(){showPage('home')};
 
 if($('homeForYouTab'))$('homeForYouTab').onclick=function(){
@@ -2170,7 +2360,7 @@ if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();sho
  $('shareChannelBtn').onclick=function(){shareText(profileName()+' on Vidoza')};
  $('editChannelBtn').onclick=function(){if($('channelEditBox')){$('channelEditBox').style.display=$('channelEditBox').style.display==='none'?'block':'none';$('channelNameInput').value=profileName();$('channelBioInput').value=profileBio()}};
  $('saveChannelBtn').onclick=saveChannel;$('youShortBtn').onclick=function(){showPage('shortUpload')};$('youSettingsBtn').onclick=function(){showPage('settings')};
- $('historyBtn').onclick=function(){toast('History is available for videos opened on this device.')};$('savedBtn').onclick=function(){showSaved()};$('likedBtn').onclick=function(){showLiked()};
+ $('historyBtn').onclick=function(){showPage('library');renderLibrary('history')};$('savedBtn').onclick=function(){showPage('library');renderLibrary('saved')};$('likedBtn').onclick=function(){showPage('library');renderLibrary('liked')};
  $('privacyBtn').onclick=function(){policy('Privacy Policy','Vidoza uses account information to provide login and platform features.')};
  $('termsBtn').onclick=function(){policy('Terms of Service','Use Vidoza lawfully and upload only content you own or have permission to use.')};
  $('guidelinesBtn').onclick=function(){policy('Community Guidelines','Do not upload unlawful, abusive, deceptive, dangerous or rights-infringing content.')};
@@ -2203,6 +2393,7 @@ async function boot(){
    try{await hydrateMedia()}catch(e){}
    try{renderHome()}catch(e){startupError=startupError||('Home: '+(e.message||e))}
    try{renderShorts()}catch(e){startupError=startupError||('Shorts: '+(e.message||e))}
+   try{updateNotificationDot()}catch(e){}
 
    try{
      if(window.supabase&&window.supabase.createClient){

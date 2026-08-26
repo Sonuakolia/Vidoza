@@ -874,6 +874,34 @@ video::-webkit-media-controls-panel{display:none!important}
 }
 </style>
 
+
+<style id="vidoza-upload-confirm-v38">
+.uploadProgressBox{margin:14px 0;padding:14px;border:1px solid #e5e7eb;border-radius:15px;background:#fff}
+.uploadProgressTop{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}
+.uploadProgressTrack{height:9px;background:#ececf0;border-radius:999px;overflow:hidden;margin:10px 0 8px}
+#videoUploadProgressBar{height:100%;width:0;background:linear-gradient(90deg,#e11d48,#7c3aed);border-radius:999px;transition:width .3s ease}
+.uploadFileInfo{font-size:12px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.uploadSuccessCard{margin:14px 0;padding:16px;border:1px solid #bbf7d0;border-radius:18px;background:#f0fdf4;text-align:center}
+.uploadSuccessCheck{width:54px;height:54px;margin:0 auto 10px;border-radius:50%;background:#16a34a;color:#fff;display:grid;place-items:center;font-size:30px;font-weight:900}
+.uploadSuccessCard b{font-size:17px}.uploadSuccessCard p{margin:5px 0 12px;color:#4b5563}
+.uploadSuccessActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#uploadBtn:disabled{opacity:.55;pointer-events:none}
+</style>
+
+
+<style id="vidoza-shorts-refresh-upload-v39">
+#shorts{position:relative}
+.shortFeedTopBar{position:sticky;top:0;z-index:40;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(0,0,0,.86);color:#fff;backdrop-filter:blur(10px)}
+.shortFeedTopBar>b{font-size:21px}
+.shortFeedTopBar>div{display:flex;gap:8px}
+.shortFeedTopBar button{width:40px;height:40px;border:0;border-radius:50%;background:#ffffff20;color:#fff;font-size:22px;font-weight:800}
+.shortEmptyCreate{min-height:calc(100vh - 150px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px 22px}
+.shortEmptyIcon{width:78px;height:78px;border-radius:24px;background:#111;color:#fff;display:grid;place-items:center;font-size:38px}
+.shortEmptyCreate h2{margin:16px 0 6px}.shortEmptyCreate p{margin:0 0 18px;color:#777}
+.shortFloatingUpload{position:fixed;right:16px;bottom:92px;z-index:80;border:0;border-radius:24px;padding:12px 16px;background:#fff;color:#111;font-weight:800;box-shadow:0 8px 28px rgba(0,0,0,.28)}
+#shortRefreshBtn:disabled{opacity:.55}
+</style>
+
 </head>
 <body>
 <div id="boot"><div class="box"><div class="vlogo">V</div><h2>Vidoza</h2><p id="bootText">Loading…</p></div></div>
@@ -915,7 +943,7 @@ video::-webkit-media-controls-panel{display:none!important}
   <div id="feed"></div>
 </div>
 
-<div id="shorts" class="page"><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
+<div id="shorts" class="page"><div class="shortFeedTopBar"><b>Shorts</b><div><button id="shortRefreshBtn" type="button">↻</button><button id="shortTopUploadBtn" type="button">＋</button></div></div><div class="section row" style="justify-content:space-between"><div class="h1" style="margin:0">Shorts</div><button class="btn primary" id="createShortBtn">＋ Create Short</button></div><div id="shortFeed"></div></div>
 
  
 <div id="social" class="page section">
@@ -988,7 +1016,21 @@ video::-webkit-media-controls-panel{display:none!important}
       <input id="tags"><input id="notifySubscribers" type="checkbox" checked>
     </div>
     <div class="videoPublishBar"><button id="draftBtn" class="videoDraftBtn" type="button">Save draft</button><button id="uploadBtn" class="videoPublishBtn" type="button">Publish</button></div>
-    <button id="cancelEditBtn" style="display:none"></button><div id="uploadStatus" class="authMsg"></div>
+    <button id="cancelEditBtn" style="display:none"></button>
+<div id="uploadStatus" class="authMsg"></div>
+<div id="videoUploadProgressBox" class="uploadProgressBox" style="display:none">
+  <div class="uploadProgressTop"><b id="videoUploadProgressText">Preparing upload…</b><span id="videoUploadPercent">0%</span></div>
+  <div class="uploadProgressTrack"><div id="videoUploadProgressBar"></div></div>
+  <div id="videoUploadFileInfo" class="uploadFileInfo"></div>
+</div>
+<div id="videoUploadSuccess" class="uploadSuccessCard" style="display:none">
+  <div class="uploadSuccessCheck">✓</div>
+  <div><b>Video uploaded successfully</b><p id="videoUploadSuccessTitle">Your video is ready.</p><small id="videoCloudStatus">Cloud upload enabled</small></div>
+  <div class="uploadSuccessActions">
+    <button id="viewUploadedVideoBtn" class="btn primary" type="button">View Video</button>
+    <button id="goUploadedChannelBtn" class="btn soft" type="button">Go to Channel</button>
+  </div>
+</div>
   </div>
 </div>
 
@@ -1629,7 +1671,8 @@ function renderShorts(){
  });
  save();
  if(!shorts.length){
-   $('shortFeed').innerHTML='<div class="empty">No Shorts yet. Tap Create Short.</div>';
+   $('shortFeed').innerHTML='<div class="shortEmptyCreate"><div class="shortEmptyIcon">⚡</div><h2>Create your first Short</h2><p>Upload a vertical video up to 90 seconds.</p><button id="emptyShortUploadBtn" class="btn primary">Upload Short Video</button></div>';
+   setTimeout(function(){if($('emptyShortUploadBtn'))$('emptyShortUploadBtn').onclick=openShortUploader},0);
    return;
  }
  $('shortFeed').innerHTML=shorts.map(function(v){
@@ -1659,8 +1702,9 @@ function renderShorts(){
      '<div class="shortCommentPanel"><div class="shortCommentBox"><input data-comment-input="'+esc(v.id)+'" placeholder="Write a comment"><button data-comment-post="'+esc(v.id)+'">Post</button></div>'+
      '<div class="shortComments">'+(comments.length?comments.map(function(c){return '<div>'+esc(c)+'</div>'}).join(''):'<div style="opacity:.7">No comments yet</div>')+'</div></div>'+
    '</div>';
- }).join('');
+ }).join('')+'<button id="shortFloatingUpload" class="shortFloatingUpload" type="button">＋ Upload Short</button>';
 
+ if($('shortFloatingUpload'))$('shortFloatingUpload').onclick=openShortUploader;
  document.querySelectorAll('[data-short-like]').forEach(function(b){b.onclick=function(){shortLike(b.dataset.shortLike)}});
  document.querySelectorAll('[data-short-save]').forEach(function(b){b.onclick=function(){shortSave(b.dataset.shortSave)}});
  document.querySelectorAll('[data-short-share]').forEach(function(b){b.onclick=function(){let v=findShort(b.dataset.shortShare);if(v)shareText(v.title)}});
@@ -2104,31 +2148,139 @@ function resetLongVideoFlow(){
  if($('videoFile'))$('videoFile').value='';if($('uploadTitle'))$('uploadTitle').value='';if($('uploadDesc'))$('uploadDesc').value='';
  showVideoStage('videoStageSelect');
 }
-async function uploadVideo(){
- if(!user){toast('Please login first');return}
- let f=videoCreateFile||$('videoFile').files[0],t=$('uploadTitle').value.trim();
- if(editVideoId && String(editVideoId).indexOf('draft:')===0){toast('Use Publish Draft from Drafts to publish this draft');return}
- if(editVideoId){
-   const v=videos.find(function(x){return String(x.id)===String(editVideoId)});if(!v)return;
-   if(f){if(v.mediaKey)await mediaDelete(v.mediaKey);v.mediaKey='video-'+v.id;await mediaPut(v.mediaKey,f)}
-   const tf=$('thumbFile').files[0];if(tf){if(v.thumbKey)await mediaDelete(v.thumbKey);v.thumbKey='thumb-'+v.id;await mediaPut(v.thumbKey,tf)}
-   v.title=t||v.title;v.description=$('uploadDesc').value;Object.assign(v,videoDetailsFromForm());
-   save();await hydrateMedia();renderHome();renderChannel();toast('Video updated');resetUploadForm();showPage('channel');return;
- }
- if(!f||!t){toast('Select video and title');return}
- $('uploadStatus').style.color='#111';$('uploadStatus').textContent='Saving video… please wait';
- try{
-  const id='local-'+Date.now(),mediaKey='video-'+id,tf=$('thumbFile').files[0],thumbKey=tf?'thumb-'+id:'';
-  await mediaPut(mediaKey,f);if(tf)await mediaPut(thumbKey,tf);
-  const v={id:id,title:t,channel:profileName(),views:'0 views',age:'Just now',description:$('uploadDesc').value,category:'All',uploaded:true,mediaKey:mediaKey,thumbKey:thumbKey,url:'',thumbnail:'',isShort:false,liked:false,saved:false,subscribed:false,comments:[]};
-  Object.assign(v,videoDetailsFromForm());videos.unshift(v);
-  save();await hydrateMedia();renderHome();renderChannel();
-  $('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='Video uploaded successfully.';
-  featureMessage('Video uploaded successfully');setTimeout(function(){resetUploadForm();resetLongVideoFlow();showPage('home')},500);
- }catch(e){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Video save failed: '+(e.message||'Storage error')}
+let videoUploadBusy=false,lastUploadedVideoId='';
+function setVideoUploadProgress(percent,text){
+ const p=Math.max(0,Math.min(100,Math.round(Number(percent)||0)));
+ if($('videoUploadProgressBox'))$('videoUploadProgressBox').style.display='block';
+ if($('videoUploadProgressBar'))$('videoUploadProgressBar').style.width=p+'%';
+ if($('videoUploadPercent'))$('videoUploadPercent').textContent=p+'%';
+ if($('videoUploadProgressText'))$('videoUploadProgressText').textContent=text||'Uploading video…';
+}
+function showVideoUploadFileInfo(file){
+ if(!$('videoUploadFileInfo')||!file)return;
+ const mb=(file.size/1024/1024).toFixed(file.size>10*1024*1024?1:2);
+ $('videoUploadFileInfo').textContent=(file.name||'Selected video')+' • '+mb+' MB';
+}
+function finishVideoUploadUI(v){
+ lastUploadedVideoId=v.id;
+ setVideoUploadProgress(100,'Upload complete');
+ if($('videoUploadSuccessTitle'))$('videoUploadSuccessTitle').textContent=v.title+' is now available on Vidoza.';
+ if($('videoCloudStatus'))$('videoCloudStatus').textContent=v.cloudUploaded?'Saved to Vidoza cloud':'Saved only on this device';
+ if($('videoUploadSuccess'))$('videoUploadSuccess').style.display='block';
+ if($('uploadStatus')){$('uploadStatus').style.color='#16a34a';$('uploadStatus').textContent='✓ Video uploaded successfully';}
 }
 
+async function uploadVideoToCloud(file,id){
+ if(!db || !db.storage)throw new Error('Cloud storage is not ready');
+ const ext=((file.name||'video.mp4').split('.').pop()||'mp4').toLowerCase();
+ const path='videos/'+(user&&user.id?user.id:'user')+'/'+id+'.'+ext;
+ const bucket=db.storage.from('videos');
+ const up=await bucket.upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type||'video/mp4'});
+ if(up.error)throw up.error;
+ const pub=bucket.getPublicUrl(path);
+ const url=pub&&pub.data&&pub.data.publicUrl?pub.data.publicUrl:'';
+ if(!url)throw new Error('Public video URL was not created');
+ return {path:path,url:url};
+}
+async function uploadVideo(){
+ if(!user){toast('Please login first');return}
+ if(videoUploadBusy){toast('Upload is already in progress');return}
+ let f=videoCreateFile||$('videoFile').files[0],t=$('uploadTitle').value.trim();
 
+ if(editVideoId && String(editVideoId).indexOf('draft:')===0){toast('Use Publish Draft from Drafts to publish this draft');return}
+
+ if(editVideoId){
+   videoUploadBusy=true;
+   if($('uploadBtn')){$('uploadBtn').disabled=true;$('uploadBtn').textContent='Updating…'}
+   try{
+     setVideoUploadProgress(15,'Preparing update…');showVideoUploadFileInfo(f);
+     const v=videos.find(function(x){return String(x.id)===String(editVideoId)});if(!v)return;
+     if(f){setVideoUploadProgress(35,'Saving video…');if(v.mediaKey)await mediaDelete(v.mediaKey);v.mediaKey='video-'+v.id;await mediaPut(v.mediaKey,f)}
+     const tf=$('thumbFile').files[0];
+     if(tf){setVideoUploadProgress(65,'Saving cover…');if(v.thumbKey)await mediaDelete(v.thumbKey);v.thumbKey='thumb-'+v.id;await mediaPut(v.thumbKey,tf)}
+     v.title=t||v.title;v.description=$('uploadDesc').value;Object.assign(v,videoDetailsFromForm());
+     setVideoUploadProgress(82,'Updating video details…');save();await hydrateMedia();renderHome();renderChannel();
+     finishVideoUploadUI(v);toast('Video updated successfully');
+   }catch(e){
+     if($('uploadStatus')){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Update failed: '+(e.message||'Storage error')}
+     setVideoUploadProgress(0,'Update failed — please retry');
+   }finally{
+     videoUploadBusy=false;if($('uploadBtn')){$('uploadBtn').disabled=false;$('uploadBtn').textContent='Publish'}
+   }
+   return;
+ }
+
+ if(!f||!t){toast('Select video and add a title');return}
+
+ videoUploadBusy=true;
+ if($('videoUploadSuccess'))$('videoUploadSuccess').style.display='none';
+ if($('uploadBtn')){$('uploadBtn').disabled=true;$('uploadBtn').textContent='Uploading…'}
+ if($('uploadStatus')){$('uploadStatus').style.color='#111';$('uploadStatus').textContent='Uploading video… Do not close this screen.'}
+ showVideoUploadFileInfo(f);
+ setVideoUploadProgress(5,'Preparing video…');
+
+ try{
+   const id='video-'+Date.now(),tf=$('thumbFile').files[0];
+   let cloud=null,thumbUrl='',usedCloud=false;
+
+   // REAL CLOUD UPLOAD FIRST
+   setVideoUploadProgress(15,'Connecting to Vidoza cloud…');
+   try{
+     cloud=await uploadVideoToCloud(f,id);
+     usedCloud=true;
+     setVideoUploadProgress(72,'Video uploaded to cloud…');
+   }catch(cloudErr){
+     // Fallback keeps testing possible on this device, but reports it clearly.
+     setVideoUploadProgress(30,'Cloud unavailable — saving on this device…');
+   }
+
+   let mediaKey='',thumbKey='';
+   if(!usedCloud){
+     mediaKey='video-'+id;
+     await mediaPut(mediaKey,f);
+     setVideoUploadProgress(65,'Saved on this device…');
+   }
+
+   if(tf){
+     thumbKey='thumb-'+id;
+     try{await mediaPut(thumbKey,tf)}catch(e){}
+     setVideoUploadProgress(78,'Saving thumbnail…');
+   }
+
+   const v={
+     id:id,title:t,channel:profileName(),views:'0 views',age:'Just now',
+     description:$('uploadDesc').value,category:'All',uploaded:true,
+     mediaKey:mediaKey,thumbKey:thumbKey,
+     url:usedCloud?cloud.url:'',cloudPath:usedCloud?cloud.path:'',
+     thumbnail:'',isShort:false,liked:false,saved:false,subscribed:false,comments:[],
+     cloudUploaded:usedCloud
+   };
+   Object.assign(v,videoDetailsFromForm());
+
+   setVideoUploadProgress(86,'Publishing video…');
+   videos.unshift(v);
+   save();
+
+   if(!usedCloud)await hydrateMedia();
+   renderHome();renderChannel();
+
+   setVideoUploadProgress(100,usedCloud?'Upload complete':'Saved on this device');
+   finishVideoUploadUI(v);
+   if($('uploadStatus')){
+     $('uploadStatus').style.color=usedCloud?'#16a34a':'#b45309';
+     $('uploadStatus').textContent=usedCloud
+       ?'✓ Video uploaded successfully to Vidoza cloud'
+       :'⚠ Cloud upload failed. Video saved only on this device.';
+   }
+   addNotification('creator','Video published',v.title+' is now visible on your channel.',profileName());
+ }catch(e){
+   if($('uploadStatus')){$('uploadStatus').style.color='#dc2626';$('uploadStatus').textContent='Upload failed — Retry: '+(e.message||'Storage error');}
+   setVideoUploadProgress(0,'Upload failed — Retry');
+ }finally{
+   videoUploadBusy=false;
+   if($('uploadBtn')){$('uploadBtn').disabled=false;$('uploadBtn').textContent='Publish'}
+ }
+}
 
 
 let shortEditFile=null,shortEditUrl='',shortEditDuration=0,shortTrimStart=0,shortTrimEnd=0;
@@ -2141,6 +2293,15 @@ function showShortStage(id){
 function fmtTime(sec){
  sec=Math.max(0,Number(sec)||0);
  return Math.floor(sec/60)+':'+String(Math.floor(sec%60)).padStart(2,'0');
+}
+function openShortUploader(){
+ resetShortFlow();
+ showPage('shortUpload');
+ showShortStage('shortStageSelect');
+ setTimeout(function(){
+   const f=$('shortFile');
+   if(f){f.value='';f.click()}
+ },180);
 }
 function openShortFromFile(file){
  shortEditFile=file;
@@ -2258,7 +2419,7 @@ async function uploadShort(){
    });
 
    save();await hydrateMedia();renderShorts();
-   $('shortStatus').style.color='#16a34a';$('shortStatus').textContent='Short uploaded successfully.';
+   $('shortStatus').style.color='#16a34a';$('shortStatus').textContent='✓ Short uploaded successfully. Open Shorts to view it.';
    setTimeout(function(){resetShortFlow();showPage('shorts')},400);
  }catch(e){
    $('shortStatus').style.color='#dc2626';$('shortStatus').textContent='Upload failed: '+(e.message||'Storage error');
@@ -2329,7 +2490,11 @@ if($('homeFollowingTab'))$('homeFollowingTab').onclick=function(){
   renderHome();
 };
 
-$('navShorts').onclick=function(){showPage('shorts')};
+$('navShorts').onclick=async function(){
+ showPage('shorts');
+ try{await hydrateMedia()}catch(e){}
+ renderShorts();
+};
 $('navCreate').onclick=function(){$('createMenu').style.display='flex'};
 $('closeCreateMenu').onclick=function(){$('createMenu').style.display='none'};
 $('createMenu').onclick=function(e){if(e.target===$('createMenu'))$('createMenu').style.display='none'};
@@ -2341,8 +2506,7 @@ $('createVideoOption').onclick=function(){
 };
 $('createShortOption').onclick=function(){
  $('createMenu').style.display='none';
- resetShortFlow();
- showPage('shortUpload');
+ openShortUploader();
 };
 $('createPhotoOption').onclick=function(){$('createMenu').style.display='none';showPage('photoUpload')};
 $('createLiveOption').onclick=function(){$('createMenu').style.display='none';showPage('live')};
@@ -2360,6 +2524,19 @@ if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();sho
 
 
  if($('shortFile'))$('shortFile').onchange=function(){if(this.files[0])openShortFromFile(this.files[0])};
+
+ if($('shortTopUploadBtn'))$('shortTopUploadBtn').onclick=openShortUploader;
+ if($('shortRefreshBtn'))$('shortRefreshBtn').onclick=async function(){
+   const b=this;b.disabled=true;b.textContent='…';
+   try{
+     document.querySelectorAll('#shortFeed video').forEach(function(v){try{v.pause()}catch(e){}});
+     await hydrateMedia();
+     renderShorts();
+     toast('Shorts refreshed');
+   }catch(e){toast('Refresh failed')}
+   finally{b.disabled=false;b.textContent='↻'}
+ };
+
  if($('shortRecordBtn'))$('shortRecordBtn').onclick=function(){if($('shortFile'))$('shortFile').click()};
  if($('shortBackBtn'))$('shortBackBtn').onclick=function(){resetShortFlow();showPage('home')};
  if($('editorBackBtn'))$('editorBackBtn').onclick=function(){resetShortFlow()};
@@ -2410,6 +2587,11 @@ if($('shortModeLive'))$('shortModeLive').onclick=function(){resetShortFlow();sho
 
 
  $('uploadBtn').onclick=uploadVideo;
+
+if($('videoFile'))$('videoFile').addEventListener('change',function(){if(this.files&&this.files[0])showVideoUploadFileInfo(this.files[0])});
+if($('viewUploadedVideoBtn'))$('viewUploadedVideoBtn').onclick=function(){if(lastUploadedVideoId)openVideo(lastUploadedVideoId)};
+if($('goUploadedChannelBtn'))$('goUploadedChannelBtn').onclick=function(){renderChannel();showPage('channel')};
+
  $('photoPostBtn').onclick=createPhotoPost;
 
  document.querySelectorAll('.profileTab').forEach(function(b){b.onclick=function(){renderProfileTab(b.dataset.profileTab)}});
